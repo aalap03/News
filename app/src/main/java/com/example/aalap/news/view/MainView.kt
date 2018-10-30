@@ -4,8 +4,10 @@ import com.example.aalap.news.models.Article
 
 interface MainView {
 
+    fun loading(isVisible: Boolean)
+
     fun showError(errorMsg: String?)
 
-    fun addNews(articles: List<Article>?)
+    fun addNews(articles: List<Article>)
 
 }

@@ -3,24 +3,30 @@
     xmlns:tools="http://schemas.android.com/tools"
     package="com.example.aalap.news">
 
-    <uses-permission android:name="android.permission.INTERNET"/>
+    <uses-permission android:name="android.permission.INTERNET" />
 
     <application
-        android:allowBackup="true"
-        android:icon="@mipmap/ic_launcher"
-        android:label="@string/app_name"
         android:name=".App"
-        android:roundIcon="@mipmap/ic_launcher_round"
+        android:allowBackup="true"
+        android:icon="@drawable/ic_news_app_launcher"
+        android:label="@string/app_name"
+        android:roundIcon="@drawable/ic_news_app_launcher"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".MainActivity">
+        <activity android:name=".ui.activities.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".NewsSettings" />
+
+        <activity android:name=".ui.activities.NewsSettings" />
+
+        <activity android:name=".ui.activities.Webview"
+            android:parentActivityName=".ui.activities.MainActivity">
+
+        </activity>
     </application>
 
 </manifest>

@@ -10,6 +10,7 @@ import retrofit2.converter.gson.GsonConverterFactory
 
 lateinit var retrofit: Retrofit
 lateinit var retrofitService: NewsService
+lateinit var pref: Pref
 
 class App: Application() {
 
@@ -22,17 +23,18 @@ class App: Application() {
                 .addConverterFactory(GsonConverterFactory.create())
                 .client(okHttpClient())
                 .build()
+        pref = Pref(this)
 
         retrofitService = retrofit.create(NewsService::class.java)
     }
 
-    fun okHttpClient(): OkHttpClient {
+    private fun okHttpClient(): OkHttpClient {
         return OkHttpClient.Builder()
                 .addInterceptor(interceptor())
                 .build()
     }
 
-    fun interceptor(): Interceptor {
+    private fun interceptor(): Interceptor {
         return Interceptor { chain ->
 
             val request = chain.request()

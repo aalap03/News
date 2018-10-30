@@ -1,4 +1,4 @@
-package com.example.aalap.news
+package com.example.aalap.news.ui.activities
 
 import android.os.Bundle
 import android.view.View
@@ -6,17 +6,31 @@ import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.widget.Toolbar
+import com.example.aalap.news.R
 import com.example.aalap.news.models.Country
 import kotlinx.android.synthetic.main.settings_screen.*
+import kotlinx.android.synthetic.main.toolbar_template.*
 
 
-class NewsSettings: AppCompatActivity() {
+class NewsSettings: BaseActivity() {
+
+    override fun layoutResID(): Int {
+        return R.layout.settings_screen
+    }
+
+    override fun getToolbar(): Toolbar {
+        return news_toolbar
+    }
+
+    override fun getToolbarTitle(): String {
+        return "News Settings"
+    }
 
     var countryList = Country.keysForSpinner()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.settings_screen)
 
         val adapter = ArrayAdapter<String>(this,
                 android.R.layout.simple_spinner_dropdown_item, countryList)

@@ -18,4 +18,8 @@ interface NewsService {
 
     @GET("top-headlines")
     fun getTopHeadlinesByCategory(@Query("category") country: String): Single<Response<News>>
+
+
+    @GET("everything")
+    fun getEverything(@Query("q") country: String): Single<Response<News>>
 }
