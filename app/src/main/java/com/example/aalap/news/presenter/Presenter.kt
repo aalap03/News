@@ -9,8 +9,10 @@ import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.functions.BiConsumer
 import io.reactivex.schedulers.Schedulers
+import org.jetbrains.anko.AnkoLogger
+import org.jetbrains.anko.info
 
-class Presenter(var view: MainView, var model: NewsModel) {
+class Presenter(var view: MainView, var model: NewsModel): AnkoLogger {
 
     private var compositeDisposable = CompositeDisposable()
     private val TAG = "Presenter: "
@@ -23,6 +25,7 @@ class Presenter(var view: MainView, var model: NewsModel) {
 
     fun getAllHeadlinesByCategory(category: String) {
 
+        info { "Getting Articles:..." }
         view.loading(true)
         getAndDisplayList(model.getTopHeadlinesByCategory(category))
     }
@@ -44,7 +47,7 @@ class Presenter(var view: MainView, var model: NewsModel) {
     private fun getListConsumer(): BiConsumer<List<Article>, Throwable> {
         return BiConsumer { articles, throwable ->
             if (articles != null)
-                view.addNews(articles)
+                view.displayArticles(articles)
             else
                 view.showError(throwable?.localizedMessage)
         }

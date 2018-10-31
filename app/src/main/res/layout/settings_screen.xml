@@ -1,31 +1,40 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical">
 
+    <include layout="@layout/toolbar_template" />
 
-    <include layout="@layout/toolbar_template"/>
+    <TextView
+        style="@style/News_text_big"
+        android:layout_width="wrap_content"
+        android:layout_margin="8dp"
+        android:layout_height="wrap_content"
+        android:text="Preferences" />
 
     <androidx.appcompat.widget.SwitchCompat
-        android:id="@+id/settings_theme"
+        android:id="@+id/switch_theme"
         android:layout_width="match_parent"
-        android:layout_margin="5dp"
         android:layout_height="wrap_content"
-        android:text="Dark Theme" />
+        android:layout_margin="5dp"
+        android:text="Dark Theme"
+        android:textSize="20sp" />
 
     <androidx.appcompat.widget.SwitchCompat
-        android:id="@+id/settings_layout"
+        android:id="@+id/switch_articles_layout"
         android:layout_width="match_parent"
-        android:layout_margin="5dp"
         android:layout_height="wrap_content"
-        android:text="News Grid" />
+        android:layout_margin="5dp"
+        android:text="News Grid"
+        android:textSize="20sp" />
 
     <androidx.appcompat.widget.AppCompatSpinner
         android:id="@+id/settings_country"
-        android:layout_margin="5dp"
         android:layout_width="match_parent"
-        android:spinnerMode="dialog"
-        android:layout_height="40dp" />
+        android:layout_height="40dp"
+        android:layout_margin="5dp"
+        android:spinnerMode="dialog" />
 
 </LinearLayout>

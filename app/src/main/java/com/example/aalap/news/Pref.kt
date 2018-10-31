@@ -27,4 +27,12 @@ class Pref(var appContext: Context) {
         return pref.getInt(KEY_THEME, R.style.AppTheme)
     }
 
+    fun isDarkTheme(): Boolean {
+        return (getTheme() == R.style.AppTheme_Dark)
+    }
+
+    fun isLayoutGrid(): Boolean {
+        return (getRecyclerLayout() == NewsLayout.LAYOUT_GRID)
+    }
+
 }

@@ -5,8 +5,10 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import androidx.core.content.ContextCompat
 import com.example.aalap.news.R
+import com.example.aalap.news.pref
+import org.jetbrains.anko.AnkoLogger
 
-abstract class BaseActivity: AppCompatActivity() {
+abstract class BaseActivity: AppCompatActivity(), AnkoLogger {
 
     abstract fun layoutResID(): Int
 
@@ -15,6 +17,7 @@ abstract class BaseActivity: AppCompatActivity() {
     abstract fun getToolbarTitle(): String
 
     override fun onCreate(savedInstanceState: Bundle?) {
+        setTheme(pref.getTheme())
         super.onCreate(savedInstanceState)
         setContentView(layoutResID())
 

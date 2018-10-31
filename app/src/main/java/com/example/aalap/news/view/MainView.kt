@@ -8,6 +8,6 @@ interface MainView {
 
     fun showError(errorMsg: String?)
 
-    fun addNews(articles: List<Article>)
+    fun displayArticles(articles: List<Article>)
 
 }

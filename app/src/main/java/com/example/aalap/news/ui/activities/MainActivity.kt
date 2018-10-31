@@ -12,6 +12,7 @@ import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.SearchView
+import androidx.appcompat.widget.Toolbar
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.aalap.news.ui.adapter.GridArticleAdapter
@@ -29,6 +30,8 @@ import com.mikepenz.materialdrawer.DrawerBuilder
 import com.mikepenz.materialdrawer.model.DividerDrawerItem
 import com.mikepenz.materialdrawer.model.PrimaryDrawerItem
 import com.mikepenz.materialdrawer.model.interfaces.IDrawerItem
+import kotlinx.android.synthetic.main.toolbar_template.*
+import org.jetbrains.anko.info
 
 val TAG = "MainActivity:"
 
@@ -36,26 +39,18 @@ val TAG = "MainActivity:"
 //1) Provide themes
 //2) Provide news with linear and grid both layouts.
 
-class MainActivity : AppCompatActivity(), MainView {
+class MainActivity : BaseActivity(), MainView {
 
-    override fun loading(isVisible: Boolean) {
-        refresh_layout.isRefreshing = isVisible
+    override fun layoutResID(): Int {
+        return R.layout.activity_main
     }
 
-    override fun showError(errorMsg: String?) {
-        refresh_layout.isRefreshing = false
-        Toast.makeText(this, errorMsg, Toast.LENGTH_SHORT)
-                .show()
+    override fun getToolbar(): Toolbar {
+        return news_toolbar
     }
 
-    override fun addNews(articles: List<Article>) {
-        refresh_layout.isRefreshing = false
-        val displayMetrics = DisplayMetrics()
-        windowManager.defaultDisplay.getMetrics(displayMetrics)
-        val ad =
-                if (pref.getRecyclerLayout() == NewsLayout.LAYOUT_LINEAR) ArticleAdapter(this, articles)
-                else GridArticleAdapter(this, articles, 2)
-        new_recycler.adapter = ad
+    override fun getToolbarTitle(): String {
+        return "News"
     }
 
     private lateinit var presenter: Presenter
@@ -64,19 +59,19 @@ class MainActivity : AppCompatActivity(), MainView {
         setTheme(pref.getTheme())
         super.onCreate(savedInstanceState)
 
-        setContentView(R.layout.activity_main)
-        setSupportActionBar(toolbar)
-        toolbar.title = "News"
-        toolbar.setTitleTextColor(Color.WHITE)
-
-
-        new_recycler.layoutManager = if (pref.getRecyclerLayout() == NewsLayout.LAYOUT_LINEAR) LinearLayoutManager(this) else GridLayoutManager(this, 2)
-
+        new_recycler.layoutManager =
+                if (pref.getRecyclerLayout() == NewsLayout.LAYOUT_LINEAR) LinearLayoutManager(this)
+                else GridLayoutManager(this, 2)
         presenter = Presenter(this, NewsModel())
 
+        setUpDrawer()
+    }
+
+    override fun onResume() {
+        super.onResume()
+        new_recycler.layoutManager = if (pref.getRecyclerLayout() == NewsLayout.LAYOUT_LINEAR) LinearLayoutManager(this) else GridLayoutManager(this, 2)
         presenter.getAllHeadlinesByCategory(Category.ENTERTAINMENT)
 
-        setUpDrawer()
     }
 
     override fun onDestroy() {
@@ -139,5 +134,27 @@ class MainActivity : AppCompatActivity(), MainView {
             R.id.menu_settings -> startActivity(Intent(this, NewsSettings::class.java))
         }
         return super.onOptionsItemSelected(item)
+    }
+
+    override fun loading(isVisible: Boolean) {
+        refresh_layout.isRefreshing = isVisible
+    }
+
+    override fun showError(errorMsg: String?) {
+        refresh_layout.isRefreshing = false
+        Toast.makeText(this, errorMsg, Toast.LENGTH_SHORT)
+                .show()
+    }
+
+    override fun displayArticles(articles: List<Article>) {
+
+        info { "articles: ${articles.size}" }
+        refresh_layout.isRefreshing = false
+        val displayMetrics = DisplayMetrics()
+        windowManager.defaultDisplay.getMetrics(displayMetrics)
+        val ad =
+                if (pref.getRecyclerLayout() == NewsLayout.LAYOUT_LINEAR) ArticleAdapter(this, articles)
+                else GridArticleAdapter(this, articles, displayMetrics.widthPixels)
+        new_recycler.adapter = ad
     }
 }
