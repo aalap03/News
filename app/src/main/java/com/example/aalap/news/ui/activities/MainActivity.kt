@@ -64,13 +64,16 @@ class MainActivity : BaseActivity(), MainView {
                 else GridLayoutManager(this, 2)
         presenter = Presenter(this, NewsModel())
 
+        refresh_layout.setOnRefreshListener {
+            presenter.getAllHeadlinesByCountry()
+        }
         setUpDrawer()
     }
 
     override fun onResume() {
         super.onResume()
         new_recycler.layoutManager = if (pref.getRecyclerLayout() == NewsLayout.LAYOUT_LINEAR) LinearLayoutManager(this) else GridLayoutManager(this, 2)
-        presenter.getAllHeadlinesByCategory(Category.ENTERTAINMENT)
+        presenter.getAllHeadlinesByCountry()
 
     }
 
