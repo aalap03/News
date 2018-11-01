@@ -17,8 +17,13 @@ class NewsModel {
                 .map { it.body()?.articles }
     }
 
-    fun getEverything(category: String): Single<List<Article>>? {
-        return retrofitService.getEverything(category)
+    fun getEverything(category: String, page: Long, pageSize: Int): Single<List<Article>>? {
+        return retrofitService.getEverything(category, page, pageSize)
+                .map { it.body()?.articles }
+    }
+
+    fun getTopHeadlinesByCountryAndCategory(country: String, category: String): Single<List<Article>>? {
+        return retrofitService.getTopHeadlinesByCategoryAndCountry(country, category)
                 .map { it.body()?.articles }
     }
 }

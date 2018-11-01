@@ -1,7 +1,6 @@
 package com.example.aalap.news.ui.activities
 
 import android.content.Intent
-import android.graphics.Color
 import android.graphics.Typeface
 import android.os.Build
 import android.os.Bundle
@@ -10,7 +9,6 @@ import android.view.Menu
 import android.view.MenuItem
 import android.view.View
 import android.widget.Toast
-import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.SearchView
 import androidx.appcompat.widget.Toolbar
 import androidx.recyclerview.widget.GridLayoutManager
@@ -33,13 +31,10 @@ import com.mikepenz.materialdrawer.model.interfaces.IDrawerItem
 import kotlinx.android.synthetic.main.toolbar_template.*
 import org.jetbrains.anko.info
 
-val TAG = "MainActivity:"
-
-//App TODO s
-//1) Provide themes
-//2) Provide news with linear and grid both layouts.
-
 class MainActivity : BaseActivity(), MainView {
+
+    private lateinit var presenter: Presenter
+    private var widthScreen: Int = 0
 
     override fun layoutResID(): Int {
         return R.layout.activity_main
@@ -53,11 +48,14 @@ class MainActivity : BaseActivity(), MainView {
         return "News"
     }
 
-    private lateinit var presenter: Presenter
 
     override fun onCreate(savedInstanceState: Bundle?) {
         setTheme(pref.getTheme())
         super.onCreate(savedInstanceState)
+
+        val displayMetrics = DisplayMetrics()
+        windowManager.defaultDisplay.getMetrics(displayMetrics)
+        widthScreen = displayMetrics.widthPixels
 
         new_recycler.layoutManager =
                 if (pref.getRecyclerLayout() == NewsLayout.LAYOUT_LINEAR) LinearLayoutManager(this)
@@ -88,24 +86,41 @@ class MainActivity : BaseActivity(), MainView {
         else
             Typeface.createFromAsset(assets, "lato_regular.ttf")
 
-        val drawerItemBusiness1 = PrimaryDrawerItem().withName("Categories").withTypeface(typeface)
+        val drawerItemTitle = PrimaryDrawerItem().withName("Categories").withTypeface(typeface)
+
         val drawerItemBusiness = PrimaryDrawerItem().withName(Category.BUSINESS).withSelectable(true).withTypeface(typeface)
         val drawerItemEntertainment = PrimaryDrawerItem().withName(Category.ENTERTAINMENT).withSelectable(true).withTypeface(typeface)
         val drawerItemGeneral = PrimaryDrawerItem().withName(Category.GENERAL).withSelectable(true).withTypeface(typeface)
+        val drawerItemTechnology = PrimaryDrawerItem().withName(Category.TECHNOLOGY).withSelectable(true).withTypeface(typeface)
+        val drawerItemScience = PrimaryDrawerItem().withName(Category.SCIENCE).withSelectable(true).withTypeface(typeface)
+        val drawerItemSports = PrimaryDrawerItem().withName(Category.SPORTS).withSelectable(true).withTypeface(typeface)
+        val drawerItemHealth = PrimaryDrawerItem().withName(Category.HEALTH).withSelectable(true).withTypeface(typeface)
 
         val drawer = DrawerBuilder()
                 .withActivity(this)
                 .withActionBarDrawerToggle(true)
                 .withCloseOnClick(true)
-                .addDrawerItems(drawerItemBusiness1, DividerDrawerItem(), drawerItemBusiness, drawerItemEntertainment, drawerItemGeneral)
+                .addDrawerItems(drawerItemTitle, DividerDrawerItem(),
+                        drawerItemBusiness,
+                        drawerItemEntertainment,
+                        drawerItemGeneral,
+                        drawerItemTechnology,
+                        drawerItemScience,
+                        drawerItemSports,
+                        drawerItemHealth
+                )
                 .withSelectedItemByPosition(1)
                 .build()
 
         drawer.setOnDrawerItemClickListener { _: View?, position: Int, _: IDrawerItem<*, *>? ->
             when (position) {
-                1 -> presenter.getAllHeadlinesByCategory(Category.BUSINESS)
-                2 -> presenter.getAllHeadlinesByCategory(Category.ENTERTAINMENT)
-                3 -> presenter.getAllHeadlinesByCategory(Category.GENERAL)
+                2 -> presenter.getAllHeadlinesByCategory(Category.BUSINESS)
+                3 -> presenter.getAllHeadlinesByCategory(Category.ENTERTAINMENT)
+                4 -> presenter.getAllHeadlinesByCategory(Category.GENERAL)
+                5 -> presenter.getAllHeadlinesByCategory(Category.TECHNOLOGY)
+                6 -> presenter.getAllHeadlinesByCategory(Category.SCIENCE)
+                7 -> presenter.getAllHeadlinesByCategory(Category.SPORTS)
+                8 -> presenter.getAllHeadlinesByCategory(Category.HEALTH)
             }
             drawer.closeDrawer()
             true
@@ -120,7 +135,7 @@ class MainActivity : BaseActivity(), MainView {
 
         menuSearch.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
             override fun onQueryTextSubmit(query: String?): Boolean {
-                presenter.getEverythingArticle(query)
+                presenter.getEverythingArticle(query, 1, 10)
                 return true
             }
 
@@ -153,11 +168,13 @@ class MainActivity : BaseActivity(), MainView {
 
         info { "articles: ${articles.size}" }
         refresh_layout.isRefreshing = false
-        val displayMetrics = DisplayMetrics()
-        windowManager.defaultDisplay.getMetrics(displayMetrics)
+
         val ad =
-                if (pref.getRecyclerLayout() == NewsLayout.LAYOUT_LINEAR) ArticleAdapter(this, articles)
-                else GridArticleAdapter(this, articles, displayMetrics.widthPixels)
+                if (pref.getRecyclerLayout() == NewsLayout.LAYOUT_LINEAR)
+                    ArticleAdapter(this, articles)
+                else
+                    GridArticleAdapter(this, articles, widthScreen)
+
         new_recycler.adapter = ad
     }
 }

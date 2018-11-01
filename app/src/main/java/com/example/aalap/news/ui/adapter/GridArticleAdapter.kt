@@ -13,7 +13,6 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.aalap.news.R
 import com.example.aalap.news.Utils
 import com.example.aalap.news.models.Article
-import com.example.aalap.news.ui.activities.TAG
 import com.example.aalap.news.ui.activities.Webview
 import com.squareup.picasso.Picasso
 
@@ -46,9 +45,9 @@ class GridArticleAdapter(var context: Context, var list: List<Article>, var scre
         holder.date.text = Utils().getLocaleTime(article.publishedAt)
 
         if (TextUtils.isEmpty(article.urlToImage))
-            picasso.load(R.drawable.ic_news_app_launcher).error(R.drawable.ic_news_app_launcher).placeholder(R.drawable.ic_news_app_launcher).into(holder.image)
+            picasso.load(R.mipmap.ic_launcher_round).error(R.mipmap.ic_launcher_round).placeholder(R.mipmap.ic_launcher_round).into(holder.image)
         else
-            picasso.load(article.urlToImage).error(R.drawable.ic_news_app_launcher).placeholder(R.drawable.ic_news_app_launcher).into(holder.image)
+            picasso.load(article.urlToImage).error(R.mipmap.ic_launcher_round).placeholder(R.mipmap.ic_launcher_round).into(holder.image)
 
         holder.itemView.setOnClickListener { holder.bindClicks(article) }
     }
@@ -60,7 +59,7 @@ class GridArticleAdapter(var context: Context, var list: List<Article>, var scre
         var image: ImageView = itemView.findViewById(R.id.article_image)
 
         fun bindClicks(article: Article) {
-            Log.d(TAG, "Opening...")
+
             val intent = Intent(context, Webview::class.java)
             intent.putExtra("url", article.url)
             intent.putExtra("title", article.title)

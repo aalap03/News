@@ -17,7 +17,7 @@ abstract class BaseActivity: AppCompatActivity(), AnkoLogger {
     abstract fun getToolbarTitle(): String
 
     override fun onCreate(savedInstanceState: Bundle?) {
-        setTheme(pref.getTheme())
+//        setTheme(pref.getTheme())
         super.onCreate(savedInstanceState)
         setContentView(layoutResID())
 

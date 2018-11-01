@@ -7,7 +7,7 @@ import com.example.aalap.news.models.NewsLayout
 const val KEY_THEME = "theme"
 const val KEY_LAYOUT = "layout"
 
-class Pref(var appContext: Context) {
+class Pref(appContext: Context) {
 
     var pref: SharedPreferences = appContext.getSharedPreferences("News", Context.MODE_PRIVATE)
 

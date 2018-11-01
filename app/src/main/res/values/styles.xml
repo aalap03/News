@@ -2,22 +2,20 @@
 
     <!-- Base application theme. -->
     <style name="AppTheme" parent="MaterialDrawerTheme.Light">
-        <!-- Customize your theme here. -->
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
-        <item name="android:background">@color/background_light</item>
+
         <item name="android:fontFamily">@font/lato_regular</item>
         <item name="android:textColorSecondary">@android:color/white</item>
 
+
     </style>
 
-    <style name="AppTheme_Dark" parent="MaterialDrawerTheme.Light">
-        <!-- Customize your theme here. -->
+    <style name="AppTheme_Dark" parent="MaterialDrawerTheme.Light.DarkToolbar">
         <item name="colorPrimary">@color/colorPrimary_Dark</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark_Dark</item>
         <item name="colorAccent">@color/colorAccent_Dark</item>
-        <item name="android:background">@color/background_dark</item>
 
         <item name="android:fontFamily">@font/lato_regular</item>
         <item name="android:textColorSecondary">@android:color/white</item>

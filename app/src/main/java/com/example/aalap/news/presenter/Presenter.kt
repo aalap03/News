@@ -1,6 +1,5 @@
 package com.example.aalap.news.presenter
 
-import android.util.Log
 import com.example.aalap.news.models.Article
 import com.example.aalap.news.models.NewsModel
 import com.example.aalap.news.view.MainView
@@ -12,44 +11,43 @@ import io.reactivex.schedulers.Schedulers
 import org.jetbrains.anko.AnkoLogger
 import org.jetbrains.anko.info
 
-class Presenter(var view: MainView, var model: NewsModel): AnkoLogger {
+class Presenter(var view: MainView, private var model: NewsModel) : AnkoLogger {
 
     private var compositeDisposable = CompositeDisposable()
-    private val TAG = "Presenter: "
 
     fun getAllHeadlinesByCountry() {
-
         view.loading(true)
         getAndDisplayList(model.getTopHeadlinesByCountry())
     }
 
     fun getAllHeadlinesByCategory(category: String) {
-
-        info { "Getting Articles:..." }
         view.loading(true)
-        getAndDisplayList(model.getTopHeadlinesByCategory(category))
+        getAndDisplayList(model.getTopHeadlinesByCountryAndCategory("us", category))
     }
 
-    fun getEverythingArticle(query: String?) {
-        getAndDisplayList(query?.let { model.getEverything(it) })
+    fun getEverythingArticle(query: String?, page: Long, pageSize: Int) {
+        getAndDisplayList(query?.let { model.getEverything(it, page, pageSize) })
     }
 
     //this receives list single as parameter, subscribes it and display it on the view
     private fun getAndDisplayList(single: Single<List<Article>>?) {
-        single?.subscribeOn(Schedulers.io())
-//                ?.onErrorResumeNext(single) //Give db items at this point
-                ?.doOnError { Log.d(TAG, it.localizedMessage) }
-                ?.observeOn(AndroidSchedulers.mainThread())
-                ?.subscribe(getListConsumer())
-                ?.let { compositeDisposable.add(it) }
+        if (single != null)
+            single.subscribeOn(Schedulers.io())
+                    .doOnError { info { it.localizedMessage } }
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribe(getListConsumer())
+                    .let { compositeDisposable.add(it) }
+        else
+            view.showError("Feed Not found")
     }
 
     private fun getListConsumer(): BiConsumer<List<Article>, Throwable> {
         return BiConsumer { articles, throwable ->
-            if (articles != null)
-                view.displayArticles(articles)
-            else
-                view.showError(throwable?.localizedMessage)
+            when {
+                articles != null -> view.displayArticles(articles)
+                throwable != null -> view.showError(throwable.localizedMessage)
+                else -> view.showError("Are bhai kehna kya chahte ho???")
+            }
         }
     }
 
