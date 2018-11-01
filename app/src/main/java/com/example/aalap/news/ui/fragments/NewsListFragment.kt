@@ -25,7 +25,7 @@ const val CATEGORY = "category"
 class NewsListFragment : Fragment(), MainView, AnkoLogger {
 
     private lateinit var presenter: Presenter
-    lateinit var adapter: ArticleAdapter
+    private lateinit var adapter: ArticleAdapter
 
     companion object {
 
@@ -71,7 +71,6 @@ class NewsListFragment : Fragment(), MainView, AnkoLogger {
     override fun displayArticles(articles: List<Article>) {
         adapter = ArticleAdapter(requireContext(), articles)
         new_recycler.adapter = adapter
-
         refresh_layout.isRefreshing = false
     }
 }
