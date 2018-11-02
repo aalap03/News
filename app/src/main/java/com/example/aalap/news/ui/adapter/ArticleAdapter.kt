@@ -15,9 +15,11 @@ import com.example.aalap.news.models.newsmodels.Article
 import com.example.aalap.news.ui.activities.Webview
 import com.squareup.picasso.Picasso
 import org.jetbrains.anko.AnkoLogger
+import org.jetbrains.anko.displayMetrics
 import org.jetbrains.anko.info
+import org.jetbrains.anko.windowManager
 
-class ArticleAdapter(var context: Context, var list: List<Article>) : RecyclerView.Adapter<ArticleAdapter.ArticleHolder>(), AnkoLogger {
+class ArticleAdapter(var context: Context, var list: List<Article>, var screenWidth: Int) : RecyclerView.Adapter<ArticleAdapter.ArticleHolder>(), AnkoLogger {
 
     var picasso: Picasso = Picasso.get()
 
@@ -32,6 +34,7 @@ class ArticleAdapter(var context: Context, var list: List<Article>) : RecyclerVi
     override fun onBindViewHolder(holder: ArticleHolder, position: Int) {
         val article = list[position]
         holder.title.text = article.title
+        holder.image.layoutParams.height = screenWidth / 2
 
         if (!TextUtils.isEmpty(article.author)) {
             holder.author.visibility = View.VISIBLE
@@ -45,7 +48,9 @@ class ArticleAdapter(var context: Context, var list: List<Article>) : RecyclerVi
         if (TextUtils.isEmpty(article.urlToImage))
             holder.image.setImageResource(R.mipmap.ic_launcher_round)
         else
-            picasso.load(article.urlToImage).error(R.mipmap.ic_launcher_round).resize(Utils().dpToPx(70), Utils().dpToPx(70)).centerCrop()
+            picasso.load(article.urlToImage)
+                    .error(R.mipmap.ic_launcher_round)
+                    .fit()
                     .placeholder(R.mipmap.ic_launcher_round)
                     .into(holder.image)
 

@@ -171,12 +171,12 @@ class MainActivity : BaseActivity(), MainView {
         info { "articles: ${articles.size}" }
         refresh_layout.isRefreshing = false
 
-        val ad =
-                if (pref.getRecyclerLayout() == NewsLayout.LAYOUT_LINEAR)
-                    ArticleAdapter(this, articles)
-                else
-                    GridArticleAdapter(this, articles, widthScreen)
-
-        new_recycler.adapter = ad
+//        val ad =
+//                if (pref.getRecyclerLayout() == NewsLayout.LAYOUT_LINEAR)
+//                    ArticleAdapter(this, articles)
+//                else
+//                    GridArticleAdapter(this, articles, widthScreen)
+//
+//        new_recycler.adapter = ad
     }
 }

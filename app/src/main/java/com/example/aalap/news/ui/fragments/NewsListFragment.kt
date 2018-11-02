@@ -2,6 +2,7 @@ package layout
 
 import android.os.Bundle
 import android.text.TextUtils
+import android.util.DisplayMetrics
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -18,6 +19,7 @@ import com.example.aalap.news.view.MainView
 import kotlinx.android.synthetic.main.news_list_frag.*
 import org.jetbrains.anko.AnkoLogger
 import org.jetbrains.anko.info
+import org.jetbrains.anko.windowManager
 
 const val CATEGORY = "category"
 
@@ -25,6 +27,7 @@ class NewsListFragment : Fragment(), MainView, AnkoLogger {
 
     private lateinit var presenter: Presenter
     private lateinit var adapter: ArticleAdapter
+    private var widthScreen: Int = 0
 
     companion object {
 
@@ -49,12 +52,18 @@ class NewsListFragment : Fragment(), MainView, AnkoLogger {
         new_recycler.layoutManager = LinearLayoutManager(requireContext())
 
         info { "Fragment Category: $category" }
-
+        val displayMetrics = DisplayMetrics()
+        context?.windowManager?.defaultDisplay?.getMetrics(displayMetrics)
+        widthScreen = displayMetrics.widthPixels
 
         if (!TextUtils.isEmpty(category))
             category?.let { presenter.getAllHeadlinesByCategory(it) }
         else
             showError("No categories found")
+
+        refresh_layout.setOnRefreshListener {
+            category?.let { presenter.getAllHeadlinesByCategory(it) }
+        }
     }
 
     override fun loading(isVisible: Boolean) {
@@ -68,7 +77,7 @@ class NewsListFragment : Fragment(), MainView, AnkoLogger {
     }
 
     override fun displayArticles(articles: List<Article>) {
-        adapter = ArticleAdapter(requireContext(), articles)
+        adapter = ArticleAdapter(requireContext(), articles, widthScreen)
         new_recycler.adapter = adapter
         refresh_layout.isRefreshing = false
     }

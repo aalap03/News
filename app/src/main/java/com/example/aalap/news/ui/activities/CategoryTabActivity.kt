@@ -2,9 +2,12 @@ package com.example.aalap.news.ui.activities
 
 import android.Manifest
 import android.annotation.SuppressLint
+import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Build
 import android.os.Bundle
+import android.view.Menu
+import android.view.MenuItem
 import androidx.appcompat.widget.Toolbar
 import androidx.core.app.ActivityCompat
 import com.example.aalap.news.R
@@ -47,6 +50,27 @@ class CategoryTabActivity : BaseActivity() {
                 .setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY)
 
         requestLocation()
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        menuInflater.inflate(R.menu.menu, menu)
+        return super.onCreateOptionsMenu(menu)
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem?): Boolean {
+
+        when(item?.itemId) {
+
+            R.id.menu_settings->{
+                startActivity(Intent(this, NewsSettings::class.java))
+            }
+
+            R.id.menu_search->{
+
+            }
+        }
+
+        return super.onOptionsItemSelected(item)
     }
 
     private fun requestLocation() {
