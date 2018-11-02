@@ -1,7 +1,7 @@
 package com.example.aalap.news.presenter
 
-import com.example.aalap.news.models.Article
-import com.example.aalap.news.models.NewsModel
+import com.example.aalap.news.models.newsmodels.Article
+import com.example.aalap.news.models.newsmodels.NewsModel
 import com.example.aalap.news.view.MainView
 import io.reactivex.Single
 import io.reactivex.android.schedulers.AndroidSchedulers

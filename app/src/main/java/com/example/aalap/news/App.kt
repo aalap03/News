@@ -2,14 +2,17 @@ package com.example.aalap.news
 
 import android.app.Application
 import com.example.aalap.news.retrofitutils.NewsService
+import com.example.aalap.news.retrofitutils.WeatherService
 import okhttp3.Interceptor
 import okhttp3.OkHttpClient
 import retrofit2.Retrofit
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
 import retrofit2.converter.gson.GsonConverterFactory
 
-lateinit var retrofit: Retrofit
-lateinit var retrofitService: NewsService
+lateinit var newsRetrofit: Retrofit
+lateinit var weatherRetrofit: Retrofit
+lateinit var newsService: NewsService
+lateinit var weatherService: WeatherService
 lateinit var pref: Pref
 
 class App: Application() {
@@ -17,15 +20,23 @@ class App: Application() {
     override fun onCreate() {
         super.onCreate()
 
-        retrofit = Retrofit.Builder()
+        newsRetrofit = Retrofit.Builder()
                 .baseUrl("https://newsapi.org/v2/")
                 .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
                 .addConverterFactory(GsonConverterFactory.create())
                 .client(okHttpClient())
                 .build()
+
+        weatherRetrofit = Retrofit.Builder()
+                .baseUrl("https://api.darksky.net/forecast/"+getString(R.string.weather_api_key)+"/")
+                .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
+                .addConverterFactory(GsonConverterFactory.create())
+                .build()
+
         pref = Pref(this)
 
-        retrofitService = retrofit.create(NewsService::class.java)
+        newsService = newsRetrofit.create(NewsService::class.java)
+        weatherService = weatherRetrofit.create(WeatherService::class.java)
     }
 
     private fun okHttpClient(): OkHttpClient {

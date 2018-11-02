@@ -3,7 +3,6 @@ package com.example.aalap.news.ui.adapter
 import android.content.Context
 import android.content.Intent
 import android.text.TextUtils
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -12,7 +11,7 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.aalap.news.R
 import com.example.aalap.news.Utils
-import com.example.aalap.news.models.Article
+import com.example.aalap.news.models.newsmodels.Article
 import com.example.aalap.news.ui.activities.Webview
 import com.squareup.picasso.Picasso
 

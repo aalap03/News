@@ -2,7 +2,7 @@ package com.example.aalap.news
 
 import android.content.Context
 import android.content.SharedPreferences
-import com.example.aalap.news.models.NewsLayout
+import com.example.aalap.news.models.newsmodels.NewsLayout
 
 const val KEY_THEME = "theme"
 const val KEY_LAYOUT = "layout"

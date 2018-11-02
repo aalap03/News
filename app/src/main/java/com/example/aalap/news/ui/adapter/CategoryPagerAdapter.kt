@@ -3,7 +3,7 @@ package com.example.aalap.news.ui.adapter
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentPagerAdapter
-import com.example.aalap.news.models.Category
+import com.example.aalap.news.models.newsmodels.Category
 import layout.NewsListFragment
 
 class CategoryPagerAdapter(fragmentManager: FragmentManager): FragmentPagerAdapter(fragmentManager) {

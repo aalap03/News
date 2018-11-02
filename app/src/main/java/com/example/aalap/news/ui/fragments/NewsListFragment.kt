@@ -10,11 +10,10 @@ import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 
 import com.example.aalap.news.R
-import com.example.aalap.news.models.Article
-import com.example.aalap.news.models.NewsModel
+import com.example.aalap.news.models.newsmodels.Article
+import com.example.aalap.news.models.newsmodels.NewsModel
 import com.example.aalap.news.presenter.Presenter
 import com.example.aalap.news.ui.adapter.ArticleAdapter
-import com.example.aalap.news.ui.adapter.GridArticleAdapter
 import com.example.aalap.news.view.MainView
 import kotlinx.android.synthetic.main.news_list_frag.*
 import org.jetbrains.anko.AnkoLogger

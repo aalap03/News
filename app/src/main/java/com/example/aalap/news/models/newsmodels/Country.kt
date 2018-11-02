@@ -1,4 +1,4 @@
-package com.example.aalap.news.models
+package com.example.aalap.news.models.newsmodels
 
 import android.util.Log
 

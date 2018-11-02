@@ -15,10 +15,10 @@ import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.aalap.news.ui.adapter.GridArticleAdapter
 import com.example.aalap.news.R
-import com.example.aalap.news.models.Article
-import com.example.aalap.news.models.Category
-import com.example.aalap.news.models.NewsLayout
-import com.example.aalap.news.models.NewsModel
+import com.example.aalap.news.models.newsmodels.Article
+import com.example.aalap.news.models.newsmodels.Category
+import com.example.aalap.news.models.newsmodels.NewsLayout
+import com.example.aalap.news.models.newsmodels.NewsModel
 import com.example.aalap.news.pref
 import com.example.aalap.news.presenter.Presenter
 import com.example.aalap.news.ui.adapter.ArticleAdapter
@@ -30,6 +30,8 @@ import com.mikepenz.materialdrawer.model.PrimaryDrawerItem
 import com.mikepenz.materialdrawer.model.interfaces.IDrawerItem
 import kotlinx.android.synthetic.main.toolbar_template.*
 import org.jetbrains.anko.info
+
+@Deprecated("Not used", replaceWith = ReplaceWith("CategoryTabActivity", ""), level = DeprecationLevel.WARNING)
 
 class MainActivity : BaseActivity(), MainView {
 
