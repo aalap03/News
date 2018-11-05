@@ -46,12 +46,12 @@ class ArticleAdapter(var context: Context, var list: List<Article>, var screenWi
         holder.date.text = Utils().getLocaleTime(article.publishedAt)
 
         if (TextUtils.isEmpty(article.urlToImage))
-            holder.image.setImageResource(R.mipmap.ic_launcher_round)
+            holder.image.setImageResource(R.drawable.gradient_1)
         else
             picasso.load(article.urlToImage)
-                    .error(R.mipmap.ic_launcher_round)
+                    .error(R.drawable.gradient_1)
                     .fit()
-                    .placeholder(R.mipmap.ic_launcher_round)
+                    .placeholder(R.drawable.gradient_1)
                     .into(holder.image)
 
         holder.itemView.setOnClickListener { holder.bindClicks(article) }

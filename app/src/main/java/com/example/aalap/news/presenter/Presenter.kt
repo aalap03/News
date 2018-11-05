@@ -2,6 +2,7 @@ package com.example.aalap.news.presenter
 
 import com.example.aalap.news.models.newsmodels.Article
 import com.example.aalap.news.models.newsmodels.NewsModel
+import com.example.aalap.news.view.BaseView
 import com.example.aalap.news.view.MainView
 import io.reactivex.Single
 import io.reactivex.android.schedulers.AndroidSchedulers
@@ -11,7 +12,7 @@ import io.reactivex.schedulers.Schedulers
 import org.jetbrains.anko.AnkoLogger
 import org.jetbrains.anko.info
 
-class Presenter(var view: MainView, private var model: NewsModel) : AnkoLogger {
+class Presenter(var view: BaseView, private var model: NewsModel) : AnkoLogger {
 
     private var compositeDisposable = CompositeDisposable()
 
@@ -26,6 +27,7 @@ class Presenter(var view: MainView, private var model: NewsModel) : AnkoLogger {
     }
 
     fun getEverythingArticle(query: String?, page: Long, pageSize: Int) {
+        view.loading(true)
         getAndDisplayList(query?.let { model.getEverything(it, page, pageSize) })
     }
 
@@ -43,6 +45,7 @@ class Presenter(var view: MainView, private var model: NewsModel) : AnkoLogger {
 
     private fun getListConsumer(): BiConsumer<List<Article>, Throwable> {
         return BiConsumer { articles, throwable ->
+            info { "Articles: ${articles?.size}" }
             when {
                 articles != null -> view.displayArticles(articles)
                 throwable != null -> view.showError(throwable.localizedMessage)

@@ -1,5 +1,6 @@
 package layout
 
+import android.content.Context
 import android.os.Bundle
 import android.text.TextUtils
 import android.util.DisplayMetrics
@@ -14,20 +15,29 @@ import com.example.aalap.news.R
 import com.example.aalap.news.models.newsmodels.Article
 import com.example.aalap.news.models.newsmodels.NewsModel
 import com.example.aalap.news.presenter.Presenter
+import com.example.aalap.news.ui.activities.CategoryTabActivity
+import com.example.aalap.news.ui.activities.SendQuery
 import com.example.aalap.news.ui.adapter.ArticleAdapter
 import com.example.aalap.news.view.MainView
 import kotlinx.android.synthetic.main.news_list_frag.*
+import kotlinx.android.synthetic.main.toolbar_template.*
 import org.jetbrains.anko.AnkoLogger
 import org.jetbrains.anko.info
 import org.jetbrains.anko.windowManager
 
 const val CATEGORY = "category"
 
-class NewsListFragment : Fragment(), MainView, AnkoLogger {
+class NewsListFragment : Fragment(), MainView, AnkoLogger, SendQuery {
+
+    override fun sendQuery(query: String) {
+        info { "Everything: $query" }
+        presenter.getEverythingArticle(query, 1, 100)
+    }
 
     private lateinit var presenter: Presenter
     private lateinit var adapter: ArticleAdapter
     private var widthScreen: Int = 0
+    var category: String = "Anything"
 
     companion object {
 
@@ -47,7 +57,8 @@ class NewsListFragment : Fragment(), MainView, AnkoLogger {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val category = arguments?.getString(CATEGORY)
+        news_toolbar.visibility = View.GONE
+        category = arguments?.getString(CATEGORY) ?: "Anything"
         presenter = Presenter(this, NewsModel())
         new_recycler.layoutManager = LinearLayoutManager(requireContext())
 
@@ -78,7 +89,18 @@ class NewsListFragment : Fragment(), MainView, AnkoLogger {
 
     override fun displayArticles(articles: List<Article>) {
         adapter = ArticleAdapter(requireContext(), articles, widthScreen)
-        new_recycler.adapter = adapter
-        refresh_layout.isRefreshing = false
+        info { "Category: $category" }
+        new_recycler?.adapter = adapter
+        refresh_layout?.isRefreshing = false
+    }
+
+    override fun onAttach(context: Context?) {
+        super.onAttach(context)
+        (context as CategoryTabActivity).sendQuery = this
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        presenter.dispose()
     }
 }

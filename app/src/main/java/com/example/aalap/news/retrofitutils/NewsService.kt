@@ -21,7 +21,8 @@ interface NewsService {
 
     @GET("everything")
     fun getEverything(
-            @Query("q") query: String,
-            @Query("page") page: Long,
-            @Query("pageSize") size: Int): Single<Response<News>>
+            @Query("q") query: String): Single<Response<News>>
+//    ,
+//            @Query("page") page: Long,
+//            @Query("pageSize") size: Int): Single<Response<News>>
 }

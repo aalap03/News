@@ -18,7 +18,7 @@ class NewsModel {
     }
 
     fun getEverything(category: String, page: Long, pageSize: Int): Single<List<Article>>? {
-        return newsService.getEverything(category, page, pageSize)
+        return newsService.getEverything(category)
                 .map { it.body()?.articles }
     }
 
