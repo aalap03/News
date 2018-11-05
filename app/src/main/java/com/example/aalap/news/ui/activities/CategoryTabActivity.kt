@@ -145,13 +145,15 @@ class CategoryTabActivity : BaseActivity() {
 
         val lastKnownLocation = manager.getLastKnownLocation(LocationManager.GPS_PROVIDER)
 
-        val weatherSubscription = weatherService.getCurrentWeather(lastKnownLocation.latitude, lastKnownLocation.longitude)
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe { t1, t2 ->
-                    info { "Weather: data: ${t1?.body()}" }
-                    info { "Weather: er ${t2?.localizedMessage}" }
-                }
+        if (lastKnownLocation != null) {
+            val weatherSubscription = weatherService.getCurrentWeather(lastKnownLocation.latitude, lastKnownLocation.longitude)
+                    .subscribeOn(Schedulers.io())
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribe { t1, t2 ->
+                        info { "Weather: data: ${t1?.body()}" }
+                        info { "Weather: er ${t2?.localizedMessage}" }
+                    }
+        }
 
         info { "Weather: requestingLocation..." }
         return object : LocationCallback() {

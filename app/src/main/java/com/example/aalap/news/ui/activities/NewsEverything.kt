@@ -21,6 +21,7 @@ class NewsEverything : BaseActivity(), EverythingView {
     lateinit var presenter: Presenter
     lateinit var adapter: ArticleAdapter
     var screenWidth: Int = 0
+    var currentTitle = ""
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -29,13 +30,16 @@ class NewsEverything : BaseActivity(), EverythingView {
         windowManager.defaultDisplay.getMetrics(displayMetrics)
         screenWidth = displayMetrics.widthPixels
 
+        currentTitle = intent.getStringExtra("title")
         getToolbar().backgroundColor = ContextCompat.getColor(this, R.color.primary)
-        getToolbar().title = intent.getStringExtra("title")
+        getToolbar().title = currentTitle
 
         new_recycler.layoutManager = LinearLayoutManager(this)
 
         presenter = Presenter(this, NewsModel())
-        presenter.getEverythingArticle(intent?.getStringExtra("title"), 0, 0)
+        presenter.getEverythingArticle(currentTitle, 0, 0)
+
+        refresh_layout.setOnRefreshListener { presenter.getEverythingArticle(currentTitle, 0, 0) }
     }
 
 
