@@ -18,7 +18,7 @@ import com.example.aalap.news.presenter.Presenter
 import com.example.aalap.news.ui.activities.CategoryTabActivity
 import com.example.aalap.news.ui.activities.SendQuery
 import com.example.aalap.news.ui.adapter.ArticleAdapter
-import com.example.aalap.news.view.MainView
+import com.example.aalap.news.view.NewsFragmentView
 import kotlinx.android.synthetic.main.news_list_frag.*
 import kotlinx.android.synthetic.main.toolbar_template.*
 import org.jetbrains.anko.AnkoLogger
@@ -27,7 +27,7 @@ import org.jetbrains.anko.windowManager
 
 const val CATEGORY = "category"
 
-class NewsListFragment : Fragment(), MainView, AnkoLogger, SendQuery {
+class NewsListFragment : Fragment(), NewsFragmentView, AnkoLogger, SendQuery {
 
     override fun sendQuery(query: String) {
         info { "Everything: $query" }

@@ -2,8 +2,7 @@ package com.example.aalap.news.presenter
 
 import com.example.aalap.news.models.newsmodels.Article
 import com.example.aalap.news.models.newsmodels.NewsModel
-import com.example.aalap.news.view.BaseView
-import com.example.aalap.news.view.MainView
+import com.example.aalap.news.view.NewsFragmentView
 import io.reactivex.Single
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
@@ -12,7 +11,7 @@ import io.reactivex.schedulers.Schedulers
 import org.jetbrains.anko.AnkoLogger
 import org.jetbrains.anko.info
 
-class Presenter(var view: BaseView, private var model: NewsModel) : AnkoLogger {
+class Presenter(var view: NewsFragmentView, private var model: NewsModel) : AnkoLogger {
 
     private var compositeDisposable = CompositeDisposable()
 

@@ -1,36 +1,46 @@
 package com.example.aalap.news.ui.activities
 
 import android.Manifest
+import android.animation.Animator
+import android.animation.ObjectAnimator
 import android.annotation.SuppressLint
 import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
-import android.graphics.Color
 import android.graphics.drawable.AnimationDrawable
 import android.location.LocationManager
 import android.os.Build
 import android.os.Bundle
-import android.os.Looper
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
+import android.view.animation.AccelerateInterpolator
 import androidx.appcompat.widget.SearchView
 import androidx.appcompat.widget.Toolbar
 import androidx.core.app.ActivityCompat
 import com.example.aalap.news.R
 import com.example.aalap.news.ui.adapter.CategoryPagerAdapter
-import com.example.aalap.news.weatherService
 import com.google.android.gms.location.*
-import io.reactivex.android.schedulers.AndroidSchedulers
-import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.category_tabs_activity.*
 import kotlinx.android.synthetic.main.toolbar_template.*
 import org.jetbrains.anko.backgroundDrawable
 import org.jetbrains.anko.info
-import org.jetbrains.anko.textView
-import android.widget.TextView
 import android.widget.EditText
+import android.widget.TextView
+import android.widget.Toast
 import androidx.core.content.ContextCompat
+import androidx.recyclerview.widget.LinearLayoutManager
+import com.example.aalap.news.models.weathermodels.Currently
+import com.example.aalap.news.models.weathermodels.DailyData
+import com.example.aalap.news.models.weathermodels.WeatherModel
+import com.example.aalap.news.presenter.WeatherPresenter
+import com.example.aalap.news.ui.adapter.WeatherDailyAdapter
+import com.example.aalap.news.view.MainView
+import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.disposables.CompositeDisposable
+import io.reactivex.schedulers.Schedulers
+import kotlinx.android.synthetic.main.main_weather_layout.*
+import pl.charmas.android.reactivelocation2.ReactiveLocationProvider
 
 
 const val LOCATION_PERMISSION = 1
@@ -39,17 +49,46 @@ interface SendQuery {
     fun sendQuery(query: String)
 }
 
-class CategoryTabActivity : BaseActivity() {
+class CategoryTabActivity : BaseActivity(), MainView {
+
+    override fun layoutResID(): Int {
+        return R.layout.category_tabs_activity
+    }
+
+    override fun getToolbar(): Toolbar {
+        return news_toolbar
+    }
+
+    override fun getToolbarTitle(): String {
+        return "Categories"
+    }
+
+    override fun showCurrentWeather(current: Currently) {
+        weather_current_feels_like.text = "Feels like ${current.feelsLike()}"
+        weather_current_icon.setImageResource(current.getIconRes())
+        weather_temperature_layout_current.findViewById<TextView>(R.id.weather_temperature_value).text = current.currentTemperature().toString()
+    }
 
     private lateinit var locationRequest: LocationRequest
     lateinit var sendQuery: SendQuery
     lateinit var manager: LocationManager
+    lateinit var dailyAdapter: WeatherDailyAdapter
+    lateinit var weatherPresenter: WeatherPresenter
+    lateinit var locationProvider: ReactiveLocationProvider
+    var compositeDisposable = CompositeDisposable()
+    var dailyScaleUp = false
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
         category_view_pager.adapter = CategoryPagerAdapter(supportFragmentManager)
         category_tab.setupWithViewPager(category_view_pager)
+
+        weather_recycler.layoutManager = LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
+        weatherPresenter = WeatherPresenter(this, WeatherModel())
+        locationProvider = ReactiveLocationProvider(this)
+
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             val animationDrawable = tab_screen_root.backgroundDrawable as AnimationDrawable
@@ -63,10 +102,49 @@ class CategoryTabActivity : BaseActivity() {
         locationRequest = LocationRequest
                 .create()
                 .setNumUpdates(1)
-                .setExpirationDuration(5000)
-                .setPriority(LocationRequest.PRIORITY_BALANCED_POWER_ACCURACY)
+                .setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY)
 
         requestLocation()
+
+        weather_city_name.setOnClickListener { animateRecycler(!dailyScaleUp) }
+
+
+    }
+
+    private fun animateRecycler(isScaleUp: Boolean) {
+        dailyScaleUp = isScaleUp
+
+        if (isScaleUp)
+            weather_recycler.visibility = View.VISIBLE
+
+        val top: Int = weather_recycler.top
+        val bottom: Int
+
+        bottom = if (isScaleUp) weather_recycler.bottom else top
+
+        val objectAnimator = ObjectAnimator.ofInt(weather_recycler, "translationX", top, bottom)
+        objectAnimator.duration = 2000
+        objectAnimator.interpolator = AccelerateInterpolator()
+        objectAnimator.start()
+
+        objectAnimator.addListener(object : Animator.AnimatorListener {
+            override fun onAnimationRepeat(animation: Animator?) {
+
+            }
+
+            override fun onAnimationEnd(animation: Animator?) {
+                if (!isScaleUp)
+                    weather_recycler.visibility = View.GONE
+            }
+
+            override fun onAnimationCancel(animation: Animator?) {
+
+            }
+
+            override fun onAnimationStart(animation: Animator?) {
+
+            }
+        })
 
     }
 
@@ -116,16 +194,10 @@ class CategoryTabActivity : BaseActivity() {
                 ActivityCompat.requestPermissions(this,
                         arrayOf(Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION),
                         LOCATION_PERMISSION)
-            } else
-                LocationServices.getFusedLocationProviderClient(this).requestLocationUpdates(locationRequest, locationCallback(), null)
+            } else {
+                getLocationRX()
+            }
         }
-    }
-
-    override fun onPause() {
-        super.onPause()
-
-        info { "Weather: removing" }
-        LocationServices.getFusedLocationProviderClient(this).removeLocationUpdates(locationCallback())
     }
 
     @SuppressLint("MissingPermission")
@@ -135,63 +207,40 @@ class CategoryTabActivity : BaseActivity() {
         if (requestCode == LOCATION_PERMISSION && grantResults.isNotEmpty()) {
 
             if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                LocationServices.getFusedLocationProviderClient(this).requestLocationUpdates(locationRequest, locationCallback(), Looper.myLooper())
+                getLocationRX()
             }
         }
     }
+
+    override fun showDailyData(list: List<DailyData>) {
+        dailyAdapter = WeatherDailyAdapter(this, list)
+        weather_recycler.adapter = dailyAdapter
+    }
+
+    override fun dailyDataError(errorMsg: String) {
+        Toast.makeText(this, errorMsg, Toast.LENGTH_SHORT)
+                .show()
+    }
+
 
     @SuppressLint("MissingPermission")
-    private fun locationCallback(): LocationCallback {
+    fun getLocationRX() {
 
-        val lastKnownLocation = manager.getLastKnownLocation(LocationManager.GPS_PROVIDER)
-
-        if (lastKnownLocation != null) {
-            val weatherSubscription = weatherService.getCurrentWeather(lastKnownLocation.latitude, lastKnownLocation.longitude)
-                    .subscribeOn(Schedulers.io())
+        if (manager.isProviderEnabled(LocationManager.GPS_PROVIDER))
+            compositeDisposable.add(locationProvider.getUpdatedLocation(locationRequest)
                     .observeOn(AndroidSchedulers.mainThread())
-                    .subscribe { t1, t2 ->
-                        info { "Weather: data: ${t1?.body()}" }
-                        info { "Weather: er ${t2?.localizedMessage}" }
-                    }
-        }
+                    .subscribeOn(Schedulers.io())
+                    .subscribe({ t -> weatherPresenter.getCurrentWeather(t.latitude, t.longitude) },
+                            { t -> Toast.makeText(this, t.localizedMessage, Toast.LENGTH_SHORT).show() })
+            )
+        else
+            compositeDisposable.add(locationProvider.lastKnownLocation
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribeOn(Schedulers.io())
+                    .subscribe({ t -> weatherPresenter.getCurrentWeather(t.latitude, t.longitude) },
+                            { t -> Toast.makeText(this, t.localizedMessage, Toast.LENGTH_SHORT).show() })
+            )
 
-        info { "Weather: requestingLocation..." }
-        return object : LocationCallback() {
-            override fun onLocationResult(result: LocationResult?) {
-                super.onLocationResult(result)
-
-                if (result != null) {
-                    val location = if (result.locations.isNotEmpty())
-                        result.locations[0]
-                    else
-                        result.lastLocation
-
-                    info { "Weather: ${location.longitude}" }
-                    info { "Weather: ${location.latitude}" }
-
-                    val weatherSubscription = weatherService.getCurrentWeather(location.latitude, location.longitude)
-                            .subscribeOn(Schedulers.io())
-                            .observeOn(AndroidSchedulers.mainThread())
-                            .subscribe { t1, t2 ->
-                                info { "Weather: data: ${t1?.body()}" }
-                                info { "Weather: er ${t2?.localizedMessage}" }
-                            }
-
-                }
-            }
-        }
-    }
-
-    override fun layoutResID(): Int {
-        return R.layout.category_tabs_activity
-    }
-
-    override fun getToolbar(): Toolbar {
-        return news_toolbar
-    }
-
-    override fun getToolbarTitle(): String {
-        return "Categories"
     }
 
 }

@@ -12,11 +12,12 @@ import com.example.aalap.news.models.newsmodels.NewsModel
 import com.example.aalap.news.presenter.Presenter
 import com.example.aalap.news.ui.adapter.ArticleAdapter
 import com.example.aalap.news.view.EverythingView
+import com.example.aalap.news.view.NewsFragmentView
 import kotlinx.android.synthetic.main.news_list_frag.*
 import kotlinx.android.synthetic.main.toolbar_template.*
 import org.jetbrains.anko.backgroundColor
 
-class NewsEverything : BaseActivity(), EverythingView {
+class NewsEverything : BaseActivity(), NewsFragmentView {
 
     lateinit var presenter: Presenter
     lateinit var adapter: ArticleAdapter

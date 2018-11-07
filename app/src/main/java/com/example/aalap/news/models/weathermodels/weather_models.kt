@@ -1,7 +1,10 @@
 package com.example.aalap.news.models.weathermodels
 
+import android.util.Log
 import com.example.aalap.news.R
 import com.google.gson.annotations.SerializedName
+import java.text.SimpleDateFormat
+import java.util.*
 
 data class DailyData(@SerializedName("time") val time: Long,
                      @SerializedName("summary") val summary: String,
@@ -19,6 +22,13 @@ data class DailyData(@SerializedName("time") val time: Long,
 
     fun getIconRes(): Int {
         return getIcon(icon)
+    }
+
+    fun getDayOfTheWeek(): String {
+        val formatter = SimpleDateFormat("EEEE")
+        formatter.timeZone = TimeZone.getDefault()
+        val dateTime = Date(time * 1000.toLong())
+        return formatter.format(dateTime)
     }
 }
 
@@ -38,6 +48,13 @@ data class HourlyData(@SerializedName("time") val time: Long,
 
     fun getIconRes(): Int {
         return getIcon(icon)
+    }
+
+    fun getTimeAsHour(): String {
+        val formatter = SimpleDateFormat("h a")
+        formatter.timeZone = TimeZone.getDefault()
+        val dateTime = Date(time * 1000.toLong())
+        return formatter.format(dateTime)
     }
 }
 
@@ -65,6 +82,10 @@ data class Currently(@SerializedName("time") val time: Long,
     fun feelsLike(): Int {
         return getCelcious(apparentTemperature)
     }
+
+    fun getIconRes(): Int{
+        return getIcon(icon)
+    }
 }
 
 data class Weather(@SerializedName("currently") val currently: Currently,
@@ -78,33 +99,34 @@ fun getCelcious(ferenheite: Double): Int {
 }
 
 fun getIcon(icon: String): Int {
-//        when (icon) {
-//            "clear-day" -> R.drawable.wclear_day
-//
-//            "clear-night" -> R.drawable.wclear_night
-//
-//            "cloudy" -> R.drawable.wcloudy
-//
-//            "partly-cloudy-day" -> R.drawable.wcloudy
-//
-//            "cloudy-night" -> R.drawable.wcloudy_night
-//
-//            "partly-cloudy-night" -> R.drawable.wcloudy_night
-//
-//            "fog" -> R.drawable.wfog
-//
-//            "wind" -> R.drawable.wind
-//
-//            "sleet" -> R.drawable.wind
-//
-//            "partly-cloudy" -> R.drawable.wpartly_cloudy
-//
-//            "rain" -> R.drawable.wrain
-//
-//            "snow" -> R.drawable.wsnow
-//
-//            else -> R.drawable.wclear_day
-    //       }
-    return R.mipmap.ic_launcher
+    return when (icon) {
+        "clear-day" -> R.drawable.ic_day
+
+        "clear-night" -> R.drawable.ic_night
+
+        "cloudy" -> R.drawable.ic_cloudy
+
+        "partly-cloudy-day" -> R.drawable.ic_cloudy
+
+        "cloudy-night" -> R.drawable.ic_cloudy_night
+
+        "partly-cloudy-night" -> R.drawable.ic_cloudy_night
+
+        //todo change these
+        "fog" -> R.drawable.ic_cloudy
+
+        "wind" -> R.drawable.ic_night
+
+        "sleet" -> R.drawable.ic_day
+        //todo ends
+
+        "partly-cloudy" -> R.drawable.ic_cloudy
+
+        "rain" -> R.drawable.ic_rainy
+
+        "snow" -> R.drawable.ic_snowy
+
+        else -> R.drawable.ic_day
+    }
 }
 

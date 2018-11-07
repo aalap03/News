@@ -81,4 +81,7 @@ dependencies {
 
     implementation 'com.google.android.gms:play-services-location:16.0.0'
 
+    compile 'pl.charmas.android:android-reactive-location2:2.1@aar'
+
+
 }

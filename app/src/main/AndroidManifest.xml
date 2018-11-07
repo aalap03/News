@@ -4,8 +4,7 @@
     package="com.example.aalap.news">
 
     <uses-feature
-        android:name="android.hardware.location.gps"
-        android:required="false" />
+        android:name="android.hardware.location.gps" />
 
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
