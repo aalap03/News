@@ -24,12 +24,13 @@ class WeatherPresenter(var view: MainView, var model: WeatherModel): AnkoLogger 
                         t1 != null -> {
                             view.showDailyData(t1.daily.data)
                             view.showCurrentWeather(t1.currently)
+                            view.hourlyData(t1.hourly.data)
                         }
                         t2 != null -> {
-                            view.dailyDataError(t2.localizedMessage)
+                            view.error(t2.localizedMessage)
                         }
                         else -> {
-                            view.dailyDataError("Not sure what the fuck is wrong")
+                            view.error("Not sure what the fuck is wrong")
                         }
                     }
                 }?.let {

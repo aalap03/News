@@ -1,6 +1,5 @@
 package layout
 
-import android.content.Context
 import android.os.Bundle
 import android.text.TextUtils
 import android.util.DisplayMetrics
@@ -15,8 +14,6 @@ import com.example.aalap.news.R
 import com.example.aalap.news.models.newsmodels.Article
 import com.example.aalap.news.models.newsmodels.NewsModel
 import com.example.aalap.news.presenter.Presenter
-import com.example.aalap.news.ui.activities.CategoryTabActivity
-import com.example.aalap.news.ui.activities.SendQuery
 import com.example.aalap.news.ui.adapter.ArticleAdapter
 import com.example.aalap.news.view.NewsFragmentView
 import kotlinx.android.synthetic.main.news_list_frag.*
@@ -27,12 +24,7 @@ import org.jetbrains.anko.windowManager
 
 const val CATEGORY = "category"
 
-class NewsListFragment : Fragment(), NewsFragmentView, AnkoLogger, SendQuery {
-
-    override fun sendQuery(query: String) {
-        info { "Everything: $query" }
-        presenter.getEverythingArticle(query, 1, 100)
-    }
+class NewsListFragment : Fragment(), NewsFragmentView, AnkoLogger {
 
     private lateinit var presenter: Presenter
     private lateinit var adapter: ArticleAdapter
@@ -92,11 +84,6 @@ class NewsListFragment : Fragment(), NewsFragmentView, AnkoLogger, SendQuery {
         info { "Category: $category" }
         new_recycler?.adapter = adapter
         refresh_layout?.isRefreshing = false
-    }
-
-    override fun onAttach(context: Context?) {
-        super.onAttach(context)
-        (context as CategoryTabActivity).sendQuery = this
     }
 
     override fun onDestroyView() {

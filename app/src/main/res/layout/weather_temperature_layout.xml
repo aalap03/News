@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     android:gravity="center"
@@ -9,16 +9,16 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="6"
+        android:text="-16"
         android:id="@+id/weather_temperature_value"
-        android:textColor="@color/lb_tv_white" />
+        android:textColor="@android:color/white" />
 
     <ImageView
         android:layout_width="5dp"
         android:layout_marginTop="3dp"
         android:layout_marginStart="2dp"
         android:layout_height="5dp"
-        android:layout_gravity="top"
+        android:layout_toEndOf="@+id/weather_temperature_value"
         android:src="@drawable/ic_outline_fiber_manual_record_24px" />
 
-</LinearLayout>
+</RelativeLayout>

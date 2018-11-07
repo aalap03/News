@@ -2,6 +2,7 @@ package com.example.aalap.news
 
 import android.content.res.Resources
 import android.util.TypedValue
+import com.afollestad.materialdialogs.MaterialDialog
 import java.text.ParseException
 import java.text.SimpleDateFormat
 import java.util.*
@@ -30,5 +31,9 @@ class Utils {
         }
 
         return desiredOutput
+    }
+
+    fun dialog() {
+
     }
 }

@@ -2,6 +2,7 @@ package com.example.aalap.news.view
 
 import com.example.aalap.news.models.weathermodels.Currently
 import com.example.aalap.news.models.weathermodels.DailyData
+import com.example.aalap.news.models.weathermodels.HourlyData
 
 interface MainView {
 
@@ -9,5 +10,7 @@ interface MainView {
 
     fun showCurrentWeather(current: Currently)
 
-    fun dailyDataError(errorMsg: String)
+    fun error(errorMsg: String)
+
+    fun hourlyData(data: List<HourlyData>)
 }

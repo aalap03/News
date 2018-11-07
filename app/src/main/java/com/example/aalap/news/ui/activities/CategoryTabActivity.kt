@@ -7,6 +7,7 @@ import android.annotation.SuppressLint
 import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
+import android.graphics.Color
 import android.graphics.drawable.AnimationDrawable
 import android.location.LocationManager
 import android.os.Build
@@ -30,11 +31,18 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
+import com.afollestad.materialdialogs.MaterialDialog
+import com.afollestad.materialdialogs.customview.customView
+import com.afollestad.materialdialogs.customview.getCustomView
+import com.afollestad.materialdialogs.list.listItems
 import com.example.aalap.news.models.weathermodels.Currently
 import com.example.aalap.news.models.weathermodels.DailyData
+import com.example.aalap.news.models.weathermodels.HourlyData
 import com.example.aalap.news.models.weathermodels.WeatherModel
 import com.example.aalap.news.presenter.WeatherPresenter
 import com.example.aalap.news.ui.adapter.WeatherDailyAdapter
+import com.example.aalap.news.ui.adapter.WeatherHourlyAdapter
 import com.example.aalap.news.view.MainView
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
@@ -45,11 +53,20 @@ import pl.charmas.android.reactivelocation2.ReactiveLocationProvider
 
 const val LOCATION_PERMISSION = 1
 
-interface SendQuery {
-    fun sendQuery(query: String)
-}
-
 class CategoryTabActivity : BaseActivity(), MainView {
+
+    private lateinit var locationRequest: LocationRequest
+    lateinit var manager: LocationManager
+    private lateinit var dailyAdapter: WeatherDailyAdapter
+    private lateinit var weatherPresenter: WeatherPresenter
+    private lateinit var locationProvider: ReactiveLocationProvider
+    private var compositeDisposable = CompositeDisposable()
+    private var dailyScaleUp = false
+    private lateinit var hourlyList: List<HourlyData>
+
+    override fun hourlyData(data: List<HourlyData>) {
+        hourlyList = data
+    }
 
     override fun layoutResID(): Int {
         return R.layout.category_tabs_activity
@@ -69,16 +86,6 @@ class CategoryTabActivity : BaseActivity(), MainView {
         weather_temperature_layout_current.findViewById<TextView>(R.id.weather_temperature_value).text = current.currentTemperature().toString()
     }
 
-    private lateinit var locationRequest: LocationRequest
-    lateinit var sendQuery: SendQuery
-    lateinit var manager: LocationManager
-    lateinit var dailyAdapter: WeatherDailyAdapter
-    lateinit var weatherPresenter: WeatherPresenter
-    lateinit var locationProvider: ReactiveLocationProvider
-    var compositeDisposable = CompositeDisposable()
-    var dailyScaleUp = false
-
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -88,7 +95,7 @@ class CategoryTabActivity : BaseActivity(), MainView {
         weather_recycler.layoutManager = LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
         weatherPresenter = WeatherPresenter(this, WeatherModel())
         locationProvider = ReactiveLocationProvider(this)
-
+        manager = getSystemService(Context.LOCATION_SERVICE) as LocationManager
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             val animationDrawable = tab_screen_root.backgroundDrawable as AnimationDrawable
@@ -96,8 +103,6 @@ class CategoryTabActivity : BaseActivity(), MainView {
             animationDrawable.setExitFadeDuration(4000)
             animationDrawable.start()
         }
-
-        manager = getSystemService(Context.LOCATION_SERVICE) as LocationManager
 
         locationRequest = LocationRequest
                 .create()
@@ -107,8 +112,21 @@ class CategoryTabActivity : BaseActivity(), MainView {
         requestLocation()
 
         weather_city_name.setOnClickListener { animateRecycler(!dailyScaleUp) }
+        weather_current_icon.setOnClickListener{ hourlyWeather() }
 
+    }
 
+    private fun hourlyWeather() {
+        val material = MaterialDialog(this)
+                .customView(R.layout.weather_hourly, scrollable = true)
+
+        val customView = material.getCustomView()
+        customView?.setBackgroundResource(R.drawable.gradient_1)
+        val recycler : RecyclerView? = customView?.findViewById(R.id.weather_recycler_hourly)
+        recycler?.layoutManager = LinearLayoutManager(this)
+        val adapter = WeatherHourlyAdapter(this, hourlyList)
+        recycler?.adapter = adapter
+        material.show()
     }
 
     private fun animateRecycler(isScaleUp: Boolean) {
@@ -123,7 +141,6 @@ class CategoryTabActivity : BaseActivity(), MainView {
         bottom = if (isScaleUp) weather_recycler.bottom else top
 
         val objectAnimator = ObjectAnimator.ofInt(weather_recycler, "translationX", top, bottom)
-        objectAnimator.duration = 2000
         objectAnimator.interpolator = AccelerateInterpolator()
         objectAnimator.start()
 
@@ -175,14 +192,9 @@ class CategoryTabActivity : BaseActivity(), MainView {
     }
 
     override fun onOptionsItemSelected(item: MenuItem?): Boolean {
-
         when (item?.itemId) {
-
-            R.id.menu_settings -> {
-                startActivity(Intent(this, NewsSettings::class.java))
-            }
+            R.id.menu_settings -> startActivity(Intent(this, NewsSettings::class.java))
         }
-
         return super.onOptionsItemSelected(item)
     }
 
@@ -190,26 +202,21 @@ class CategoryTabActivity : BaseActivity(), MainView {
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             if (checkSelfPermission(Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED
-                    || checkSelfPermission(Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+                    || checkSelfPermission(Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED)
                 ActivityCompat.requestPermissions(this,
                         arrayOf(Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION),
                         LOCATION_PERMISSION)
-            } else {
+            else
                 getLocationRX()
-            }
         }
     }
 
     @SuppressLint("MissingPermission")
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
-
-        if (requestCode == LOCATION_PERMISSION && grantResults.isNotEmpty()) {
-
-            if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+        if (requestCode == LOCATION_PERMISSION && grantResults.isNotEmpty())
+            if (grantResults[0] == PackageManager.PERMISSION_GRANTED)
                 getLocationRX()
-            }
-        }
     }
 
     override fun showDailyData(list: List<DailyData>) {
@@ -217,7 +224,7 @@ class CategoryTabActivity : BaseActivity(), MainView {
         weather_recycler.adapter = dailyAdapter
     }
 
-    override fun dailyDataError(errorMsg: String) {
+    override fun error(errorMsg: String) {
         Toast.makeText(this, errorMsg, Toast.LENGTH_SHORT)
                 .show()
     }
@@ -240,7 +247,5 @@ class CategoryTabActivity : BaseActivity(), MainView {
                     .subscribe({ t -> weatherPresenter.getCurrentWeather(t.latitude, t.longitude) },
                             { t -> Toast.makeText(this, t.localizedMessage, Toast.LENGTH_SHORT).show() })
             )
-
     }
-
 }

@@ -9,7 +9,7 @@
     android:id="@+id/weather_daily_root"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    android:background="@android:color/transparent">
+    android:layout_margin="3dp">
 
 
     <TextView
@@ -23,7 +23,7 @@
         android:gravity="center"
         android:maxLength="3"
         android:textAllCaps="true"
-        android:textColor="@color/lb_tv_white"
+        android:textColor="@android:color/white"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
@@ -41,11 +41,11 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         android:id="@+id/weather_daily_icon"
-        android:layout_width="40dp"
-        android:layout_height="40dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         app:layout_constraintTop_toBottomOf="@+id/weather_daily_day_name"
         android:layout_marginTop="5dp"
-        android:src="@drawable/ic_rainy"/>
+        android:src="@drawable/ic_rain"/>
 
     <include
         android:id="@+id/weather_daily_temp_max"

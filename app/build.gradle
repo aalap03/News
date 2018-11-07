@@ -83,5 +83,7 @@ dependencies {
 
     compile 'pl.charmas.android:android-reactive-location2:2.1@aar'
 
+    implementation 'com.afollestad.material-dialogs:core:2.0.0-beta4'
+
 
 }

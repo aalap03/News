@@ -33,7 +33,7 @@
 
         <TextView
             android:id="@+id/weather_city_name"
-            android:textColor="@color/lb_tv_white"
+            android:textColor="@android:color/white"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
@@ -68,7 +68,7 @@
         <TextView
             android:id="@+id/weather_current_feels_like"
             android:layout_width="wrap_content"
-            android:textColor="@color/lb_tv_white"
+            android:textColor="@android:color/white"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
             android:layout_marginEnd="8dp"

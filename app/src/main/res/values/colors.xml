@@ -13,4 +13,7 @@
     <color name="background_light">#ffffff</color>
     <color name="background_dark">#696969</color>
 
+
+    <color name="holo_dark_blue">#ff00ddff</color>
+
 </resources>

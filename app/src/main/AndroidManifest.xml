@@ -4,7 +4,8 @@
     package="com.example.aalap.news">
 
     <uses-feature
-        android:name="android.hardware.location.gps" />
+        android:name="android.hardware.location.gps"
+        android:required="false" />
 
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
@@ -21,7 +22,8 @@
 
         <activity android:name=".ui.activities.NewsSettings"/>
 
-        <activity android:name=".ui.activities.Webview"/>
+        <activity android:name=".ui.activities.Webview"
+            android:parentActivityName=".ui.activities.CategoryTabActivity"/>
 
         <activity android:name=".ui.activities.CategoryTabActivity">
             <intent-filter>
@@ -34,7 +36,6 @@
         <activity android:name=".ui.activities.NewsEverything"
             android:parentActivityName=".ui.activities.CategoryTabActivity"
             />
-
     </application>
 
 </manifest>

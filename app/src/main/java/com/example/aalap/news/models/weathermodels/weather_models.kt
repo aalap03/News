@@ -36,7 +36,8 @@ data class DailyData(@SerializedName("time") val time: Long,
 data class HourlyData(@SerializedName("time") val time: Long,
                       @SerializedName("icon") val icon: String,
                       @SerializedName("temperature") val temperature: Double,
-                      @SerializedName("apparentTemperature") val apparentTemperature: Double
+                      @SerializedName("apparentTemperature") val apparentTemperature: Double,
+                      @SerializedName("summary") val summary: String
 ) {
     fun temperature(): Int {
         return getCelcious(temperature)
@@ -98,35 +99,30 @@ fun getCelcious(ferenheite: Double): Int {
     return ((ferenheite - 32) * 5 / 9).toInt()
 }
 
+//clear-day, clear-night, rain, snow, sleet, wind, fog, cloudy, partly-cloudy-day, or partly-cloudy-night
 fun getIcon(icon: String): Int {
     return when (icon) {
-        "clear-day" -> R.drawable.ic_day
+        "clear-day" -> R.drawable.ic_clear_day
 
-        "clear-night" -> R.drawable.ic_night
+        "clear-night" -> R.drawable.ic_clear_night
 
-        "cloudy" -> R.drawable.ic_cloudy
-
-        "partly-cloudy-day" -> R.drawable.ic_cloudy
-
-        "cloudy-night" -> R.drawable.ic_cloudy_night
-
-        "partly-cloudy-night" -> R.drawable.ic_cloudy_night
-
-        //todo change these
-        "fog" -> R.drawable.ic_cloudy
-
-        "wind" -> R.drawable.ic_night
-
-        "sleet" -> R.drawable.ic_day
-        //todo ends
-
-        "partly-cloudy" -> R.drawable.ic_cloudy
-
-        "rain" -> R.drawable.ic_rainy
+        "rain" -> R.drawable.ic_rain
 
         "snow" -> R.drawable.ic_snowy
 
-        else -> R.drawable.ic_day
+        "sleet" -> R.drawable.ic_sleet
+
+        "wind" -> R.drawable.ic_windy
+
+        "fog" -> R.drawable.ic_foggy
+
+        "cloudy" -> R.drawable.ic_cloudy
+
+        "partly-cloudy-day" -> R.drawable.ic_cloudy_day
+
+        "partly-cloudy-night" -> R.drawable.ic_cloudy_night
+
+        else -> R.mipmap.ic_launcher
     }
 }
 

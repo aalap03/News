@@ -53,7 +53,7 @@ class NewsSettings : BaseActivity() {
         switch_theme.isChecked = pref.isDarkTheme()
         switch_articles_layout.isChecked = pref.isLayoutGrid()
 
-        switch_theme.setOnCheckedChangeListener { buttonView, isChecked ->
+        switch_theme.setOnCheckedChangeListener { _, isChecked ->
             if (isChecked)
                 pref.saveTheme(R.style.AppTheme_Dark)
             else
