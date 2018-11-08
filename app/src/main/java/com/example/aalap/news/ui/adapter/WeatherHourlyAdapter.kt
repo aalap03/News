@@ -6,14 +6,14 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
+import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
 import com.example.aalap.news.R
 import com.example.aalap.news.models.weathermodels.HourlyData
 import org.jetbrains.anko.AnkoLogger
-import org.jetbrains.anko.info
 
 class WeatherHourlyAdapter(var context: Context, var list: List<HourlyData>) :
-        RecyclerView.Adapter<WeatherHourlyAdapter.HourlyHolder>(), AnkoLogger{
+        RecyclerView.Adapter<WeatherHourlyAdapter.HourlyHolder>(), AnkoLogger {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): HourlyHolder {
         return HourlyHolder(LayoutInflater.from(context).inflate(R.layout.weather_item_hourly, parent, false))
@@ -26,16 +26,20 @@ class WeatherHourlyAdapter(var context: Context, var list: List<HourlyData>) :
     override fun onBindViewHolder(holder: HourlyHolder, position: Int) {
         val hourlyItem = list[position]
         holder.time.text = hourlyItem.getTimeAsHour()
-        info { hourlyItem.getTimeAsHour() }
         holder.icon.setImageResource(hourlyItem.getIconRes())
         holder.summary.text = hourlyItem.summary
         holder.temperature.text = hourlyItem.temperature().toString()
+        holder.itemView.setOnClickListener { holder.bindClick(hourlyItem) }
     }
 
-    inner class HourlyHolder(itemview: View) : RecyclerView.ViewHolder(itemview) {
-        var time: TextView = itemview.findViewById(R.id.weather_hourly_time)
-        var temperature: TextView = itemview.findViewById<View>(R.id.weather_layout_hourly).findViewById(R.id.weather_temperature_value)
-        var icon: ImageView = itemview.findViewById(R.id.weather_hourly_icon)
-        var summary: TextView = itemview.findViewById(R.id.weather_hourly_summary)
+    inner class HourlyHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+        var time: TextView = itemView.findViewById(R.id.weather_hourly_time)
+        var temperature: TextView = itemView.findViewById<View>(R.id.weather_layout_hourly).findViewById(R.id.weather_temperature_value)
+        var icon: ImageView = itemView.findViewById(R.id.weather_hourly_icon)
+        var summary: TextView = itemView.findViewById(R.id.weather_hourly_summary)
+        fun bindClick(hourlyItem: HourlyData) {
+            Toast.makeText(context, "@ ${hourlyItem.getTimeAsHour()} Wind chill will be  ${hourlyItem.feelsLike()}", Toast.LENGTH_LONG)
+                    .show()
+        }
     }
 }

@@ -1,6 +1,5 @@
 package com.example.aalap.news.models.weathermodels
 
-import android.util.Log
 import com.example.aalap.news.R
 import com.google.gson.annotations.SerializedName
 import java.text.SimpleDateFormat
@@ -13,11 +12,11 @@ data class DailyData(@SerializedName("time") val time: Long,
                      @SerializedName("temperatureMax") val temperatureMax: Double
 ) {
     fun temperatureMin(): Int {
-        return getCelcious(temperatureMin)
+        return getCelsius(temperatureMin)
     }
 
     fun temperatureMax(): Int {
-        return getCelcious(temperatureMax)
+        return getCelsius(temperatureMax)
     }
 
     fun getIconRes(): Int {
@@ -40,11 +39,11 @@ data class HourlyData(@SerializedName("time") val time: Long,
                       @SerializedName("summary") val summary: String
 ) {
     fun temperature(): Int {
-        return getCelcious(temperature)
+        return getCelsius(temperature)
     }
 
     fun feelsLike(): Int {
-        return getCelcious(apparentTemperature)
+        return getCelsius(apparentTemperature)
     }
 
     fun getIconRes(): Int {
@@ -65,11 +64,7 @@ data class Hourly(@SerializedName("icon") val icon: String,
 
 data class Daily(@SerializedName("icon") val icon: String,
                  @SerializedName("data") val data: List<DailyData>
-) {
-    fun getIconRes(): Int {
-        return getIcon(icon)
-    }
-}
+)
 
 data class Currently(@SerializedName("time") val time: Long,
                      @SerializedName("icon") val icon: String,
@@ -77,11 +72,11 @@ data class Currently(@SerializedName("time") val time: Long,
                      @SerializedName("apparentTemperature") val apparentTemperature: Double
 ) {
     fun currentTemperature(): Int {
-        return getCelcious(temperature)
+        return getCelsius(temperature)
     }
 
     fun feelsLike(): Int {
-        return getCelcious(apparentTemperature)
+        return getCelsius(apparentTemperature)
     }
 
     fun getIconRes(): Int{
@@ -95,8 +90,8 @@ data class Weather(@SerializedName("currently") val currently: Currently,
 )
 
 
-fun getCelcious(ferenheite: Double): Int {
-    return ((ferenheite - 32) * 5 / 9).toInt()
+fun getCelsius(fahrenheit: Double): Int {
+    return ((fahrenheit - 32) * 5 / 9).toInt()
 }
 
 //clear-day, clear-night, rain, snow, sleet, wind, fog, cloudy, partly-cloudy-day, or partly-cloudy-night
