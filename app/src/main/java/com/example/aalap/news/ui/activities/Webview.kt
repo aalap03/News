@@ -3,20 +3,31 @@ package com.example.aalap.news.ui.activities
 import android.graphics.Color
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.view.Menu
+import android.view.MenuItem
 import android.webkit.WebView
 import android.webkit.WebViewClient
 import android.widget.Toast
 import com.example.aalap.news.R
+import com.example.aalap.news.models.newsmodels.Article
+import io.realm.Realm
 import kotlinx.android.synthetic.main.activity_webview.*
 
 class Webview : AppCompatActivity() {
+
+    var url: String = ""
+    var currentArticle: Article? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_webview)
         setSupportActionBar(webview_toolbar)
         supportActionBar?.title = intent.getStringExtra("title")
+        url = intent.getStringExtra("url")
         webview_toolbar.setTitleTextColor(Color.WHITE)
+
+
+        currentArticle = Realm.getDefaultInstance().where(Article::class.java).equalTo("url", url).findFirst()
 
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         supportActionBar?.setDisplayShowHomeEnabled(true)
@@ -37,7 +48,7 @@ class Webview : AppCompatActivity() {
             }
         }
 
-        webview.loadUrl(intent.getStringExtra("url"))
+        webview.loadUrl(url)
     }
 
     fun webviewSettings() {
@@ -47,6 +58,24 @@ class Webview : AppCompatActivity() {
         webview.settings.builtInZoomControls = true
         webview.settings.displayZoomControls = true
         webview.settings.useWideViewPort = true
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        menuInflater.inflate(R.menu.menu_webview, menu)
+        menu?.findItem(R.id.menu_bookmark)?.setIcon(if (currentArticle?.isSaved == true) R.drawable.ic_saved else R.drawable.ic_not_saved)
+        return super.onCreateOptionsMenu(menu)
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem?): Boolean {
+        when (item?.itemId) {
+            R.id.menu_bookmark -> {
+                Realm.getDefaultInstance().executeTransaction {
+                    currentArticle?.isSaved = !currentArticle?.isSaved!!
+                    item.setIcon(if (currentArticle?.isSaved == true) R.drawable.ic_saved else R.drawable.ic_not_saved)
+                }
+            }
+        }
+        return super.onOptionsItemSelected(item)
     }
 
 }

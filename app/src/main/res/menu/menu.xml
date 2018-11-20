@@ -8,6 +8,11 @@
     </item>
 
     <item
+        android:id="@+id/menu_bookmarked"
+        android:title="Saved News">
+    </item>
+
+    <item
         android:id="@+id/menu_search"
         android:title="Search"
         app:actionViewClass="androidx.appcompat.widget.SearchView"

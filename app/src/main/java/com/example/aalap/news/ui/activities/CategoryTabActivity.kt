@@ -32,6 +32,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.afollestad.materialdialogs.MaterialDialog
 import com.afollestad.materialdialogs.customview.customView
 import com.afollestad.materialdialogs.customview.getCustomView
+import com.example.aalap.news.models.newsmodels.Article
 import com.example.aalap.news.models.weathermodels.Currently
 import com.example.aalap.news.models.weathermodels.DailyData
 import com.example.aalap.news.models.weathermodels.HourlyData
@@ -43,6 +44,7 @@ import com.example.aalap.news.view.MainView
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
+import io.realm.Realm
 import kotlinx.android.synthetic.main.category_tabs_activity.*
 import kotlinx.android.synthetic.main.main_weather_layout.*
 import pl.charmas.android.reactivelocation2.ReactiveLocationProvider
@@ -151,7 +153,7 @@ class CategoryTabActivity : BaseActivity(), MainView {
     private fun animateRecycler(isScaleUp: Boolean) {
         dailyScaleUp = isScaleUp
 
-        if(isScaleUp)
+        if (isScaleUp)
             weather_recycler.visibility = View.VISIBLE
         //scale animator
         val scaleBegin = if (isScaleUp) 0f else 1f
@@ -164,11 +166,11 @@ class CategoryTabActivity : BaseActivity(), MainView {
                 .setDuration(1000)
 
         animator.start()
-        animator.setListener(object: Animator.AnimatorListener {
+        animator.setListener(object : Animator.AnimatorListener {
             override fun onAnimationRepeat(animation: Animator?) {}
 
             override fun onAnimationEnd(animation: Animator?) {
-                if(!isScaleUp)
+                if (!isScaleUp)
                     weather_recycler.visibility = View.GONE
             }
 
@@ -178,39 +180,6 @@ class CategoryTabActivity : BaseActivity(), MainView {
 
             }
         })
-
-
-        //objectAnimator
-//        if (isScaleUp)
-//            weather_recycler.visibility = View.VISIBLE
-//
-//        val top: Int = weather_recycler.top
-//        val bottom: Int
-//
-//        bottom = if (isScaleUp) weather_recycler.bottom else top
-//
-//        val objectAnimatorX = ObjectAnimator.ofInt(weather_recycler, "translationX", top, bottom)
-//        val objectAnimatorY = ObjectAnimator.ofInt(weather_recycler, "translationY", bottom, top)
-//
-//        val set = AnimatorSet()
-//        set.duration = 2000
-//        set.playSequentially(objectAnimatorX, objectAnimatorY)
-////        objectAnimator.interpolator = AccelerateInterpolator()
-//        set.start()
-//
-//        set.addListener(object : Animator.AnimatorListener {
-//            override fun onAnimationRepeat(animation: Animator?) {}
-//
-//            override fun onAnimationEnd(animation: Animator?) {
-//                if (!isScaleUp)
-//                    weather_recycler.visibility = View.GONE
-//            }
-//
-//            override fun onAnimationCancel(animation: Animator?) {}
-//
-//            override fun onAnimationStart(animation: Animator?) {}
-//        })
-
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
@@ -242,6 +211,11 @@ class CategoryTabActivity : BaseActivity(), MainView {
     override fun onOptionsItemSelected(item: MenuItem?): Boolean {
         when (item?.itemId) {
             R.id.menu_settings -> startActivity(Intent(this, NewsSettings::class.java))
+            R.id.menu_bookmarked -> {
+                val size = Realm.getDefaultInstance().where(Article::class.java).equalTo("isSaved", true).findAll().size
+                Toast.makeText(this, "Saved: $size", Toast.LENGTH_SHORT)
+                        .show()
+            }
         }
         return super.onOptionsItemSelected(item)
     }
