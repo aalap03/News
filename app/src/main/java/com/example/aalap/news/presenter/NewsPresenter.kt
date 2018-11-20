@@ -10,8 +10,9 @@ import io.reactivex.functions.BiConsumer
 import io.reactivex.schedulers.Schedulers
 import org.jetbrains.anko.AnkoLogger
 import org.jetbrains.anko.info
+import java.net.UnknownHostException
 
-class Presenter(var view: NewsFragmentView, private var model: NewsModel) : AnkoLogger {
+class NewsPresenter(var view: NewsFragmentView, private var model: NewsModel) : AnkoLogger {
 
     private var compositeDisposable = CompositeDisposable()
 
@@ -22,7 +23,23 @@ class Presenter(var view: NewsFragmentView, private var model: NewsModel) : Anko
 
     fun getAllHeadlinesByCategory(category: String) {
         view.loading(true)
-        getAndDisplayList(model.getTopHeadlinesByCountryAndCategory("us", category))
+
+        model.getTopHeadlinesByCountryAndCategory(category)
+                ?.subscribeOn(Schedulers.io())
+                ?.observeOn(AndroidSchedulers.mainThread())
+                ?.subscribe({ list ->
+                    view.displayArticlesR(list)
+                }, { throwable ->
+                    if (throwable is UnknownHostException) {
+                        view.showError("No internet")
+                        model.getDBNews(category).let { view.displayArticlesR(it) }
+                    }
+                    else
+                        view.showError(throwable.localizedMessage)
+                })?.let {
+                    compositeDisposable.add(it)
+                }
+
     }
 
     fun getEverythingArticle(query: String?, page: Long, pageSize: Int) {

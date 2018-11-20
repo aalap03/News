@@ -1,6 +1,7 @@
 package com.example.aalap.news.view
 
 import com.example.aalap.news.models.newsmodels.Article
+//import com.example.aalap.news.models.newsmodels.RArticle
 
 interface BaseView {
 
@@ -9,4 +10,5 @@ interface BaseView {
     fun showError(errorMsg: String?)
 
     fun displayArticles(articles: List<Article>)
+    fun displayArticlesR(articles: List<Article>?)
 }

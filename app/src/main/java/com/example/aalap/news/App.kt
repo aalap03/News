@@ -3,6 +3,8 @@ package com.example.aalap.news
 import android.app.Application
 import com.example.aalap.news.retrofitutils.NewsService
 import com.example.aalap.news.retrofitutils.WeatherService
+import io.realm.Realm
+import io.realm.RealmConfiguration
 import okhttp3.Interceptor
 import okhttp3.OkHttpClient
 import retrofit2.Retrofit
@@ -19,6 +21,13 @@ class App: Application() {
 
     override fun onCreate() {
         super.onCreate()
+
+        Realm.init(this)
+        val config = RealmConfiguration.Builder()
+                .deleteRealmIfMigrationNeeded()
+                .name("news.realm")
+                .build()
+        Realm.setDefaultConfiguration(config)
 
         newsRetrofit = Retrofit.Builder()
                 .baseUrl("https://newsapi.org/v2/")

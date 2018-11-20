@@ -9,17 +9,20 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.aalap.news.R
 import com.example.aalap.news.models.newsmodels.Article
 import com.example.aalap.news.models.newsmodels.NewsModel
-import com.example.aalap.news.presenter.Presenter
+//import com.example.aalap.news.models.newsmodels.RArticle
+import com.example.aalap.news.presenter.NewsPresenter
 import com.example.aalap.news.ui.adapter.ArticleAdapter
-import com.example.aalap.news.view.EverythingView
 import com.example.aalap.news.view.NewsFragmentView
 import kotlinx.android.synthetic.main.news_list_frag.*
 import kotlinx.android.synthetic.main.toolbar_template.*
 import org.jetbrains.anko.backgroundColor
 
 class NewsEverything : BaseActivity(), NewsFragmentView {
+    override fun displayArticlesR(articles: List<Article>?) {
 
-    lateinit var presenter: Presenter
+    }
+
+    lateinit var presenter: NewsPresenter
     lateinit var adapter: ArticleAdapter
     var screenWidth: Int = 0
     var currentTitle = ""
@@ -37,7 +40,7 @@ class NewsEverything : BaseActivity(), NewsFragmentView {
 
         new_recycler.layoutManager = LinearLayoutManager(this)
 
-        presenter = Presenter(this, NewsModel())
+        presenter = NewsPresenter(this, NewsModel())
         presenter.getEverythingArticle(currentTitle, 0, 0)
 
         refresh_layout.setOnRefreshListener { presenter.getEverythingArticle(currentTitle, 0, 0) }
@@ -56,8 +59,8 @@ class NewsEverything : BaseActivity(), NewsFragmentView {
 
     override fun displayArticles(articles: List<Article>) {
         loading(false)
-        adapter = ArticleAdapter(this, articles, screenWidth)
-        new_recycler.adapter = adapter
+//        adapter = ArticleAdapter(this, articles, screenWidth)
+//        new_recycler.adapter = adapter
     }
 
     override fun layoutResID(): Int {

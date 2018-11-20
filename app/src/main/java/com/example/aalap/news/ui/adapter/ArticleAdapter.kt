@@ -12,6 +12,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.aalap.news.R
 import com.example.aalap.news.Utils
 import com.example.aalap.news.models.newsmodels.Article
+//import com.example.aalap.news.models.newsmodels.RArticle
 import com.example.aalap.news.ui.activities.Webview
 import com.squareup.picasso.Picasso
 import org.jetbrains.anko.AnkoLogger

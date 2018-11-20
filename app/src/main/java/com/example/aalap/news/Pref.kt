@@ -6,6 +6,8 @@ import com.example.aalap.news.models.newsmodels.NewsLayout
 
 const val KEY_THEME = "theme"
 const val KEY_LAYOUT = "layout"
+const val KEY_LATITUDE = "latitude"
+const val KEY_LONGITUDE = "longitude"
 
 class Pref(appContext: Context) {
 
@@ -33,6 +35,19 @@ class Pref(appContext: Context) {
 
     fun isLayoutGrid(): Boolean {
         return (getRecyclerLayout() == NewsLayout.LAYOUT_GRID)
+    }
+
+    fun saveLastCoOrdinates(latitude: String, longitude: String) {
+        pref.edit().putString(KEY_LATITUDE, latitude).apply()
+        pref.edit().putString(KEY_LONGITUDE, longitude).apply()
+    }
+
+    fun getLatitude(): Double{
+        return pref.getString(KEY_LATITUDE, "0.0").toDouble()
+    }
+
+    fun getLongitude(): Double{
+        return pref.getString(KEY_LONGITUDE, "0.0").toDouble()
     }
 
 }

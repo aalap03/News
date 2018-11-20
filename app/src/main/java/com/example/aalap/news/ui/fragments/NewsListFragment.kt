@@ -13,7 +13,8 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.aalap.news.R
 import com.example.aalap.news.models.newsmodels.Article
 import com.example.aalap.news.models.newsmodels.NewsModel
-import com.example.aalap.news.presenter.Presenter
+//import com.example.aalap.news.models.newsmodels.RArticle
+import com.example.aalap.news.presenter.NewsPresenter
 import com.example.aalap.news.ui.adapter.ArticleAdapter
 import com.example.aalap.news.view.NewsFragmentView
 import kotlinx.android.synthetic.main.news_list_frag.*
@@ -26,7 +27,15 @@ const val CATEGORY = "category"
 
 class NewsListFragment : Fragment(), NewsFragmentView, AnkoLogger {
 
-    private lateinit var presenter: Presenter
+    override fun displayArticlesR(articles: List<Article>?) {
+        info { "Article: for view Category: $category size: ${articles?.size}" }
+
+        adapter = articles?.let { ArticleAdapter(requireContext(), it, widthScreen) }!!
+        new_recycler?.adapter = adapter
+        refresh_layout?.isRefreshing = false
+    }
+
+    private lateinit var presenter: NewsPresenter
     private lateinit var adapter: ArticleAdapter
     private var widthScreen: Int = 0
     var category: String = "Anything"
@@ -51,7 +60,7 @@ class NewsListFragment : Fragment(), NewsFragmentView, AnkoLogger {
 
         news_toolbar.visibility = View.GONE
         category = arguments?.getString(CATEGORY) ?: "Anything"
-        presenter = Presenter(this, NewsModel())
+        presenter = NewsPresenter(this, NewsModel())
         new_recycler.layoutManager = LinearLayoutManager(requireContext())
 
         info { "Fragment Category: $category" }
@@ -60,12 +69,12 @@ class NewsListFragment : Fragment(), NewsFragmentView, AnkoLogger {
         widthScreen = displayMetrics.widthPixels
 
         if (!TextUtils.isEmpty(category))
-            category?.let { presenter.getAllHeadlinesByCategory(it) }
+            category.let { presenter.getAllHeadlinesByCategory(it) }
         else
             showError("No categories found")
 
         refresh_layout.setOnRefreshListener {
-            category?.let { presenter.getAllHeadlinesByCategory(it) }
+            category.let { presenter.getAllHeadlinesByCategory(it) }
         }
     }
 
@@ -80,10 +89,10 @@ class NewsListFragment : Fragment(), NewsFragmentView, AnkoLogger {
     }
 
     override fun displayArticles(articles: List<Article>) {
-        adapter = ArticleAdapter(requireContext(), articles, widthScreen)
-        info { "Category: $category" }
-        new_recycler?.adapter = adapter
-        refresh_layout?.isRefreshing = false
+//        adapter = ArticleAdapter(requireContext(), articles, widthScreen)
+//        info { "Category: $category" }
+//        new_recycler?.adapter = adapter
+//        refresh_layout?.isRefreshing = false
     }
 
     override fun onDestroyView() {

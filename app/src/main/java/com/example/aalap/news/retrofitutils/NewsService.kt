@@ -1,7 +1,9 @@
 package com.example.aalap.news.retrofitutils
 
 import com.example.aalap.news.models.newsmodels.News
+import io.reactivex.Observable
 import io.reactivex.Single
+import okhttp3.ResponseBody
 import retrofit2.Response
 import retrofit2.http.GET
 import retrofit2.http.Query
@@ -25,4 +27,8 @@ interface NewsService {
 //    ,
 //            @Query("page") page: Long,
 //            @Query("pageSize") size: Int): Single<Response<News>>
+
+    @GET("top-headlines")
+    fun getTopHeadlines(@Query("country") country: String,
+                        @Query("category") category: String): Observable<Response<ResponseBody>>
 }
