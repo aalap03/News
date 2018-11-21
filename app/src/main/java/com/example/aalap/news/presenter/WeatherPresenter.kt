@@ -20,14 +20,12 @@ class WeatherPresenter(var view: MainView, var model: WeatherModel): AnkoLogger 
         pref.saveLastCoOrdinates(latitude.toString(), longitude.toString())
 
         model.getCurrentWeather(latitude, longitude)
-                ?.observeOn(AndroidSchedulers.mainThread())
+                .observeOn(AndroidSchedulers.mainThread())
                 ?.subscribeOn(Schedulers.io())
                 ?.subscribe { t1, t2 ->
                     when {
                         t1 != null -> {
-                            view.showDailyData(t1.daily.data)
-                            view.showCurrentWeather(t1.currently)
-                            view.hourlyData(t1.hourly.data)
+                            view.getWeatherData(weather = t1)
                         }
                         t2 != null -> {
                             view.error(t2.localizedMessage)

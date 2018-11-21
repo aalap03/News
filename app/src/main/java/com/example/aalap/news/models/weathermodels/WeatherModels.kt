@@ -2,15 +2,18 @@ package com.example.aalap.news.models.weathermodels
 
 import com.example.aalap.news.R
 import com.google.gson.annotations.SerializedName
+import io.realm.Realm
+import io.realm.RealmList
+import io.realm.RealmObject
 import java.text.SimpleDateFormat
 import java.util.*
 
-data class DailyData(@SerializedName("time") val time: Long,
-                     @SerializedName("summary") val summary: String,
-                     @SerializedName("icon") val icon: String,
-                     @SerializedName("temperatureMin") val temperatureMin: Double,
-                     @SerializedName("temperatureMax") val temperatureMax: Double
-) {
+open class DailyData(@SerializedName("time") var time: Long = 0,
+                     @SerializedName("summary") var summary: String = "",
+                     @SerializedName("icon") var icon: String = "",
+                     @SerializedName("temperatureMin") var temperatureMin: Double = 0.0,
+                     @SerializedName("temperatureMax") var temperatureMax: Double = 0.0
+) :RealmObject() {
     fun temperatureMin(): Int {
         return getCelsius(temperatureMin)
     }
@@ -24,20 +27,20 @@ data class DailyData(@SerializedName("time") val time: Long,
     }
 
     fun getDayOfTheWeek(): String {
-        val formatter = SimpleDateFormat("EEEE")
+        var formatter = SimpleDateFormat("EEEE")
         formatter.timeZone = TimeZone.getDefault()
-        val dateTime = Date(time * 1000.toLong())
+        var dateTime = Date(time * 1000.toLong())
         return formatter.format(dateTime)
     }
 }
 
 
-data class HourlyData(@SerializedName("time") val time: Long,
-                      @SerializedName("icon") val icon: String,
-                      @SerializedName("temperature") val temperature: Double,
-                      @SerializedName("apparentTemperature") val apparentTemperature: Double,
-                      @SerializedName("summary") val summary: String
-) {
+open class HourlyData(@SerializedName("time") var time: Long = 0,
+                      @SerializedName("icon") var icon: String = "",
+                      @SerializedName("temperature") var temperature: Double = 0.0,
+                      @SerializedName("apparentTemperature") var apparentTemperature: Double = 0.0,
+                      @SerializedName("summary") var summary: String = ""
+):RealmObject() {
     fun temperature(): Int {
         return getCelsius(temperature)
     }
@@ -51,26 +54,27 @@ data class HourlyData(@SerializedName("time") val time: Long,
     }
 
     fun getTimeAsHour(): String {
-        val formatter = SimpleDateFormat("h a")
+        var formatter = SimpleDateFormat("h a")
         formatter.timeZone = TimeZone.getDefault()
-        val dateTime = Date(time * 1000.toLong())
+        var dateTime = Date(time * 1000.toLong())
         return formatter.format(dateTime)
     }
 }
 
-data class Hourly(@SerializedName("icon") val icon: String,
-                  @SerializedName("data") val data: List<HourlyData>
-)
+open class Hourly(@SerializedName("icon") var icon: String = "",
+                  @SerializedName("data") var data: RealmList<HourlyData> = RealmList()
+):RealmObject()
 
-data class Daily(@SerializedName("icon") val icon: String,
-                 @SerializedName("data") val data: List<DailyData>
-)
+open class Daily(@SerializedName("icon") var icon: String = "",
+                 @SerializedName("data") var data: RealmList<DailyData> = RealmList()
+): RealmObject()
 
-data class Currently(@SerializedName("time") val time: Long,
-                     @SerializedName("icon") val icon: String,
-                     @SerializedName("temperature") val temperature: Double,
-                     @SerializedName("apparentTemperature") val apparentTemperature: Double
-) {
+open class Currently(@SerializedName("time") var time: Long = 0,
+                     @SerializedName("icon") var icon: String = "",
+                     @SerializedName("temperature") var temperature: Double = 0.0,
+                     @SerializedName("apparentTemperature") var apparentTemperature: Double = 0.0
+
+):RealmObject() {
     fun currentTemperature(): Int {
         return getCelsius(temperature)
     }
@@ -79,15 +83,15 @@ data class Currently(@SerializedName("time") val time: Long,
         return getCelsius(apparentTemperature)
     }
 
-    fun getIconRes(): Int{
+    fun getIconRes(): Int {
         return getIcon(icon)
     }
 }
 
-data class Weather(@SerializedName("currently") val currently: Currently,
-                   @SerializedName("daily") val daily: Daily,
-                   @SerializedName("hourly") val hourly: Hourly
-)
+open class Weather(@SerializedName("currently") var currently: Currently? = Currently(0, "", 0.0, 0.0),
+                   @SerializedName("daily") var daily: Daily? = Daily("", RealmList()),
+                   @SerializedName("hourly") var hourly: Hourly? = Hourly("", RealmList())
+) : RealmObject()
 
 
 fun getCelsius(fahrenheit: Double): Int {

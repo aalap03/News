@@ -9,6 +9,7 @@ import android.content.pm.PackageManager
 import android.graphics.Canvas
 import android.graphics.drawable.AnimationDrawable
 import android.graphics.drawable.Drawable
+import android.location.Geocoder
 import android.location.LocationManager
 import android.os.Build
 import android.os.Bundle
@@ -33,10 +34,8 @@ import com.afollestad.materialdialogs.MaterialDialog
 import com.afollestad.materialdialogs.customview.customView
 import com.afollestad.materialdialogs.customview.getCustomView
 import com.example.aalap.news.models.newsmodels.Article
-import com.example.aalap.news.models.weathermodels.Currently
-import com.example.aalap.news.models.weathermodels.DailyData
-import com.example.aalap.news.models.weathermodels.HourlyData
-import com.example.aalap.news.models.weathermodels.WeatherModel
+import com.example.aalap.news.models.weathermodels.*
+import com.example.aalap.news.pref
 import com.example.aalap.news.presenter.WeatherPresenter
 import com.example.aalap.news.ui.adapter.WeatherDailyAdapter
 import com.example.aalap.news.ui.adapter.WeatherHourlyAdapter
@@ -48,7 +47,7 @@ import io.realm.Realm
 import kotlinx.android.synthetic.main.category_tabs_activity.*
 import kotlinx.android.synthetic.main.main_weather_layout.*
 import pl.charmas.android.reactivelocation2.ReactiveLocationProvider
-
+import java.util.*
 
 const val LOCATION_PERMISSION = 1
 
@@ -62,9 +61,34 @@ class CategoryTabActivity : BaseActivity(), MainView {
     private var compositeDisposable = CompositeDisposable()
     private var dailyScaleUp = false
     private lateinit var hourlyList: List<HourlyData>
+    var hourlyDialog: MaterialDialog? = null
 
-    override fun hourlyData(data: List<HourlyData>) {
-        hourlyList = data
+    override fun getWeatherData(weather: Weather) {
+
+        //currently
+        val current: Currently? = weather.currently
+        if (current != null) {
+            weather_current_feels_like.text = "Feels like ${current.feelsLike()}"
+            weather_current_icon.setImageResource(current.getIconRes())
+            weather_temperature_layout_current.findViewById<TextView>(R.id.weather_temperature_value).text = current.currentTemperature().toString()
+            weather_city_name.text = getCityName(pref.getLatitude(), pref.getLongitude())
+        }
+        //daily
+        dailyAdapter = weather.daily?.data?.let { WeatherDailyAdapter(this, it) }!!
+        weather_recycler.adapter = dailyAdapter
+
+        //hourly
+        hourlyDialog = MaterialDialog(this)
+                .customView(R.layout.weather_hourly, scrollable = true)
+
+        val customView = hourlyDialog?.getCustomView()
+        customView?.setBackgroundResource(R.drawable.gradient_2)
+        val recycler: RecyclerView? = customView?.findViewById(R.id.weather_recycler_hourly)
+        recycler?.layoutManager = LinearLayoutManager(this)
+        val adapter = weather.hourly?.data?.let { WeatherHourlyAdapter(this, it) }
+        recycler?.adapter = adapter
+        recycler?.addItemDecoration(Decorator())
+
     }
 
     override fun layoutResID(): Int {
@@ -79,12 +103,6 @@ class CategoryTabActivity : BaseActivity(), MainView {
         return "Categories"
     }
 
-    override fun showCurrentWeather(current: Currently) {
-        weather_current_feels_like.text = "Feels like ${current.feelsLike()}"
-        weather_current_icon.setImageResource(current.getIconRes())
-        weather_temperature_layout_current.findViewById<TextView>(R.id.weather_temperature_value).text = current.currentTemperature().toString()
-    }
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -93,6 +111,8 @@ class CategoryTabActivity : BaseActivity(), MainView {
 
         weather_recycler.layoutManager = LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
         weatherPresenter = WeatherPresenter(this, WeatherModel())
+        weatherPresenter.getCurrentWeather(22.3072, 73.1812)
+
         locationProvider = ReactiveLocationProvider(this)
         manager = getSystemService(Context.LOCATION_SERVICE) as LocationManager
 
@@ -108,25 +128,10 @@ class CategoryTabActivity : BaseActivity(), MainView {
                 .setNumUpdates(1)
                 .setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY)
 
-        requestLocation()
+        //requestLocation()
 
         weather_city_name.setOnClickListener { animateRecycler(!dailyScaleUp) }
-        weather_current_icon.setOnClickListener { hourlyWeather() }
-
-    }
-
-    private fun hourlyWeather() {
-        val material = MaterialDialog(this)
-                .customView(R.layout.weather_hourly, scrollable = true)
-
-        val customView = material.getCustomView()
-        customView?.setBackgroundResource(R.drawable.gradient_2)
-        val recycler: RecyclerView? = customView?.findViewById(R.id.weather_recycler_hourly)
-        recycler?.layoutManager = LinearLayoutManager(this)
-        val adapter = WeatherHourlyAdapter(this, hourlyList)
-        recycler?.adapter = adapter
-        recycler?.addItemDecoration(Decorator())
-        material.show()
+        weather_current_icon.setOnClickListener { hourlyDialog?.show() }
     }
 
     inner class Decorator : RecyclerView.ItemDecoration() {
@@ -241,11 +246,6 @@ class CategoryTabActivity : BaseActivity(), MainView {
                 getLocationRX()
     }
 
-    override fun showDailyData(list: List<DailyData>) {
-        dailyAdapter = WeatherDailyAdapter(this, list)
-        weather_recycler.adapter = dailyAdapter
-    }
-
     override fun error(errorMsg: String) {
         Toast.makeText(this, errorMsg, Toast.LENGTH_SHORT)
                 .show()
@@ -259,15 +259,22 @@ class CategoryTabActivity : BaseActivity(), MainView {
             compositeDisposable.add(locationProvider.getUpdatedLocation(locationRequest)
                     .observeOn(AndroidSchedulers.mainThread())
                     .subscribeOn(Schedulers.io())
-                    .subscribe({ t -> weatherPresenter.getCurrentWeather(t.latitude, t.longitude) },
+                    .subscribe({ t ->
+                        getCityName(t.latitude, t.longitude)
+                        weatherPresenter.getCurrentWeather(t.latitude, t.longitude)
+                    },
                             { t -> Toast.makeText(this, t.localizedMessage, Toast.LENGTH_SHORT).show() })
             )
         else
-            compositeDisposable.add(locationProvider.lastKnownLocation
-                    .observeOn(AndroidSchedulers.mainThread())
-                    .subscribeOn(Schedulers.io())
-                    .subscribe({ t -> weatherPresenter.getCurrentWeather(t.latitude, t.longitude) },
-                            { t -> Toast.makeText(this, t.localizedMessage, Toast.LENGTH_SHORT).show() })
-            )
+            weatherPresenter.getCurrentWeather(pref.getLatitude(), pref.getLongitude())
+
+
+    }
+
+    private fun getCityName(latitude: Double, longitude: Double): String {
+        val geocoder = Geocoder(this, Locale.getDefault())
+
+        val fromLocation = geocoder.getFromLocation(latitude, longitude, 1)
+        return fromLocation[0].locality
     }
 }
