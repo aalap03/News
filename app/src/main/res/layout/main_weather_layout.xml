@@ -39,7 +39,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
             android:layout_marginBottom="8dp"
-            android:text="Montreal"
+            android:text="City not found"
             app:layout_constraintBottom_toTopOf="@+id/weather_recycler"
             app:layout_constraintStart_toStartOf="@id/imageView1"
             app:layout_constraintTop_toTopOf="parent" />
@@ -73,7 +73,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
             android:layout_marginEnd="8dp"
-            android:text="Feels Like -5"
+            android:text="Feels Like- "
             app:layout_constraintEnd_toStartOf="@+id/weather_current_icon"
             app:layout_constraintTop_toBottomOf="@+id/weather_temperature_layout_current" />
 

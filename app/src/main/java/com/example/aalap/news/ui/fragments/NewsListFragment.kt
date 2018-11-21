@@ -30,13 +30,20 @@ class NewsListFragment : Fragment(), NewsFragmentView, AnkoLogger {
     override fun displayArticlesR(articles: List<Article>?) {
         info { "Article: for view Category: $category size: ${articles?.size}" }
 
-        adapter = articles?.let { ArticleAdapter(requireContext(), it, widthScreen) }!!
-        new_recycler?.adapter = adapter
-        refresh_layout?.isRefreshing = false
+        if (articles?.isEmpty() == true) {
+            empty_view.visibility = View.VISIBLE
+            new_recycler.visibility = View.GONE
+        } else {
+            empty_view.visibility = View.GONE
+            new_recycler.visibility = View.VISIBLE
+            adapter = articles?.let { ArticleAdapter(requireContext(), it, widthScreen) }!!
+            new_recycler?.adapter = adapter
+            refresh_layout?.isRefreshing = false
+        }
     }
 
     private lateinit var presenter: NewsPresenter
-    private lateinit var adapter: ArticleAdapter
+    private var adapter: ArticleAdapter? = null
     private var widthScreen: Int = 0
     var category: String = "Anything"
 
@@ -86,6 +93,10 @@ class NewsListFragment : Fragment(), NewsFragmentView, AnkoLogger {
         refresh_layout.isRefreshing = false
         Toast.makeText(context, errorMsg, Toast.LENGTH_SHORT)
                 .show()
+        if( adapter == null || adapter?.itemCount == 0){
+            empty_view.visibility = View.VISIBLE
+            new_recycler.visibility = View.GONE
+        }
     }
 
     override fun displayArticles(articles: List<Article>) {

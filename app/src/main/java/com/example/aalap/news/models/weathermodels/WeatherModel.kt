@@ -7,6 +7,7 @@ import io.realm.Realm
 import org.jetbrains.anko.AnkoLogger
 import org.jetbrains.anko.info
 import retrofit2.Response
+import java.lang.RuntimeException
 
 class WeatherModel : AnkoLogger {
 
@@ -14,8 +15,7 @@ class WeatherModel : AnkoLogger {
         return weatherService.getCurrentWeather(latitude, longitude)
                 .map { it.body() }
                 .doOnSuccess { t -> saveToDB(it = t) }
-                .onErrorReturnItem(Realm.getDefaultInstance().where(Weather::class.java).findFirst())
-
+                .onErrorReturnItem(Realm.getDefaultInstance().where(Weather::class.java).findFirst() ?: Weather())
     }
 
     private fun saveToDB(it: Weather?): Single<Weather?> {
@@ -33,6 +33,14 @@ class WeatherModel : AnkoLogger {
         }
         return Single.just(it)
     }
+
+//    fun <T> returnOnError(): T  {
+//        val weather = Realm.getDefaultInstance().where(Weather::class.java).findFirst()
+//        if(weather == null)
+//            return "Weather was not found bro"
+//        else
+//            return weather
+//    }
 
     private fun testLogs(realm: Realm) {
         info { "Weather: ${realm.where(Weather::class.java).findAll().size}" }

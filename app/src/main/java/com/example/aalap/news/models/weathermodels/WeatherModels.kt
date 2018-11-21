@@ -1,5 +1,6 @@
 package com.example.aalap.news.models.weathermodels
 
+import android.util.Log
 import com.example.aalap.news.R
 import com.google.gson.annotations.SerializedName
 import io.realm.Realm
@@ -27,9 +28,9 @@ open class DailyData(@SerializedName("time") var time: Long = 0,
     }
 
     fun getDayOfTheWeek(): String {
-        var formatter = SimpleDateFormat("EEEE")
+        val formatter = SimpleDateFormat("EEEE")
         formatter.timeZone = TimeZone.getDefault()
-        var dateTime = Date(time * 1000.toLong())
+        val dateTime = Date(time * 1000.toLong())
         return formatter.format(dateTime)
     }
 }
@@ -54,9 +55,9 @@ open class HourlyData(@SerializedName("time") var time: Long = 0,
     }
 
     fun getTimeAsHour(): String {
-        var formatter = SimpleDateFormat("h a")
+        val formatter = SimpleDateFormat("h a")
         formatter.timeZone = TimeZone.getDefault()
-        var dateTime = Date(time * 1000.toLong())
+        val dateTime = Date(time * 1000.toLong())
         return formatter.format(dateTime)
     }
 }
@@ -100,6 +101,7 @@ fun getCelsius(fahrenheit: Double): Int {
 
 //clear-day, clear-night, rain, snow, sleet, wind, fog, cloudy, partly-cloudy-day, or partly-cloudy-night
 fun getIcon(icon: String): Int {
+    Log.d("Icon: ", "Icon: $icon")
     return when (icon) {
         "clear-day" -> R.drawable.ic_clear_day
 

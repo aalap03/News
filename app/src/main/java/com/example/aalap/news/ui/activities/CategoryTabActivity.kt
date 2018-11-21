@@ -46,7 +46,9 @@ import io.reactivex.schedulers.Schedulers
 import io.realm.Realm
 import kotlinx.android.synthetic.main.category_tabs_activity.*
 import kotlinx.android.synthetic.main.main_weather_layout.*
+import org.jetbrains.anko.info
 import pl.charmas.android.reactivelocation2.ReactiveLocationProvider
+import java.lang.Exception
 import java.util.*
 
 const val LOCATION_PERMISSION = 1
@@ -60,8 +62,7 @@ class CategoryTabActivity : BaseActivity(), MainView {
     private lateinit var locationProvider: ReactiveLocationProvider
     private var compositeDisposable = CompositeDisposable()
     private var dailyScaleUp = false
-    private lateinit var hourlyList: List<HourlyData>
-    var hourlyDialog: MaterialDialog? = null
+    private var hourlyDialog: MaterialDialog? = null
 
     override fun getWeatherData(weather: Weather) {
 
@@ -111,7 +112,6 @@ class CategoryTabActivity : BaseActivity(), MainView {
 
         weather_recycler.layoutManager = LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
         weatherPresenter = WeatherPresenter(this, WeatherModel())
-        weatherPresenter.getCurrentWeather(22.3072, 73.1812)
 
         locationProvider = ReactiveLocationProvider(this)
         manager = getSystemService(Context.LOCATION_SERVICE) as LocationManager
@@ -128,7 +128,7 @@ class CategoryTabActivity : BaseActivity(), MainView {
                 .setNumUpdates(1)
                 .setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY)
 
-        //requestLocation()
+        requestLocation()
 
         weather_city_name.setOnClickListener { animateRecycler(!dailyScaleUp) }
         weather_current_icon.setOnClickListener { hourlyDialog?.show() }
@@ -259,11 +259,9 @@ class CategoryTabActivity : BaseActivity(), MainView {
             compositeDisposable.add(locationProvider.getUpdatedLocation(locationRequest)
                     .observeOn(AndroidSchedulers.mainThread())
                     .subscribeOn(Schedulers.io())
-                    .subscribe({ t ->
-                        getCityName(t.latitude, t.longitude)
-                        weatherPresenter.getCurrentWeather(t.latitude, t.longitude)
-                    },
-                            { t -> Toast.makeText(this, t.localizedMessage, Toast.LENGTH_SHORT).show() })
+                    .subscribe({ t -> weatherPresenter.getCurrentWeather(t.latitude, t.longitude) },
+                            { t -> Toast.makeText(this, t.localizedMessage, Toast.LENGTH_SHORT).show() }
+                    )
             )
         else
             weatherPresenter.getCurrentWeather(pref.getLatitude(), pref.getLongitude())
@@ -272,9 +270,12 @@ class CategoryTabActivity : BaseActivity(), MainView {
     }
 
     private fun getCityName(latitude: Double, longitude: Double): String {
-        val geocoder = Geocoder(this, Locale.getDefault())
-
-        val fromLocation = geocoder.getFromLocation(latitude, longitude, 1)
-        return fromLocation[0].locality
+        return try {
+            val geoCoder = Geocoder(this.applicationContext, Locale.getDefault())
+            geoCoder.getFromLocation(latitude, longitude, 1)[0].locality
+        } catch(e: Exception){
+            e.printStackTrace()
+            "City Not found"
+        }
     }
 }

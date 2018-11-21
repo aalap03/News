@@ -9,7 +9,7 @@ import io.reactivex.schedulers.Schedulers
 import org.jetbrains.anko.AnkoLogger
 import org.jetbrains.anko.info
 
-class WeatherPresenter(var view: MainView, var model: WeatherModel): AnkoLogger {
+class WeatherPresenter(var view: MainView, var model: WeatherModel) : AnkoLogger {
 
     var compositeDisposable = CompositeDisposable()
 
@@ -25,9 +25,11 @@ class WeatherPresenter(var view: MainView, var model: WeatherModel): AnkoLogger 
                 ?.subscribe { t1, t2 ->
                     when {
                         t1 != null -> {
+                            info { "gotWeather" }
                             view.getWeatherData(weather = t1)
                         }
                         t2 != null -> {
+                            info { "gotError: ${t2.localizedMessage}" }
                             view.error(t2.localizedMessage)
                         }
                         else -> {
