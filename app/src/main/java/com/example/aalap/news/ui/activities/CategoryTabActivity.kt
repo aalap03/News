@@ -220,6 +220,10 @@ class CategoryTabActivity : BaseActivity(), MainView {
                 val size = Realm.getDefaultInstance().where(Article::class.java).equalTo("isSaved", true).findAll().size
                 Toast.makeText(this, "Saved: $size", Toast.LENGTH_SHORT)
                         .show()
+
+                val intent = Intent(this@CategoryTabActivity, NewsEverything::class.java)
+                intent.putExtra("saved", true)
+                startActivity(intent)
             }
         }
         return super.onOptionsItemSelected(item)

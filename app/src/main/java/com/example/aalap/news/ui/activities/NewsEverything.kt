@@ -13,6 +13,8 @@ import com.example.aalap.news.models.newsmodels.NewsModel
 import com.example.aalap.news.presenter.NewsPresenter
 import com.example.aalap.news.ui.adapter.ArticleAdapter
 import com.example.aalap.news.view.NewsFragmentView
+import io.realm.Realm
+import io.realm.Sort
 import kotlinx.android.synthetic.main.news_list_frag.*
 import kotlinx.android.synthetic.main.toolbar_template.*
 import org.jetbrains.anko.backgroundColor
@@ -26,6 +28,7 @@ class NewsEverything : BaseActivity(), NewsFragmentView {
     lateinit var adapter: ArticleAdapter
     var screenWidth: Int = 0
     var currentTitle = ""
+    var isSaved = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -34,16 +37,21 @@ class NewsEverything : BaseActivity(), NewsFragmentView {
         windowManager.defaultDisplay.getMetrics(displayMetrics)
         screenWidth = displayMetrics.widthPixels
 
-        currentTitle = intent.getStringExtra("title")
+        isSaved = intent.getBooleanExtra("saved", false)
         getToolbar().backgroundColor = ContextCompat.getColor(this, R.color.primary)
-        getToolbar().title = currentTitle
 
         new_recycler.layoutManager = LinearLayoutManager(this)
 
-        presenter = NewsPresenter(this, NewsModel())
-        presenter.getEverythingArticle(currentTitle, 0, 0)
-
-        refresh_layout.setOnRefreshListener { presenter.getEverythingArticle(currentTitle, 0, 0) }
+        if (isSaved) {
+            getToolbar().title = "Saved Items"
+            displayArticles(Realm.getDefaultInstance().where(Article::class.java).equalTo("isSaved", true).sort("publishedAt", Sort.DESCENDING).findAll())
+        } else {
+            currentTitle = intent.getStringExtra("title")
+            getToolbar().title = currentTitle
+            presenter = NewsPresenter(this, NewsModel())
+            presenter.getEverythingArticle(currentTitle, 1, 1)
+        }
+        refresh_layout.setOnRefreshListener { presenter.getEverythingArticle(currentTitle, 1, 1) }
     }
 
 
@@ -59,8 +67,8 @@ class NewsEverything : BaseActivity(), NewsFragmentView {
 
     override fun displayArticles(articles: List<Article>) {
         loading(false)
-//        adapter = ArticleAdapter(this, articles, screenWidth)
-//        new_recycler.adapter = adapter
+        adapter = ArticleAdapter(this, articles, screenWidth)
+        new_recycler.adapter = adapter
     }
 
     override fun layoutResID(): Int {
