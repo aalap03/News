@@ -2,7 +2,7 @@ package com.example.aalap.news.presenter
 
 import com.example.aalap.news.models.newsmodels.Article
 import com.example.aalap.news.models.newsmodels.NewsModel
-import com.example.aalap.news.view.NewsFragmentView
+import com.example.aalap.news.view.NewsListView
 import io.reactivex.Single
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
@@ -12,7 +12,7 @@ import org.jetbrains.anko.AnkoLogger
 import org.jetbrains.anko.info
 import java.net.UnknownHostException
 
-class NewsPresenter(var view: NewsFragmentView, private var model: NewsModel) : AnkoLogger {
+class NewsPresenter(var view: NewsListView, private var model: NewsModel) : AnkoLogger {
 
     private var compositeDisposable = CompositeDisposable()
 
@@ -63,7 +63,7 @@ class NewsPresenter(var view: NewsFragmentView, private var model: NewsModel) : 
         return BiConsumer { articles, throwable ->
             info { "Articles: ${articles?.size}" }
             when {
-                articles != null -> view.displayArticles(articles)
+                articles != null -> view.displayArticlesR(articles)
                 throwable != null -> view.showError(throwable.localizedMessage)
                 else -> view.showError("Are bhai kehna kya chahte ho???")
             }

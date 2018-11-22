@@ -9,20 +9,16 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.aalap.news.R
 import com.example.aalap.news.models.newsmodels.Article
 import com.example.aalap.news.models.newsmodels.NewsModel
-//import com.example.aalap.news.models.newsmodels.RArticle
 import com.example.aalap.news.presenter.NewsPresenter
 import com.example.aalap.news.ui.adapter.ArticleAdapter
-import com.example.aalap.news.view.NewsFragmentView
+import com.example.aalap.news.view.NewsListView
 import io.realm.Realm
 import io.realm.Sort
 import kotlinx.android.synthetic.main.news_list_frag.*
 import kotlinx.android.synthetic.main.toolbar_template.*
 import org.jetbrains.anko.backgroundColor
 
-class NewsEverything : BaseActivity(), NewsFragmentView {
-    override fun displayArticlesR(articles: List<Article>?) {
-
-    }
+class NewsEverythingAndSaved : BaseActivity(), NewsListView {
 
     lateinit var presenter: NewsPresenter
     lateinit var adapter: ArticleAdapter
@@ -44,7 +40,7 @@ class NewsEverything : BaseActivity(), NewsFragmentView {
 
         if (isSaved) {
             getToolbar().title = "Saved Items"
-            displayArticles(Realm.getDefaultInstance().where(Article::class.java).equalTo("isSaved", true).sort("publishedAt", Sort.DESCENDING).findAll())
+            displayArticlesR(Realm.getDefaultInstance().where(Article::class.java).equalTo("isSaved", true).sort("publishedAt", Sort.DESCENDING).findAll())
         } else {
             currentTitle = intent.getStringExtra("title")
             getToolbar().title = currentTitle
@@ -65,9 +61,9 @@ class NewsEverything : BaseActivity(), NewsFragmentView {
                 .show()
     }
 
-    override fun displayArticles(articles: List<Article>) {
+    override fun displayArticlesR(articles: List<Article>?) {
         loading(false)
-        adapter = ArticleAdapter(this, articles, screenWidth)
+        adapter = articles?.let { ArticleAdapter(this, it, screenWidth) }!!
         new_recycler.adapter = adapter
     }
 

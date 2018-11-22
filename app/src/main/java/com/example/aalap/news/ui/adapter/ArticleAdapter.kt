@@ -9,6 +9,7 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
+import com.example.aalap.news.Pref
 import com.example.aalap.news.R
 import com.example.aalap.news.Utils
 import com.example.aalap.news.models.newsmodels.Article
@@ -16,16 +17,24 @@ import com.example.aalap.news.models.newsmodels.Article
 import com.example.aalap.news.ui.activities.Webview
 import com.squareup.picasso.Picasso
 import org.jetbrains.anko.AnkoLogger
-import org.jetbrains.anko.displayMetrics
 import org.jetbrains.anko.info
-import org.jetbrains.anko.windowManager
 
 class ArticleAdapter(var context: Context, var list: List<Article>, var screenWidth: Int) : RecyclerView.Adapter<ArticleAdapter.ArticleHolder>(), AnkoLogger {
 
     var picasso: Picasso = Picasso.get()
+    var pref = Pref(context.applicationContext)
 
-    override fun onCreateViewHolder(p0: ViewGroup, p1: Int): ArticleHolder {
-        return ArticleHolder(LayoutInflater.from(context).inflate(R.layout.news_item_grid, p0, false))
+    override fun onCreateViewHolder(parent: ViewGroup, p1: Int): ArticleHolder {
+
+        info{"Compact? ${pref.isLayoutCompact()}"}
+        val layout = if (pref.isLayoutCompact())
+            R.layout.news_item_compact
+        else
+            R.layout.news_item_grid
+
+        val view = LayoutInflater.from(context).inflate(layout, parent, false)
+
+        return ArticleHolder(view)
     }
 
     override fun getItemCount(): Int {
@@ -35,7 +44,13 @@ class ArticleAdapter(var context: Context, var list: List<Article>, var screenWi
     override fun onBindViewHolder(holder: ArticleHolder, position: Int) {
         val article = list[position]
         holder.title.text = article.title
-        holder.image.layoutParams.height = screenWidth / 2
+
+        if (pref.isLayoutCompact()) {
+            holder.image.layoutParams.width = screenWidth / 5
+            holder.image.layoutParams.height = screenWidth / 5
+        } else {
+            holder.image.layoutParams.height = screenWidth / 2
+        }
 
         if (!TextUtils.isEmpty(article.author)) {
             holder.author.visibility = View.VISIBLE

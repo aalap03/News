@@ -4,8 +4,8 @@ import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import androidx.core.content.ContextCompat
+import com.example.aalap.news.Pref
 import com.example.aalap.news.R
-import com.example.aalap.news.pref
 import org.jetbrains.anko.AnkoLogger
 
 abstract class BaseActivity: AppCompatActivity(), AnkoLogger {
@@ -16,9 +16,13 @@ abstract class BaseActivity: AppCompatActivity(), AnkoLogger {
 
     abstract fun getToolbarTitle(): String
 
+    lateinit var pref :Pref
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(layoutResID())
+
+        pref = Pref(this.applicationContext)
 
         setSupportActionBar(getToolbar())
         getToolbar().title = getToolbarTitle()

@@ -18,7 +18,7 @@ class Pref(appContext: Context) {
     }
 
     fun getRecyclerLayout(): Int {
-        return pref.getInt(KEY_LAYOUT, NewsLayout.LAYOUT_LINEAR)
+        return pref.getInt(KEY_LAYOUT, NewsLayout.LAYOUT_COMPACT)
     }
 
     fun saveTheme(themeRes: Int) {
@@ -33,8 +33,8 @@ class Pref(appContext: Context) {
         return (getTheme() == R.style.AppTheme_Dark)
     }
 
-    fun isLayoutGrid(): Boolean {
-        return (getRecyclerLayout() == NewsLayout.LAYOUT_GRID)
+    fun isLayoutCompact(): Boolean {
+        return (getRecyclerLayout() == NewsLayout.LAYOUT_COMPACT)
     }
 
     fun saveLastCoOrdinates(latitude: String, longitude: String) {

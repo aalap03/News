@@ -1,6 +1,7 @@
 package com.example.aalap.news
 
 import android.app.Application
+import android.content.Context
 import com.example.aalap.news.retrofitutils.NewsService
 import com.example.aalap.news.retrofitutils.WeatherService
 import io.realm.Realm
@@ -15,9 +16,10 @@ lateinit var newsRetrofit: Retrofit
 lateinit var weatherRetrofit: Retrofit
 lateinit var newsService: NewsService
 lateinit var weatherService: WeatherService
+
 lateinit var pref: Pref
 
-class App: Application() {
+class App : Application() {
 
     override fun onCreate() {
         super.onCreate()
@@ -37,7 +39,7 @@ class App: Application() {
                 .build()
 
         weatherRetrofit = Retrofit.Builder()
-                .baseUrl("https://api.darksky.net/forecast/"+getString(R.string.weather_api_key)+"/")
+                .baseUrl("https://api.darksky.net/forecast/" + getString(R.string.weather_api_key) + "/")
                 .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
                 .addConverterFactory(GsonConverterFactory.create())
                 .build()

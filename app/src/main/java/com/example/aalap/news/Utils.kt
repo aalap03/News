@@ -1,7 +1,12 @@
 package com.example.aalap.news
 
+import android.content.Context
 import android.content.res.Resources
+import android.graphics.Canvas
+import android.graphics.drawable.Drawable
 import android.util.TypedValue
+import androidx.core.content.ContextCompat
+import androidx.recyclerview.widget.RecyclerView
 import com.afollestad.materialdialogs.MaterialDialog
 import java.text.ParseException
 import java.text.SimpleDateFormat
@@ -33,7 +38,24 @@ class Utils {
         return desiredOutput
     }
 
-    fun dialog() {
+    inner class Decorator(context: Context) : RecyclerView.ItemDecoration() {
 
+        var divider: Drawable? = ContextCompat.getDrawable(context, R.drawable.line_divider)
+
+        override fun onDraw(canvas: Canvas, parent: RecyclerView, state: RecyclerView.State) {
+            super.onDraw(canvas, parent, state)
+            val left = parent.paddingLeft
+            val right = parent.width - parent.paddingRight
+            val childCount = parent.childCount
+
+            for (i in 0 until childCount) {
+                val child = parent.getChildAt(i)
+                val params = child.layoutParams
+                val top = child.bottom + params.height
+                val bottom = top + (divider?.intrinsicHeight ?: 0)
+                divider?.setBounds(left, top, right, bottom)
+                divider?.draw(canvas)
+            }
+        }
     }
 }

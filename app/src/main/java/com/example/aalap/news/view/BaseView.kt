@@ -9,6 +9,5 @@ interface BaseView {
 
     fun showError(errorMsg: String?)
 
-    fun displayArticles(articles: List<Article>)
     fun displayArticlesR(articles: List<Article>?)
 }

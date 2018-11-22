@@ -1,5 +1,7 @@
 package com.example.aalap.news.presenter
 
+import com.example.aalap.news.App
+import com.example.aalap.news.Pref
 import com.example.aalap.news.models.weathermodels.WeatherModel
 import com.example.aalap.news.pref
 import com.example.aalap.news.view.MainView
@@ -18,18 +20,15 @@ class WeatherPresenter(var view: MainView, var model: WeatherModel) : AnkoLogger
         info { "Weather: requesting... $latitude : $longitude" }
 
         pref.saveLastCoOrdinates(latitude.toString(), longitude.toString())
-
         model.getCurrentWeather(latitude, longitude)
                 .observeOn(AndroidSchedulers.mainThread())
                 ?.subscribeOn(Schedulers.io())
                 ?.subscribe { t1, t2 ->
                     when {
                         t1 != null -> {
-                            info { "gotWeather" }
                             view.getWeatherData(weather = t1)
                         }
                         t2 != null -> {
-                            info { "gotError: ${t2.localizedMessage}" }
                             view.error(t2.localizedMessage)
                         }
                         else -> {

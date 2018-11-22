@@ -33,9 +33,9 @@ import androidx.recyclerview.widget.RecyclerView
 import com.afollestad.materialdialogs.MaterialDialog
 import com.afollestad.materialdialogs.customview.customView
 import com.afollestad.materialdialogs.customview.getCustomView
+import com.example.aalap.news.Utils
 import com.example.aalap.news.models.newsmodels.Article
 import com.example.aalap.news.models.weathermodels.*
-import com.example.aalap.news.pref
 import com.example.aalap.news.presenter.WeatherPresenter
 import com.example.aalap.news.ui.adapter.WeatherDailyAdapter
 import com.example.aalap.news.ui.adapter.WeatherHourlyAdapter
@@ -46,7 +46,6 @@ import io.reactivex.schedulers.Schedulers
 import io.realm.Realm
 import kotlinx.android.synthetic.main.category_tabs_activity.*
 import kotlinx.android.synthetic.main.main_weather_layout.*
-import org.jetbrains.anko.info
 import pl.charmas.android.reactivelocation2.ReactiveLocationProvider
 import java.lang.Exception
 import java.util.*
@@ -88,7 +87,7 @@ class CategoryTabActivity : BaseActivity(), MainView {
         recycler?.layoutManager = LinearLayoutManager(this)
         val adapter = weather.hourly?.data?.let { WeatherHourlyAdapter(this, it) }
         recycler?.adapter = adapter
-        recycler?.addItemDecoration(Decorator())
+        recycler?.addItemDecoration(Utils().Decorator(this))
 
     }
 
@@ -132,27 +131,6 @@ class CategoryTabActivity : BaseActivity(), MainView {
 
         weather_city_name.setOnClickListener { animateRecycler(!dailyScaleUp) }
         weather_current_icon.setOnClickListener { hourlyDialog?.show() }
-    }
-
-    inner class Decorator : RecyclerView.ItemDecoration() {
-
-        var divider: Drawable? = ContextCompat.getDrawable(this@CategoryTabActivity, R.drawable.line_divider)
-
-        override fun onDraw(canvas: Canvas, parent: RecyclerView, state: RecyclerView.State) {
-            super.onDraw(canvas, parent, state)
-            val left = parent.paddingLeft
-            val right = parent.width - parent.paddingRight
-            val childCount = parent.childCount
-
-            for (i in 0 until childCount) {
-                val child = parent.getChildAt(i)
-                val params = child.layoutParams
-                val top = child.bottom + params.height
-                val bottom = top + (divider?.intrinsicHeight ?: 0)
-                divider?.setBounds(left, top, right, bottom)
-                divider?.draw(canvas)
-            }
-        }
     }
 
     private fun animateRecycler(isScaleUp: Boolean) {
@@ -199,7 +177,7 @@ class CategoryTabActivity : BaseActivity(), MainView {
 
         searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
             override fun onQueryTextSubmit(query: String?): Boolean {
-                val intent = Intent(this@CategoryTabActivity, NewsEverything::class.java)
+                val intent = Intent(this@CategoryTabActivity, NewsEverythingAndSaved::class.java)
                 intent.putExtra("title", query)
                 startActivity(intent)
                 return true
@@ -215,13 +193,13 @@ class CategoryTabActivity : BaseActivity(), MainView {
 
     override fun onOptionsItemSelected(item: MenuItem?): Boolean {
         when (item?.itemId) {
-            R.id.menu_settings -> startActivity(Intent(this, NewsSettings::class.java))
+            R.id.menu_settings -> startActivity(Intent(this, SettingsScreen::class.java))
             R.id.menu_bookmarked -> {
                 val size = Realm.getDefaultInstance().where(Article::class.java).equalTo("isSaved", true).findAll().size
                 Toast.makeText(this, "Saved: $size", Toast.LENGTH_SHORT)
                         .show()
 
-                val intent = Intent(this@CategoryTabActivity, NewsEverything::class.java)
+                val intent = Intent(this@CategoryTabActivity, NewsEverythingAndSaved::class.java)
                 intent.putExtra("saved", true)
                 startActivity(intent)
             }

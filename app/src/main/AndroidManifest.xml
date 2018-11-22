@@ -20,7 +20,10 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
 
-        <activity android:name=".ui.activities.NewsSettings"/>
+        <activity android:name=".ui.activities.SettingsScreen"
+            android:parentActivityName=".ui.activities.CategoryTabActivity">
+
+        </activity>
 
         <activity android:name=".ui.activities.Webview"
             android:parentActivityName=".ui.activities.CategoryTabActivity"/>
@@ -33,7 +36,7 @@
             </intent-filter>
         </activity>
 
-        <activity android:name=".ui.activities.NewsEverything"
+        <activity android:name=".ui.activities.NewsEverythingAndSaved"
             android:parentActivityName=".ui.activities.CategoryTabActivity"
             />
     </application>
