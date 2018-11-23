@@ -1,10 +1,13 @@
 package com.example.aalap.news.ui.activities
 
 import android.graphics.Color
+import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
+import android.webkit.SafeBrowsingResponse
+import android.webkit.WebResourceRequest
 import android.webkit.WebView
 import android.webkit.WebViewClient
 import android.widget.Toast
@@ -26,7 +29,6 @@ class Webview : AppCompatActivity() {
         url = intent.getStringExtra("url")
         webview_toolbar.setTitleTextColor(Color.WHITE)
 
-
         currentArticle = Realm.getDefaultInstance().where(Article::class.java).equalTo("url", url).findFirst()
 
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
@@ -45,6 +47,21 @@ class Webview : AppCompatActivity() {
 
                 Toast.makeText(this@Webview, "Loading finished", Toast.LENGTH_SHORT)
                         .show()
+            }
+
+            override fun onSafeBrowsingHit(
+                    view: WebView,
+                    request: WebResourceRequest,
+                    threatType: Int,
+                    callback: SafeBrowsingResponse
+            ) {
+                // The "true" argument indicates that your app reports incidents like
+                // this one to Safe Browsing.
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O_MR1) {
+                    callback.backToSafety(true)
+                    Toast.makeText(view.context, "Unsafe web page blocked.", Toast.LENGTH_LONG).show()
+                }
+
             }
         }
 

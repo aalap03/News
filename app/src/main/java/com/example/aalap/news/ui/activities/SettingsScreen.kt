@@ -57,22 +57,12 @@ class SettingsScreen : BaseActivity() {
         }
 
         switch_theme.setOnCheckedChangeListener { _, isChecked ->
-            if (isChecked)
-                pref.saveTheme(R.style.AppTheme_Dark)
-            else
-                pref.saveTheme(R.style.AppTheme)
-
+            pref.saveTheme(if (isChecked) R.style.AppTheme_Dark else R.style.AppTheme)
             this.recreate()
         }
 
         switch_articles_layout.setOnCheckedChangeListener { _, isChecked ->
-
-            if (isChecked)
-                pref.saveLayout(NewsLayout.LAYOUT_COMPACT)
-            else
-                pref.saveLayout(NewsLayout.LAYOUT_GRID)
-
-            info { "Compact? ${pref.isLayoutCompact()}" }
+            pref.saveLayout(if (isChecked) NewsLayout.LAYOUT_COMPACT else NewsLayout.LAYOUT_GRID)
         }
     }
 }

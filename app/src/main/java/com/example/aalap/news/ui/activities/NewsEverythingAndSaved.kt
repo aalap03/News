@@ -47,7 +47,11 @@ class NewsEverythingAndSaved : BaseActivity(), NewsListView {
             presenter = NewsPresenter(this, NewsModel())
             presenter.getEverythingArticle(currentTitle, 1, 1)
         }
-        refresh_layout.setOnRefreshListener { presenter.getEverythingArticle(currentTitle, 1, 1) }
+
+        if (!isSaved)
+            refresh_layout.setOnRefreshListener {
+                presenter.getEverythingArticle(currentTitle, 1, 1)
+            }
     }
 
 

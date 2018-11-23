@@ -1,20 +1,18 @@
 package com.example.aalap.news.models.newsmodels
 
-import android.util.Log
-
 class Country {
 
 
     companion object {
         var countryMaps = hashMapOf<String, String>()
 
-        val INDIA = "INDIA"
-        val USA = "USA"
-        val CANADA = "CANADA"
-        val FRANCE = "FRANCE"
-        val ENGLAND = "UNITED KINGDOM"
+        private const val INDIA = "INDIA"
+        private const val USA = "USA"
+        private const val CANADA = "CANADA"
+        private const val FRANCE = "FRANCE"
+        private const val ENGLAND = "UNITED KINGDOM"
 
-        fun getCountries(): HashMap<String, String> {
+        private fun getCountries(): HashMap<String, String> {
 
             countryMaps[INDIA] = "in"
             countryMaps[USA] = "us"
@@ -26,14 +24,9 @@ class Country {
         }
 
         fun keysForSpinner(): MutableList<String> {
-            var list = mutableListOf<String>()
-            getCountries().keys.forEach {
-                Log.d(TAG, it)
-                list.add(it)
-            }
+            val list = mutableListOf<String>()
+            getCountries().keys.forEach { list.add(it) }
             return list
         }
-
-        val TAG = "Country:"
     }
 }

@@ -20,6 +20,9 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
 
+        <meta-data android:name="android.webkit.WebView.EnableSafeBrowsing"
+            android:value="false" />
+
         <activity android:name=".ui.activities.SettingsScreen"
             android:parentActivityName=".ui.activities.CategoryTabActivity">
 

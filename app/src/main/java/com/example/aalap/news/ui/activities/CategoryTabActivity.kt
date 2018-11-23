@@ -63,34 +63,6 @@ class CategoryTabActivity : BaseActivity(), MainView {
     private var dailyScaleUp = false
     private var hourlyDialog: MaterialDialog? = null
 
-    override fun getWeatherData(weather: Weather) {
-
-        //currently
-        val current: Currently? = weather.currently
-        if (current != null) {
-            weather_current_feels_like.text = "Feels like ${current.feelsLike()}"
-            weather_current_icon.setImageResource(current.getIconRes())
-            weather_temperature_layout_current.findViewById<TextView>(R.id.weather_temperature_value).text = current.currentTemperature().toString()
-            weather_city_name.text = getCityName(pref.getLatitude(), pref.getLongitude())
-        }
-        //daily
-        dailyAdapter = weather.daily?.data?.let { WeatherDailyAdapter(this, it) }!!
-        weather_recycler.adapter = dailyAdapter
-
-        //hourly
-        hourlyDialog = MaterialDialog(this)
-                .customView(R.layout.weather_hourly, scrollable = true)
-
-        val customView = hourlyDialog?.getCustomView()
-        customView?.setBackgroundResource(R.drawable.gradient_2)
-        val recycler: RecyclerView? = customView?.findViewById(R.id.weather_recycler_hourly)
-        recycler?.layoutManager = LinearLayoutManager(this)
-        val adapter = weather.hourly?.data?.let { WeatherHourlyAdapter(this, it) }
-        recycler?.adapter = adapter
-        recycler?.addItemDecoration(Utils().Decorator(this))
-
-    }
-
     override fun layoutResID(): Int {
         return R.layout.category_tabs_activity
     }
@@ -233,6 +205,32 @@ class CategoryTabActivity : BaseActivity(), MainView {
                 .show()
     }
 
+    override fun getWeatherData(weather: Weather) {
+
+        //currently
+        val current: Currently? = weather.currently
+        if (current != null) {
+            weather_current_feels_like.text = "Feels like ${current.feelsLike()}"
+            weather_current_icon.setImageResource(current.getIconRes())
+            weather_temperature_layout_current.findViewById<TextView>(R.id.weather_temperature_value).text = current.currentTemperature().toString()
+            weather_city_name.text = getCityName(pref.getLatitude(), pref.getLongitude())
+        }
+        //daily
+        dailyAdapter = weather.daily?.data?.let { WeatherDailyAdapter(this, it) }!!
+        weather_recycler.adapter = dailyAdapter
+
+        //hourly
+        hourlyDialog = MaterialDialog(this).customView(R.layout.weather_hourly, scrollable = true)
+
+        val customView = hourlyDialog?.getCustomView()
+        customView?.setBackgroundResource(R.drawable.gradient_2)
+        val recycler: RecyclerView? = customView?.findViewById(R.id.weather_recycler_hourly)
+        recycler?.layoutManager = LinearLayoutManager(this)
+        val adapter = weather.hourly?.data?.let { WeatherHourlyAdapter(this, it) }
+        recycler?.adapter = adapter
+        recycler?.addItemDecoration(Utils().Decorator(this))
+
+    }
 
     @SuppressLint("MissingPermission")
     fun getLocationRX() {
