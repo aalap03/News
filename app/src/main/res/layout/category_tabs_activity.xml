@@ -33,7 +33,7 @@
             app:layout_constraintTop_toBottomOf="@+id/weather_daily_root"
             app:tabBackground="@android:color/transparent"
             app:tabMode="scrollable"
-            app:tabSelectedTextColor="@android:color/holo_purple" />
+            app:tabSelectedTextColor="@android:color/white" />
 
     </com.google.android.material.appbar.AppBarLayout>
 

@@ -12,11 +12,13 @@
         android:title="Saved News">
     </item>
 
+    <!--app:actionViewClass="androidx.appcompat.widget.SearchView"-->
+
     <item
         android:id="@+id/menu_search"
         android:title="Search"
-        app:actionViewClass="androidx.appcompat.widget.SearchView"
+
         app:showAsAction="always"
-        android:icon="@android:drawable/ic_menu_search"
+        android:icon="@drawable/menu_search"
         />
 </menu>

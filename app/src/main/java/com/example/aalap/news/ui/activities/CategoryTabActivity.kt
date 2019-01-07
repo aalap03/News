@@ -6,9 +6,7 @@ import android.annotation.SuppressLint
 import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
-import android.graphics.Canvas
 import android.graphics.drawable.AnimationDrawable
-import android.graphics.drawable.Drawable
 import android.location.Geocoder
 import android.location.LocationManager
 import android.os.Build
@@ -101,11 +99,11 @@ class CategoryTabActivity : BaseActivity(), MainView {
 
         requestLocation()
 
-        weather_city_name.setOnClickListener { animateRecycler(!dailyScaleUp) }
+        weather_city_name.setOnClickListener { animateDailyRecycler(!dailyScaleUp) }
         weather_current_icon.setOnClickListener { hourlyDialog?.show() }
     }
 
-    private fun animateRecycler(isScaleUp: Boolean) {
+    private fun animateDailyRecycler(isScaleUp: Boolean) {
         dailyScaleUp = isScaleUp
 
         if (isScaleUp)
@@ -139,26 +137,26 @@ class CategoryTabActivity : BaseActivity(), MainView {
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
         menuInflater.inflate(R.menu.menu, menu)
-        val searchView = menu?.findItem(R.id.menu_search)?.actionView as SearchView
-
-        val searchEditText = searchView.findViewById(androidx.appcompat.R.id.search_src_text) as EditText
-        searchEditText.setTextColor(ContextCompat.getColor(this, android.R.color.white))
-        searchEditText.setHintTextColor(ContextCompat.getColor(this, android.R.color.darker_gray))
-
-        searchView.queryHint = "Search Anything"
-
-        searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
-            override fun onQueryTextSubmit(query: String?): Boolean {
-                val intent = Intent(this@CategoryTabActivity, NewsEverythingAndSaved::class.java)
-                intent.putExtra("title", query)
-                startActivity(intent)
-                return true
-            }
-
-            override fun onQueryTextChange(newText: String?): Boolean {
-                return true
-            }
-        })
+//        val searchView = menu?.findItem(R.id.menu_search)?.actionView as SearchView
+//
+//        val searchEditText = searchView.findViewById(androidx.appcompat.R.id.search_src_text) as EditText
+//        searchEditText.setTextColor(ContextCompat.getColor(this, android.R.color.white))
+//        searchEditText.setHintTextColor(ContextCompat.getColor(this, android.R.color.darker_gray))
+//
+//        searchView.queryHint = "Search Anything"
+//
+//        searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
+//            override fun onQueryTextSubmit(query: String?): Boolean {
+//                val intent = Intent(this@CategoryTabActivity, NewsEverythingAndSaved::class.java)
+//                intent.putExtra("title", query)
+//                startActivity(intent)
+//                return true
+//            }
+//
+//            override fun onQueryTextChange(newText: String?): Boolean {
+//                return true
+//            }
+//        })
 
         return super.onCreateOptionsMenu(menu)
     }
