@@ -137,26 +137,26 @@ class CategoryTabActivity : BaseActivity(), MainView {
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
         menuInflater.inflate(R.menu.menu, menu)
-//        val searchView = menu?.findItem(R.id.menu_search)?.actionView as SearchView
-//
-//        val searchEditText = searchView.findViewById(androidx.appcompat.R.id.search_src_text) as EditText
-//        searchEditText.setTextColor(ContextCompat.getColor(this, android.R.color.white))
-//        searchEditText.setHintTextColor(ContextCompat.getColor(this, android.R.color.darker_gray))
-//
-//        searchView.queryHint = "Search Anything"
-//
-//        searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
-//            override fun onQueryTextSubmit(query: String?): Boolean {
-//                val intent = Intent(this@CategoryTabActivity, NewsEverythingAndSaved::class.java)
-//                intent.putExtra("title", query)
-//                startActivity(intent)
-//                return true
-//            }
-//
-//            override fun onQueryTextChange(newText: String?): Boolean {
-//                return true
-//            }
-//        })
+        val searchView = menu?.findItem(R.id.menu_search)?.actionView as SearchView
+
+        val searchEditText = searchView.findViewById(androidx.appcompat.R.id.search_src_text) as EditText
+        searchEditText.setTextColor(ContextCompat.getColor(this, android.R.color.white))
+        searchEditText.setHintTextColor(ContextCompat.getColor(this, android.R.color.darker_gray))
+
+        searchView.queryHint = "Search Anything"
+
+        searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
+            override fun onQueryTextSubmit(query: String?): Boolean {
+                val intent = Intent(this@CategoryTabActivity, NewsEverythingAndSaved::class.java)
+                intent.putExtra("title", query)
+                startActivity(intent)
+                return true
+            }
+
+            override fun onQueryTextChange(newText: String?): Boolean {
+                return true
+            }
+        })
 
         return super.onCreateOptionsMenu(menu)
     }

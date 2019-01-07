@@ -4,21 +4,18 @@
 
     <item
         android:id="@+id/menu_settings"
-        android:title="Settings">
-    </item>
+        android:title="Settings"></item>
 
     <item
         android:id="@+id/menu_bookmarked"
-        android:title="Saved News">
-    </item>
+        android:title="Saved News"></item>
 
-    <!--app:actionViewClass="androidx.appcompat.widget.SearchView"-->
 
     <item
         android:id="@+id/menu_search"
+        android:icon="@drawable/menu_search"
         android:title="Search"
 
-        app:showAsAction="always"
-        android:icon="@drawable/menu_search"
-        />
+        app:actionViewClass="androidx.appcompat.widget.SearchView"
+        app:showAsAction="always" />
 </menu>
