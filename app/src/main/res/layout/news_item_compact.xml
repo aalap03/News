@@ -19,7 +19,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             style="@style/News_text_big"
-            android:text="Name"
+            android:text="Name sdhbfkjsd fkjsdhfksj hfkjsdhfkj shdfkjsdhk jhfsdkjhfksdjhfkjsdhfjsdhfkjsdhfkjsdhfjh jkdshfksjdh"
             android:maxLines="2"
             android:ellipsize="end"
             android:layout_marginStart="5dp"
@@ -43,7 +43,7 @@
             style="@style/News_text_small"
             android:layout_height="wrap_content"
             android:layout_marginStart="5dp"
-            android:text="Yahoo.com"
+            android:text="Yahoo.comjksdfkjsdhfkjdsh djshfkjsdh fkdjshfkjsdh jfhdskfjhsdkjkdjhfkjssdhfkjsdh"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@+id/article_image"
             app:layout_constraintTop_toBottomOf="@+id/article_title" />

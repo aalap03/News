@@ -46,8 +46,8 @@ class ArticleAdapter(var context: Context, var list: List<Article>, var screenWi
         holder.title.text = article.title
 
         if (pref.isLayoutCompact()) {
-            holder.image.layoutParams.width = screenWidth / 5
-            holder.image.layoutParams.height = screenWidth / 5
+            holder.image.layoutParams.width = screenWidth / 4
+            holder.image.layoutParams.height = screenWidth / 4
         } else {
             holder.image.layoutParams.height = screenWidth / 2
         }

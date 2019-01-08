@@ -3,8 +3,10 @@ package com.example.aalap.news.ui.activities
 import android.Manifest
 import android.animation.Animator
 import android.annotation.SuppressLint
+import android.app.Activity
 import android.content.Context
 import android.content.Intent
+import android.content.IntentSender
 import android.content.pm.PackageManager
 import android.graphics.drawable.AnimationDrawable
 import android.location.Geocoder
@@ -38,6 +40,7 @@ import com.example.aalap.news.presenter.WeatherPresenter
 import com.example.aalap.news.ui.adapter.WeatherDailyAdapter
 import com.example.aalap.news.ui.adapter.WeatherHourlyAdapter
 import com.example.aalap.news.view.MainView
+import com.google.android.gms.common.api.ResolvableApiException
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
@@ -230,6 +233,8 @@ class CategoryTabActivity : BaseActivity(), MainView {
 
     }
 
+    private val LOCATION_SETTINGS: Int = 5
+
     @SuppressLint("MissingPermission")
     fun getLocationRX() {
 
@@ -241,17 +246,59 @@ class CategoryTabActivity : BaseActivity(), MainView {
                             { t -> Toast.makeText(this, t.localizedMessage, Toast.LENGTH_SHORT).show() }
                     )
             )
-        else
-            weatherPresenter.getCurrentWeather(pref.getLatitude(), pref.getLongitude())
+        else {
+            if (pref.getLatitude() != 0.0 && pref.getLongitude() != 0.0)
+                weatherPresenter.getCurrentWeather(pref.getLatitude(), pref.getLongitude())
+            else {
+                val locationSettingsRequest = LocationSettingsRequest.Builder().addLocationRequest(locationRequest).build()
+                val checkLocationSettings = LocationServices.getSettingsClient(this).checkLocationSettings(locationSettingsRequest)
+                checkLocationSettings
+                        .addOnSuccessListener { locationDisposable() }
+                        .addOnFailureListener { exception ->
+                            if (exception is ResolvableApiException) {
+                                try {
+                                    exception.startResolutionForResult(this, LOCATION_SETTINGS)
+                                } catch (e: IntentSender.SendIntentException) {
+                                    e.printStackTrace()
+                                }
+                            }
+                        }
+            }
+        }
+    }
 
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
 
+        if (requestCode == LOCATION_SETTINGS) {
+
+            if (resultCode == Activity.RESULT_OK) {
+                locationDisposable()
+            } else {
+                weather_current_feels_like.text = "Feels like N/A"
+                weather_current_icon.setImageResource(R.mipmap.ic_launcher)
+                weather_temperature_layout_current.findViewById<TextView>(R.id.weather_temperature_value).text = "N/A"
+                weather_city_name.text = "LOCATION OFF"
+            }
+        }
+    }
+
+    @SuppressLint("MissingPermission")
+    fun locationDisposable() {
+        compositeDisposable.add(locationProvider.getUpdatedLocation(locationRequest)
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribeOn(Schedulers.io())
+                .subscribe({ t -> weatherPresenter.getCurrentWeather(t.latitude, t.longitude) },
+                        { t -> Toast.makeText(this, t.localizedMessage, Toast.LENGTH_SHORT).show() }
+                )
+        )
     }
 
     private fun getCityName(latitude: Double, longitude: Double): String {
         return try {
             val geoCoder = Geocoder(this.applicationContext, Locale.getDefault())
             geoCoder.getFromLocation(latitude, longitude, 1)[0].locality
-        } catch(e: Exception){
+        } catch (e: Exception) {
             e.printStackTrace()
             "City Not found"
         }
