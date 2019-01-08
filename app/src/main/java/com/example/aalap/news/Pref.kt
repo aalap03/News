@@ -29,9 +29,9 @@ class Pref(appContext: Context) {
         return pref.getInt(KEY_THEME, R.style.AppTheme)
     }
 
-//    fun isDarkTheme(): Boolean {
-//        return (getTheme() == R.style.AppTheme_Dark)
-//    }
+    fun isDarkTheme(): Boolean {
+        return (getTheme() == R.style.AppTheme_Dark)
+    }
 
     fun isLayoutCompact(): Boolean {
         return (getRecyclerLayout() == NewsLayout.LAYOUT_COMPACT)

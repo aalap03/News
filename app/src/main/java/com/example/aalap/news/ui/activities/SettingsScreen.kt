@@ -34,13 +34,13 @@ class SettingsScreen : BaseActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
+        setTheme(pref.getTheme())
         val adapter = ArrayAdapter<String>(this,
                 android.R.layout.simple_spinner_dropdown_item, countryList)
         settings_country.adapter = adapter
         getToolbar().backgroundColor = ContextCompat.getColor(this, R.color.primary)
 
-//        switch_theme.isChecked = pref.isDarkTheme()
+        switch_theme.isChecked = pref.isDarkTheme()
         switch_articles_layout.isChecked = pref.isLayoutCompact()
 
         settings_country.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
@@ -56,10 +56,10 @@ class SettingsScreen : BaseActivity() {
             }
         }
 
-//        switch_theme.setOnCheckedChangeListener { _, isChecked ->
-//            pref.saveTheme(if (isChecked) R.style.AppTheme_Dark else R.style.AppTheme)
-//            this.recreate()
-//        }
+        switch_theme.setOnCheckedChangeListener { _, isChecked ->
+            pref.saveTheme(if (isChecked) R.style.AppTheme_Dark else R.style.AppTheme)
+            this.recreate()
+        }
 
         switch_articles_layout.setOnCheckedChangeListener { _, isChecked ->
             pref.saveLayout(if (isChecked) NewsLayout.LAYOUT_COMPACT else NewsLayout.LAYOUT_GRID)

@@ -78,7 +78,6 @@ class CategoryTabActivity : BaseActivity(), MainView {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
         category_view_pager.adapter = CategoryPagerAdapter(supportFragmentManager)
         category_tab.setupWithViewPager(category_view_pager)
 
@@ -88,12 +87,12 @@ class CategoryTabActivity : BaseActivity(), MainView {
         locationProvider = ReactiveLocationProvider(this)
         manager = getSystemService(Context.LOCATION_SERVICE) as LocationManager
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            val animationDrawable = tab_screen_root.backgroundDrawable as AnimationDrawable
-            animationDrawable.setEnterFadeDuration(4000)
-            animationDrawable.setExitFadeDuration(4000)
-            animationDrawable.start()
-        }
+//        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+//            val animationDrawable = tab_screen_root.backgroundDrawable as AnimationDrawable
+//            animationDrawable.setEnterFadeDuration(4000)
+//            animationDrawable.setExitFadeDuration(4000)
+//            animationDrawable.start()
+//        }
 
         locationRequest = LocationRequest
                 .create()

@@ -20,12 +20,9 @@ abstract class BaseActivity : AppCompatActivity(), AnkoLogger {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         pref = Pref(this.applicationContext)
-//        setTheme(pref.getTheme())
+        setTheme(pref.getTheme())
         super.onCreate(savedInstanceState)
         setContentView(layoutResID())
-
-
-
         setSupportActionBar(getToolbar())
         getToolbar().title = getToolbarTitle()
         getToolbar().setTitleTextColor(ContextCompat.getColor(this, R.color.toolbar_title_color))

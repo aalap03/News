@@ -6,7 +6,6 @@
     app:cardUseCompatPadding="true"
     app:cardElevation="3dp"
     app:cardCornerRadius="5dp"
-    android:foreground="?android:attr/selectableItemBackground"
     android:clickable="true"
     android:focusable="true"
     xmlns:android="http://schemas.android.com/apk/res/android">
@@ -23,8 +22,8 @@
             style="@style/News_text_small"
             android:layout_margin="4dp"
             android:maxLines="1"
-            android:ellipsize="end"
             android:text="Yahoo.com"
+            android:ellipsize="end"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent" />
