@@ -34,7 +34,7 @@ class NewsEverythingAndSaved : BaseActivity(), NewsListView {
         screenWidth = displayMetrics.widthPixels
 
         isSaved = intent.getBooleanExtra("saved", false)
-        getToolbar().backgroundColor = ContextCompat.getColor(this, R.color.primary)
+        supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
         new_recycler.layoutManager = LinearLayoutManager(this)
 

@@ -1,6 +1,7 @@
 package com.example.aalap.news.models.newsmodels
 
 import com.example.aalap.news.newsService
+import com.example.aalap.news.pref
 import io.reactivex.Observable
 import io.reactivex.Single
 import io.realm.Realm
@@ -10,7 +11,7 @@ import org.jetbrains.anko.AnkoLogger
 import org.jetbrains.anko.info
 import retrofit2.Response
 
-class NewsModel: AnkoLogger {
+class NewsModel : AnkoLogger {
 
 
     fun getTopHeadlinesByCountry(): Single<List<Article>>? {
@@ -24,8 +25,11 @@ class NewsModel: AnkoLogger {
     }
 
     fun getTopHeadlinesByCountryAndCategory(category: String): Observable<List<Article>>? {
-        return newsService.getTopHeadlines("us", category)
-                .flatMap{ saveToDB(it, category) }
+        val country = Country.countryKeyValueMap()[pref.getCountry()]
+        info { "Country: requesting..$country" }
+
+        return newsService.getTopHeadlines(country!!, category)
+                .flatMap { saveToDB(it, category) }
     }
 
 

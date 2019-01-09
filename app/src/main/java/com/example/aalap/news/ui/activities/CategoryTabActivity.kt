@@ -35,6 +35,7 @@ import com.afollestad.materialdialogs.customview.customView
 import com.afollestad.materialdialogs.customview.getCustomView
 import com.example.aalap.news.Utils
 import com.example.aalap.news.models.newsmodels.Article
+import com.example.aalap.news.models.newsmodels.Country
 import com.example.aalap.news.models.weathermodels.*
 import com.example.aalap.news.presenter.WeatherPresenter
 import com.example.aalap.news.ui.adapter.WeatherDailyAdapter

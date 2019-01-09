@@ -18,11 +18,11 @@
     <style name="AppTheme_Dark" parent="Theme.AppCompat.NoActionBar">
         <item name="colorPrimary">@color/colorPrimary_Dark</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark_Dark</item>
-        <item name="colorAccent">@color/colorAccent_Dark</item>
+        <item name="colorAccent">@color/md_white_1000</item>
         <item name="android:fontFamily">@font/lato_regular</item>
         <item name="android:textAppearance">@style/News_text_big_dark</item>
         <item name="android:textAppearanceMedium">@style/News_text_small_dark</item>
-        <item name="android:windowBackground">@drawable/gradient_list</item>
+        <item name="android:windowBackground">@color/colorPrimary_Dark</item>
 
         <item name="switchStyle">@style/switch_dark_theme</item>
         <item name="android:spinnerStyle">@style/Spinner_Light</item>

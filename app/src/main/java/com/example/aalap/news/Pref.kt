@@ -3,13 +3,16 @@ package com.example.aalap.news
 import android.content.Context
 import android.content.SharedPreferences
 import com.example.aalap.news.models.newsmodels.NewsLayout
+import org.jetbrains.anko.AnkoLogger
+import org.jetbrains.anko.info
 
 const val KEY_THEME = "theme"
 const val KEY_LAYOUT = "layout"
 const val KEY_LATITUDE = "latitude"
 const val KEY_LONGITUDE = "longitude"
+const val KEY_COUNTRY: String = "Key_country"
 
-class Pref(appContext: Context) {
+class Pref(appContext: Context): AnkoLogger {
 
     var pref: SharedPreferences = appContext.getSharedPreferences("News", Context.MODE_PRIVATE)
 
@@ -49,5 +52,16 @@ class Pref(appContext: Context) {
     fun getLongitude(): Double{
         return pref.getString(KEY_LONGITUDE, "0.0").toDouble()
     }
+
+    fun saveCountry(country: String) {
+        info { "Country: saved $country" }
+        pref.edit().putString(KEY_COUNTRY, country).apply()
+    }
+
+    fun getCountry(): String {
+        info { "Country: get ${pref.getString(KEY_COUNTRY, "USA")}" }
+        return pref.getString(KEY_COUNTRY, "USA")
+    }
+
 
 }

@@ -15,10 +15,9 @@ import kotlinx.android.synthetic.main.toolbar_template.*
 import org.jetbrains.anko.backgroundColor
 import org.jetbrains.anko.info
 
-
 class SettingsScreen : BaseActivity() {
 
-    var countryList = Country.keysForSpinner()
+    var countryList = Country.getListOfCountries()
 
     override fun layoutResID(): Int {
         return R.layout.settings_screen
@@ -38,6 +37,7 @@ class SettingsScreen : BaseActivity() {
         val adapter = ArrayAdapter<String>(this,
                 android.R.layout.simple_spinner_dropdown_item, countryList)
         settings_country.adapter = adapter
+        supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
         switch_theme.isChecked = pref.isDarkTheme()
         switch_articles_layout.isChecked = pref.isLayoutCompact()
@@ -49,9 +49,7 @@ class SettingsScreen : BaseActivity() {
 
             override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
                 val country = countryList[position]
-
-                Toast.makeText(this@SettingsScreen, country, Toast.LENGTH_SHORT)
-                        .show()
+                pref.saveCountry(country)
             }
         }
 

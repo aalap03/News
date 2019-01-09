@@ -63,7 +63,7 @@ class NewsListFragment : Fragment(), NewsListView, AnkoLogger {
 
 
         refresh_layout.setOnRefreshListener {
-            category.let { presenter.getAllHeadlinesByCategory(it) }
+            category.let { presenter.getAllHeadlinesByCountryAndCategory(it) }
         }
     }
 
@@ -71,7 +71,7 @@ class NewsListFragment : Fragment(), NewsListView, AnkoLogger {
         super.onResume()
 
         if (!TextUtils.isEmpty(category))
-            category.let { presenter.getAllHeadlinesByCategory(it) }
+            category.let { presenter.getAllHeadlinesByCountryAndCategory(it) }
         else
             showError("No categories found")
     }

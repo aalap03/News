@@ -38,9 +38,9 @@ class ArticleAdapter(var context: Context, var list: List<Article>, var screenWi
         val view = LayoutInflater.from(context).inflate(layout, parent, false)
         view.findViewById<CardView>(R.id.news_card).setCardBackgroundColor(ColorStateList.valueOf(
                 if (pref.isDarkTheme())
-                    ContextCompat.getColor(context, R.color.background_dark)
+                    ContextCompat.getColor(context, R.color.cardBG_dark)
                 else
-                    ContextCompat.getColor(context, R.color.background_light)
+                    ContextCompat.getColor(context, R.color.cardBG_light)
         ))
 
         return ArticleHolder(view)

@@ -21,7 +21,7 @@ class NewsPresenter(var view: NewsListView, private var model: NewsModel) : Anko
         getAndDisplayList(model.getTopHeadlinesByCountry())
     }
 
-    fun getAllHeadlinesByCategory(category: String) {
+    fun getAllHeadlinesByCountryAndCategory(category: String) {
         view.loading(true)
 
         model.getTopHeadlinesByCountryAndCategory(category)
