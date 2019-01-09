@@ -23,10 +23,9 @@ abstract class BaseActivity : AppCompatActivity(), AnkoLogger {
         setTheme(pref.getTheme())
         super.onCreate(savedInstanceState)
         setContentView(layoutResID())
-        setSupportActionBar(getToolbar())
         getToolbar().title = getToolbarTitle()
         getToolbar().setTitleTextColor(ContextCompat.getColor(this, R.color.toolbar_title_color))
-
+        setSupportActionBar(getToolbar())
     }
 
 }

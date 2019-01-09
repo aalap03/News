@@ -1,5 +1,6 @@
 package com.example.aalap.news.ui.activities
 
+import android.graphics.Typeface
 import android.os.Bundle
 import android.view.View
 import android.widget.AdapterView

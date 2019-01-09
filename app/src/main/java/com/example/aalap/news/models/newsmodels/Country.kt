@@ -33,12 +33,10 @@ class Country : AnkoLogger {
             val savedCountry = pref.getCountry()
             list.add(savedCountry)
             val values = countryKeyValueMap().keys
-            Log.d(TAG, "Saved $savedCountry")
-            Log.d(TAG, "total ${values.size}")
+
             values.filter {
                 !it.equals(savedCountry, true)
             }.forEach {
-                Log.d(TAG, "Added $it")
                 list.add(it)
             }
             return list
