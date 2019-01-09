@@ -87,20 +87,6 @@ class CategoryTabActivity : BaseActivity(), MainView {
 
         locationProvider = ReactiveLocationProvider(this)
         manager = getSystemService(Context.LOCATION_SERVICE) as LocationManager
-
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            if (pref.getTheme() == R.style.AppTheme_Dark) {
-                try {
-                    val animationDrawable = tab_screen_root.backgroundDrawable as AnimationDrawable
-                    animationDrawable.setEnterFadeDuration(4000)
-                    animationDrawable.setExitFadeDuration(4000)
-                    animationDrawable.start()
-                } catch (e: Exception) {
-                    e.printStackTrace()
-                }
-            }
-        }
-
         locationRequest = LocationRequest
                 .create()
                 .setNumUpdates(1)
