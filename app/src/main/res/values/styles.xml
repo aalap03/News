@@ -1,41 +1,83 @@
 <resources>
 
-    <!-- Base application theme. -->
+    <!--base theme-->
     <style name="AppTheme" parent="Theme.AppCompat.NoActionBar">
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
         <item name="android:fontFamily">@font/lato_regular</item>
         <item name="android:textAppearance">@style/News_text_big</item>
+        <item name="android:textAppearanceMedium">@style/News_text_small</item>
         <item name="android:windowBackground">@color/md_white_1000</item>
-        <item name="cardBackgroundColor">#e5e5e5</item>
+
+        <item name="switchStyle">@style/switch_light_theme</item>
+        <item name="android:spinnerStyle">@style/Spinner_Dark</item>
     </style>
 
+    <!--dark theme-->
     <style name="AppTheme_Dark" parent="Theme.AppCompat.NoActionBar">
         <item name="colorPrimary">@color/colorPrimary_Dark</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark_Dark</item>
         <item name="colorAccent">@color/colorAccent_Dark</item>
         <item name="android:fontFamily">@font/lato_regular</item>
         <item name="android:textAppearance">@style/News_text_big_dark</item>
-        <item name="android:windowBackground">@color/md_black_1000</item>
-        <item name="cardBackgroundColor">#000000</item>
+        <item name="android:textAppearanceMedium">@style/News_text_small_dark</item>
+        <item name="android:windowBackground">@drawable/gradient_list</item>
+
+        <item name="switchStyle">@style/switch_dark_theme</item>
+        <item name="android:spinnerStyle">@style/Spinner_Light</item>
+    </style>
+
+    <!--switch themes-->
+    <style name="switch_dark_theme" parent="Widget.AppCompat.CompoundButton.Switch">
+        <item name="android:textColor">@color/md_white_1000</item>
+        <item name="trackTint">#e5e5e5</item>
+        <item name="thumbTint">#C0C0C0</item>
+
+    </style>
+
+    <style name="switch_light_theme" parent="Widget.AppCompat.CompoundButton.Switch">
+        <item name="android:textColor">@color/md_black_1000</item>
+        <item name="thumbTint">@color/colorPrimary</item>
+        <item name="trackTint">#403F51B5</item>
     </style>
 
 
-    <style name="News_text_big" >
+    <!--text themes-->
+    <style name="News_text_big">
         <item name="android:textSize">20sp</item>
         <item name="android:fontFamily">@font/lato_regular</item>
+        <item name="android:textColor">@color/md_black_1000</item>
 
     </style>
 
-    <style name="News_text_big_dark" >
+    <style name="News_text_big_dark">
         <item name="android:textSize">20sp</item>
         <item name="android:fontFamily">@font/lato_regular</item>
+        <item name="android:textColor">@color/md_white_1000</item>
     </style>
 
     <style name="News_text_small">
         <item name="android:textSize">12sp</item>
         <item name="android:fontFamily">@font/lato_light</item>
+        <item name="android:textColor">@color/secondaryTextColor_dark</item>
     </style>
 
+    <style name="News_text_small_dark">
+        <item name="android:textSize">12sp</item>
+        <item name="android:fontFamily">@font/lato_light</item>
+        <item name="android:textColor">@color/secondaryTextColor_light</item>
+    </style>
+
+    <!--dialog themes-->
+
+    <style name="Spinner_Light" parent="Base.Widget.AppCompat.Spinner">
+        <item name="android:colorBackground">@color/md_white_1000</item>
+        <item name="android:textAppearance">@style/News_text_big</item>
+    </style>
+
+    <style name="Spinner_Dark" parent="Base.Widget.AppCompat.Spinner">
+        <item name="android:colorBackground">@color/md_black_1000</item>
+        <item name="android:textAppearance">@style/News_text_big_dark</item>
+    </style>
 </resources>

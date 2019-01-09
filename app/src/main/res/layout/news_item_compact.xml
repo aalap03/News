@@ -6,6 +6,7 @@
     app:cardUseCompatPadding="true"
     app:cardElevation="0dp"
     android:clickable="true"
+    android:id="@+id/news_card"
     android:focusable="true"
     xmlns:android="http://schemas.android.com/apk/res/android">
 
@@ -16,8 +17,8 @@
         <TextView
             android:id="@+id/article_title"
             android:layout_width="0dp"
+            android:textAppearance="?android:attr/textAppearance"
             android:layout_height="wrap_content"
-            style="@style/News_text_big"
             android:text="Name sdhbfkjsd fkjsdhfksj hfkjsdhfkj shdfkjsdhk jhfsdkjhfksdjhfkjsdhfjsdhfkjsdhfkjsdhfjh jkdshfksjdh"
             android:maxLines="2"
             android:ellipsize="end"
@@ -39,7 +40,7 @@
         <TextView
             android:id="@+id/article_author"
             android:layout_width="0dp"
-            style="@style/News_text_small"
+            android:textAppearance="?android:attr/textAppearanceMedium"
             android:layout_height="wrap_content"
             android:layout_marginStart="5dp"
             android:text="Yahoo.comjksdfkjsdhfkjdsh djshfkjsdh fkdjshfkjsdh jfhdskfjhsdkjkdjhfkjssdhfkjsdh"
@@ -51,7 +52,7 @@
             android:id="@+id/article_published_date"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            style="@style/News_text_small"
+            android:textAppearance="?android:attr/textAppearanceMedium"
             android:text="2018-12-25 04:34"
             android:layout_marginStart="5dp"
             app:layout_constraintBottom_toBottomOf="parent"

@@ -8,8 +8,8 @@
         android:required="false" />
 
     <uses-permission android:name="android.permission.INTERNET" />
-    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
-    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
 
     <application
         android:name=".App"
@@ -20,18 +20,13 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
 
-        <meta-data android:name="android.webkit.WebView.EnableSafeBrowsing"
+        <meta-data
+            android:name="android.webkit.WebView.EnableSafeBrowsing"
             android:value="false" />
 
-        <activity android:name=".ui.activities.SettingsScreen"
+        <activity
+            android:name=".ui.activities.SettingsScreen"
             android:parentActivityName=".ui.activities.CategoryTabActivity">
-
-        </activity>
-
-        <activity android:name=".ui.activities.Webview"
-            android:parentActivityName=".ui.activities.CategoryTabActivity"/>
-
-        <activity android:name=".ui.activities.CategoryTabActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -39,9 +34,16 @@
             </intent-filter>
         </activity>
 
-        <activity android:name=".ui.activities.NewsEverythingAndSaved"
-            android:parentActivityName=".ui.activities.CategoryTabActivity"
-            />
+        <activity
+            android:name=".ui.activities.Webview"
+            android:parentActivityName=".ui.activities.CategoryTabActivity" />
+
+        <activity android:name=".ui.activities.CategoryTabActivity">
+        </activity>
+
+        <activity
+            android:name=".ui.activities.NewsEverythingAndSaved"
+            android:parentActivityName=".ui.activities.CategoryTabActivity" />
     </application>
 
 </manifest>

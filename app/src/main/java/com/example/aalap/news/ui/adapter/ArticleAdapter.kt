@@ -2,12 +2,15 @@ package com.example.aalap.news.ui.adapter
 
 import android.content.Context
 import android.content.Intent
+import android.content.res.ColorStateList
 import android.text.TextUtils
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.cardview.widget.CardView
+import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.example.aalap.news.Pref
 import com.example.aalap.news.R
@@ -26,13 +29,19 @@ class ArticleAdapter(var context: Context, var list: List<Article>, var screenWi
 
     override fun onCreateViewHolder(parent: ViewGroup, p1: Int): ArticleHolder {
 
-        info{"Compact? ${pref.isLayoutCompact()}"}
+        info { "Compact? ${pref.isLayoutCompact()}" }
         val layout = if (pref.isLayoutCompact())
             R.layout.news_item_compact
         else
             R.layout.news_item_grid
 
         val view = LayoutInflater.from(context).inflate(layout, parent, false)
+        view.findViewById<CardView>(R.id.news_card).setCardBackgroundColor(ColorStateList.valueOf(
+                if (pref.isDarkTheme())
+                    ContextCompat.getColor(context, R.color.background_dark)
+                else
+                    ContextCompat.getColor(context, R.color.background_light)
+        ))
 
         return ArticleHolder(view)
     }

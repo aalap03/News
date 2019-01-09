@@ -38,7 +38,6 @@ class SettingsScreen : BaseActivity() {
         val adapter = ArrayAdapter<String>(this,
                 android.R.layout.simple_spinner_dropdown_item, countryList)
         settings_country.adapter = adapter
-        getToolbar().backgroundColor = ContextCompat.getColor(this, R.color.primary)
 
         switch_theme.isChecked = pref.isDarkTheme()
         switch_articles_layout.isChecked = pref.isLayoutCompact()

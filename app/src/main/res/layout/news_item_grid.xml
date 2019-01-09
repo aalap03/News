@@ -8,6 +8,7 @@
     app:cardCornerRadius="5dp"
     android:clickable="true"
     android:focusable="true"
+    android:id="@+id/news_card"
     xmlns:android="http://schemas.android.com/apk/res/android">
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -19,7 +20,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:gravity="center"
-            style="@style/News_text_small"
+            android:textAppearance="?android:attr/textAppearanceMedium"
             android:layout_margin="4dp"
             android:maxLines="1"
             android:text="Yahoo.com"
@@ -45,6 +46,7 @@
             android:layout_height="wrap_content"
             android:layout_margin="4dp"
             android:text="Name"
+            android:textAppearance="?android:attr/textAppearance"
             android:maxLines="2"
             android:ellipsize="end"
             app:layout_constraintTop_toBottomOf="@+id/article_image"
@@ -56,7 +58,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_margin="4dp"
-            style="@style/News_text_small"
+            android:textAppearance="?android:attr/textAppearanceMedium"
             android:text="2018-12-25 04:34"
             android:maxLines="1"
             android:ellipsize="end"

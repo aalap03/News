@@ -10,10 +10,15 @@
     <color name="colorPrimaryDark">#303F9F</color>
     <color name="colorAccent">#6A5ACD</color>
 
-    <color name="background_light">#ffffff</color>
+    <color name="background_light">#F5FFFA</color>
     <color name="background_dark">#696969</color>
 
+    <color name="primaryTextColor_light">#ffffff</color>
+    <color name="primaryTextColor_dark">#000000</color>
+    <color name="secondaryTextColor_light">#90ffffff</color>
+    <color name="secondaryTextColor_dark">#50000000</color>
 
     <color name="holo_dark_blue">#ff00ddff</color>
+
 
 </resources>
