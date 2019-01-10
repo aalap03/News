@@ -12,16 +12,20 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="5dp"
+        android:text="Dark Theme"
         android:textAppearance="?android:attr/textAppearanceMedium"
-        android:text="Dark Theme" />
+        android:textOff="Light Theme"
+        android:textOn="Dark Theme" />
 
     <androidx.appcompat.widget.SwitchCompat
         android:id="@+id/switch_articles_layout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="5dp"
+        android:text="Compact Mode"
         android:textAppearance="?android:attr/textAppearanceMedium"
-        android:text="Compact Mode" />
+        android:textOff="Grid Mode"
+        android:textOn="Compact Mode" />
 
     <androidx.appcompat.widget.AppCompatSpinner
         android:id="@+id/settings_country"

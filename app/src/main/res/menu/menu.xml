@@ -3,17 +3,19 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <item
-        android:id="@+id/menu_settings"
-        android:title="Settings"></item>
-
-    <item
-        android:id="@+id/menu_bookmarked"
-        android:title="Saved News"></item>
-
-    <item
         android:id="@+id/menu_search"
         android:icon="@drawable/menu_search"
-        android:title="Search"
+        android:title=""
         app:actionViewClass="androidx.appcompat.widget.SearchView"
         app:showAsAction="always" />
+    <item
+        android:id="@+id/menu_bookmarked"
+        app:showAsAction="always"
+        android:icon="@drawable/ic_saved"
+        android:title="" />
+    <item
+        android:id="@+id/menu_settings"
+        app:showAsAction="always"
+        app:actionViewClass="androidx.appcompat.widget.AppCompatImageView"
+        android:title="" />
 </menu>

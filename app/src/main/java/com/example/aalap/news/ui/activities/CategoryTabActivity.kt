@@ -15,6 +15,7 @@ import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
+import android.view.ViewGroup.LayoutParams.WRAP_CONTENT
 import androidx.appcompat.widget.SearchView
 import androidx.appcompat.widget.Toolbar
 import androidx.core.app.ActivityCompat
@@ -23,9 +24,11 @@ import com.example.aalap.news.ui.adapter.CategoryPagerAdapter
 import com.google.android.gms.location.*
 import kotlinx.android.synthetic.main.toolbar_template.*
 import android.widget.EditText
+import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
 import androidx.core.content.ContextCompat
+import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.afollestad.materialdialogs.MaterialDialog
@@ -43,7 +46,11 @@ import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.category_tabs_activity.*
 import kotlinx.android.synthetic.main.main_weather_layout.*
+import org.jetbrains.anko.image
+import org.jetbrains.anko.info
 import pl.charmas.android.reactivelocation2.ReactiveLocationProvider
+import uk.co.deanwild.materialshowcaseview.MaterialShowcaseView
+import uk.co.deanwild.materialshowcaseview.shape.Shape
 import java.lang.Exception
 import java.util.*
 
@@ -116,13 +123,23 @@ class CategoryTabActivity : BaseActivity(), MainView {
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
         menuInflater.inflate(R.menu.menu, menu)
         val searchView = menu?.findItem(R.id.menu_search)?.actionView as SearchView
+        val settings = menu.findItem(R.id.menu_settings).actionView as ImageView
+        settings.setImageResource(R.drawable.ic_baseline_settings_20px)
+        settings.setOnClickListener { startActivity(Intent(this, SettingsScreen::class.java)) }
+
+        MaterialShowcaseView.Builder(this)
+                .setTarget(settings)
+                .useFadeAnimation()
+                .setDismissText("GOT IT")
+                .setContentText("1) Go to settings to change theme to Dark Mode \n2) Change news to Compat Mode \n3) Change country to receive country specific news")
+//                .singleUse("Id") // provide a unique ID used to ensure it is only shown once
+                .show()
 
         val searchEditText = searchView.findViewById(androidx.appcompat.R.id.search_src_text) as EditText
         searchEditText.setTextColor(ContextCompat.getColor(this, android.R.color.white))
         searchEditText.setHintTextColor(ContextCompat.getColor(this, android.R.color.darker_gray))
 
         searchView.queryHint = "Search Anything"
-
         searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
             override fun onQueryTextSubmit(query: String?): Boolean {
                 val intent = Intent(this@CategoryTabActivity, NewsEverythingAndSaved::class.java)
