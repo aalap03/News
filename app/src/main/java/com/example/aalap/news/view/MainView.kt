@@ -8,5 +8,5 @@ interface MainView {
 
     fun getWeatherData(weather: Weather)
 
-    fun weatherLoading(loading: Boolean)
+    fun weatherLoading()
 }

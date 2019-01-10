@@ -19,7 +19,7 @@ class WeatherPresenter(var view: MainView, var model: WeatherModel) : AnkoLogger
 
         info { "Weather: requesting... $latitude : $longitude" }
 
-        view.weatherLoading(true)
+        view.weatherLoading()
 
         pref.saveLastCoOrdinates(latitude.toString(), longitude.toString())
         model.getCurrentWeather(latitude, longitude)

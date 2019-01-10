@@ -8,7 +8,6 @@ import android.content.Context
 import android.content.Intent
 import android.content.IntentSender
 import android.content.pm.PackageManager
-import android.graphics.drawable.AnimationDrawable
 import android.location.Geocoder
 import android.location.LocationManager
 import android.os.Build
@@ -23,7 +22,6 @@ import com.example.aalap.news.R
 import com.example.aalap.news.ui.adapter.CategoryPagerAdapter
 import com.google.android.gms.location.*
 import kotlinx.android.synthetic.main.toolbar_template.*
-import org.jetbrains.anko.backgroundDrawable
 import android.widget.EditText
 import android.widget.TextView
 import android.widget.Toast
@@ -34,8 +32,6 @@ import com.afollestad.materialdialogs.MaterialDialog
 import com.afollestad.materialdialogs.customview.customView
 import com.afollestad.materialdialogs.customview.getCustomView
 import com.example.aalap.news.Utils
-import com.example.aalap.news.models.newsmodels.Article
-import com.example.aalap.news.models.newsmodels.Country
 import com.example.aalap.news.models.weathermodels.*
 import com.example.aalap.news.presenter.WeatherPresenter
 import com.example.aalap.news.ui.adapter.WeatherDailyAdapter
@@ -45,7 +41,6 @@ import com.google.android.gms.common.api.ResolvableApiException
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
-import io.realm.Realm
 import kotlinx.android.synthetic.main.category_tabs_activity.*
 import kotlinx.android.synthetic.main.main_weather_layout.*
 import pl.charmas.android.reactivelocation2.ReactiveLocationProvider
@@ -64,18 +59,6 @@ class CategoryTabActivity : BaseActivity(), MainView {
     private var compositeDisposable = CompositeDisposable()
     private var dailyScaleUp = false
     private var hourlyDialog: MaterialDialog? = null
-
-    override fun layoutResID(): Int {
-        return R.layout.category_tabs_activity
-    }
-
-    override fun getToolbar(): Toolbar {
-        return news_toolbar
-    }
-
-    override fun getToolbarTitle(): String {
-        return "Categories"
-    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -168,6 +151,18 @@ class CategoryTabActivity : BaseActivity(), MainView {
         return super.onOptionsItemSelected(item)
     }
 
+    override fun layoutResID(): Int {
+        return R.layout.category_tabs_activity
+    }
+
+    override fun getToolbar(): Toolbar {
+        return news_toolbar
+    }
+
+    override fun getToolbarTitle(): String {
+        return "Categories"
+    }
+
     private fun requestLocation() {
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
@@ -194,7 +189,7 @@ class CategoryTabActivity : BaseActivity(), MainView {
                 .show()
     }
 
-    override fun weatherLoading(loading: Boolean) {
+    override fun weatherLoading() {
         toggleViews(true)
     }
 
@@ -299,12 +294,12 @@ class CategoryTabActivity : BaseActivity(), MainView {
     }
 
     fun toggleViews(showLoading: Boolean) {
-        weather_current_feels_like.visibility = if (showLoading) View.GONE else View.VISIBLE
-        weather_current_icon.visibility = if (showLoading) View.GONE else View.VISIBLE
-        weather_temperature_layout_current.visibility = if (showLoading) View.GONE else View.VISIBLE
-        weather_city_name.visibility = if (showLoading) View.GONE else View.VISIBLE
+        weather_current_feels_like.visibility = if (showLoading) View.INVISIBLE else View.VISIBLE
+        weather_current_icon.visibility = if (showLoading) View.INVISIBLE else View.VISIBLE
+        weather_temperature_layout_current.visibility = if (showLoading) View.INVISIBLE else View.VISIBLE
+        weather_city_name.visibility = if (showLoading) View.INVISIBLE else View.VISIBLE
 
-        weather_city_progressBar.visibility = if (showLoading) View.VISIBLE else View.GONE
-        weather_temperature_progressBar.visibility = if (showLoading) View.VISIBLE else View.GONE
+        weather_city_progressBar.visibility = if (showLoading) View.VISIBLE else View.INVISIBLE
+        weather_temperature_progressBar.visibility = if (showLoading) View.VISIBLE else View.INVISIBLE
     }
 }
