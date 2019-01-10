@@ -4,7 +4,6 @@ import android.os.Bundle
 import android.util.DisplayMetrics
 import android.widget.Toast
 import androidx.appcompat.widget.Toolbar
-import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.aalap.news.R
 import com.example.aalap.news.models.newsmodels.Article
@@ -16,7 +15,6 @@ import io.realm.Realm
 import io.realm.Sort
 import kotlinx.android.synthetic.main.news_list_frag.*
 import kotlinx.android.synthetic.main.toolbar_template.*
-import org.jetbrains.anko.backgroundColor
 
 class NewsEverythingAndSaved : BaseActivity(), NewsListView {
 

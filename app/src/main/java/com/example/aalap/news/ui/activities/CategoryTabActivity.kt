@@ -160,10 +160,6 @@ class CategoryTabActivity : BaseActivity(), MainView {
         when (item?.itemId) {
             R.id.menu_settings -> startActivity(Intent(this, SettingsScreen::class.java))
             R.id.menu_bookmarked -> {
-                val size = Realm.getDefaultInstance().where(Article::class.java).equalTo("isSaved", true).findAll().size
-                Toast.makeText(this, "Saved: $size", Toast.LENGTH_SHORT)
-                        .show()
-
                 val intent = Intent(this@CategoryTabActivity, NewsEverythingAndSaved::class.java)
                 intent.putExtra("saved", true)
                 startActivity(intent)
@@ -198,7 +194,13 @@ class CategoryTabActivity : BaseActivity(), MainView {
                 .show()
     }
 
+    override fun weatherLoading(loading: Boolean) {
+        toggleViews(true)
+    }
+
     override fun getWeatherData(weather: Weather) {
+
+        toggleViews(false)
 
         //currently
         val current: Currently? = weather.currently
@@ -294,5 +296,15 @@ class CategoryTabActivity : BaseActivity(), MainView {
             e.printStackTrace()
             "City Not found"
         }
+    }
+
+    fun toggleViews(showLoading: Boolean) {
+        weather_current_feels_like.visibility = if (showLoading) View.GONE else View.VISIBLE
+        weather_current_icon.visibility = if (showLoading) View.GONE else View.VISIBLE
+        weather_temperature_layout_current.visibility = if (showLoading) View.GONE else View.VISIBLE
+        weather_city_name.visibility = if (showLoading) View.GONE else View.VISIBLE
+
+        weather_city_progressBar.visibility = if (showLoading) View.VISIBLE else View.GONE
+        weather_temperature_progressBar.visibility = if (showLoading) View.VISIBLE else View.GONE
     }
 }

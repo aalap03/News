@@ -7,4 +7,6 @@ interface MainView {
     fun error(errorMsg: String)
 
     fun getWeatherData(weather: Weather)
+
+    fun weatherLoading(loading: Boolean)
 }

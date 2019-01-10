@@ -40,7 +40,7 @@
         <TextView
             android:id="@+id/article_author"
             android:layout_width="0dp"
-            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:textAppearance="?android:attr/textAppearanceSmall"
             android:layout_height="wrap_content"
             android:layout_marginStart="5dp"
             android:text="Yahoo.com"
@@ -52,7 +52,7 @@
             android:id="@+id/article_published_date"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:textAppearance="?android:attr/textAppearanceSmall"
             android:text="2018-12-25 04:34"
             android:layout_marginStart="5dp"
             app:layout_constraintBottom_toBottomOf="parent"

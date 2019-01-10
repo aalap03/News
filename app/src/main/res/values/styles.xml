@@ -1,59 +1,72 @@
 <resources>
 
+    <style name="BaseTheme" parent="Theme.AppCompat.NoActionBar">
+        <item name="android:fontFamily">@font/lato_regular</item>
+
+    </style>
     <!--base theme-->
     <style name="AppTheme" parent="Theme.AppCompat.NoActionBar">
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
-        <item name="android:fontFamily">@font/lato_regular</item>
+
         <item name="android:textAppearance">@style/primaryTextBlack</item>
-        <item name="android:textAppearanceMedium">@style/smallTextBlack</item>
+        <item name="android:textAppearanceMedium">@style/textMediumBlack</item>
+        <item name="android:textAppearanceSmall">@style/smallTextBlack</item>
         <item name="android:windowBackground">@color/white</item>
 
         <item name="switchStyle">@style/switchLight</item>
         <item name="spinnerStyle">@style/Spinner_Dark</item>
-        <item name="android:switchTextAppearance">@style/primaryTextBlack</item>
+        <item name="android:spinnerDropDownItemStyle">@style/textMediumBlack</item>
+
+        <item name="android:itemBackground">@color/white</item>
+        <item name="android:itemTextAppearance">@style/textMediumBlack</item>
     </style>
 
     <!--dark theme-->
     <style name="AppTheme_Dark" parent="Theme.AppCompat.NoActionBar">
+
         <item name="colorPrimary">@color/colorPrimary_Dark</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark_Dark</item>
         <item name="colorAccent">@color/white</item>
-        <item name="android:fontFamily">@font/lato_regular</item>
+
         <item name="android:textAppearance">@style/primaryTextWhite</item>
-        <item name="android:textAppearanceMedium">@style/smallTextWhite</item>
+        <item name="android:textAppearanceMedium">@style/textMediumWhite</item>
+        <item name="android:textAppearanceSmall">@style/smallTextWhite</item>
         <item name="android:windowBackground">@color/colorPrimary_Dark</item>
 
         <item name="switchStyle">@style/switchDark</item>
         <item name="spinnerStyle">@style/Spinner_Light</item>
-        <item name="android:switchTextAppearance">@style/primaryTextWhite</item>
+        <item name="android:spinnerDropDownItemStyle">@style/textMediumWhite</item>
+
+        <item name="android:itemBackground">@color/black</item>
+        <item name="android:itemTextAppearance">@style/textMediumWhite</item>
     </style>
 
     <!--switch themes-->
     <style name="switchDark" parent="Widget.AppCompat.CompoundButton.Switch">
+        <item name="android:textColor">@color/white</item>
         <item name="trackTint">#e5e5e5</item>
         <item name="thumbTint">#C0C0C0</item>
-        <item name="switchTextAppearance">@style/SwitchTextLight</item>
     </style>
 
     <style name="switchLight" parent="Widget.AppCompat.CompoundButton.Switch">
+        <item name="android:textColor">@color/black</item>
         <item name="thumbTint">@color/colorPrimary</item>
         <item name="trackTint">#403F51B5</item>
-        <item name="switchTextAppearance">@style/SwitchTextDark</item>
     </style>
 
 
     <style name="SwitchTextLight" parent="Base.TextAppearance.AppCompat.Widget.Switch">
         <item name="android:textColor">@color/white</item>
         <item name="android:fontFamily">@font/lato_regular</item>
-        <item name="android:textSize">24sp</item>
+        <item name="android:textSize">16sp</item>
     </style>
 
     <style name="SwitchTextDark" parent="Base.TextAppearance.AppCompat.Widget.Switch">
         <item name="android:textColor">@color/black</item>
         <item name="android:fontFamily">@font/lato_regular</item>
-        <item name="android:textSize">24sp</item>
+        <item name="android:textSize">16sp</item>
     </style>
 
     <!--text themes-->
@@ -66,6 +79,18 @@
 
     <style name="primaryTextWhite">
         <item name="android:textSize">20sp</item>
+        <item name="android:fontFamily">@font/lato_regular</item>
+        <item name="android:textColor">@color/white</item>
+    </style>
+
+    <style name="textMediumBlack">
+        <item name="android:textSize">16sp</item>
+        <item name="android:fontFamily">@font/lato_regular</item>
+        <item name="android:textColor">@color/black</item>
+    </style>
+
+    <style name="textMediumWhite">
+        <item name="android:textSize">16sp</item>
         <item name="android:fontFamily">@font/lato_regular</item>
         <item name="android:textColor">@color/white</item>
     </style>
@@ -85,12 +110,14 @@
     <!--dialog themes-->
 
     <style name="Spinner_Light" parent="Base.Widget.AppCompat.Spinner">
-        <item name="android:colorBackground">@color/white</item>
-        <item name="android:textAppearance">@style/primaryTextWhite</item>
+        <item name="android:textColor">@color/white</item>
+        <item name="android:backgroundTint">@color/white</item>
+        <item name="android:popupBackground">@color/black</item>
     </style>
 
     <style name="Spinner_Dark" parent="Base.Widget.AppCompat.Spinner">
-        <item name="android:colorBackground">@color/black</item>
-        <item name="android:textAppearance">@style/primaryTextBlack</item>
+        <item name="android:textColor">@color/black</item>
+        <item name="android:backgroundTint">@color/black</item>
+        <item name="android:popupBackground">@color/white</item>
     </style>
 </resources>

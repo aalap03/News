@@ -43,6 +43,7 @@ class SettingsScreen : BaseActivity() {
         switch_theme.isChecked = pref.isDarkTheme()
         switch_articles_layout.isChecked = pref.isLayoutCompact()
 
+
         settings_country.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
             override fun onNothingSelected(parent: AdapterView<*>?) {
 

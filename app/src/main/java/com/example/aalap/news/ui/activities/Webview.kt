@@ -13,6 +13,7 @@ import android.webkit.WebViewClient
 import android.widget.Toast
 import com.example.aalap.news.R
 import com.example.aalap.news.models.newsmodels.Article
+import com.example.aalap.news.pref
 import io.realm.Realm
 import kotlinx.android.synthetic.main.activity_webview.*
 
@@ -23,6 +24,7 @@ class Webview : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        setTheme(pref.getTheme())
         setContentView(R.layout.activity_webview)
         setSupportActionBar(webview_toolbar)
         supportActionBar?.title = intent.getStringExtra("title")
