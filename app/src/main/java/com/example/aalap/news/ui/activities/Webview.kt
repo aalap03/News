@@ -1,8 +1,6 @@
 package com.example.aalap.news.ui.activities
 
-import android.graphics.Color
 import android.os.Build
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
@@ -11,26 +9,31 @@ import android.webkit.WebResourceRequest
 import android.webkit.WebView
 import android.webkit.WebViewClient
 import android.widget.Toast
+import androidx.appcompat.widget.Toolbar
 import com.example.aalap.news.R
 import com.example.aalap.news.models.newsmodels.Article
-import com.example.aalap.news.pref
 import io.realm.Realm
 import kotlinx.android.synthetic.main.activity_webview.*
 
-class Webview : AppCompatActivity() {
+class Webview : BaseActivity() {
+    override fun layoutResID(): Int {
+        return R.layout.activity_webview
+    }
+
+    override fun getToolbar(): Toolbar {
+        return webview_toolbar
+    }
+
+    override fun getToolbarTitle(): String {
+        return intent.getStringExtra("title")
+    }
 
     var url: String = ""
     var currentArticle: Article? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setTheme(pref.getTheme())
-        setContentView(R.layout.activity_webview)
-        setSupportActionBar(webview_toolbar)
-        supportActionBar?.title = intent.getStringExtra("title")
         url = intent.getStringExtra("url")
-        webview_toolbar.setTitleTextColor(Color.WHITE)
-
         currentArticle = Realm.getDefaultInstance().where(Article::class.java).equalTo("url", url).findFirst()
 
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
