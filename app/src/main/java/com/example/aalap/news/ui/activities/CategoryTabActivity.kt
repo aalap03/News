@@ -293,7 +293,7 @@ class CategoryTabActivity : BaseActivity(), MainView {
         }
     }
 
-    fun toggleViews(showLoading: Boolean) {
+    private fun toggleViews(showLoading: Boolean) {
         weather_current_feels_like.visibility = if (showLoading) View.INVISIBLE else View.VISIBLE
         weather_current_icon.visibility = if (showLoading) View.INVISIBLE else View.VISIBLE
         weather_temperature_layout_current.visibility = if (showLoading) View.INVISIBLE else View.VISIBLE
