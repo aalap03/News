@@ -1,9 +1,9 @@
 package com.example.aalap.news.ui.activities
 
 import android.Manifest
-import android.animation.Animator
 import android.annotation.SuppressLint
 import android.app.Activity
+import android.app.ActivityOptions
 import android.content.Context
 import android.content.Intent
 import android.content.IntentSender
@@ -15,7 +15,6 @@ import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
-import android.view.ViewGroup.LayoutParams.WRAP_CONTENT
 import androidx.appcompat.widget.SearchView
 import androidx.appcompat.widget.Toolbar
 import androidx.core.app.ActivityCompat
@@ -24,21 +23,15 @@ import com.example.aalap.news.ui.adapter.CategoryPagerAdapter
 import com.google.android.gms.location.*
 import kotlinx.android.synthetic.main.toolbar_template.*
 import android.widget.EditText
-import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
 import androidx.core.content.ContextCompat
-import androidx.recyclerview.widget.GridLayoutManager
+import androidx.fragment.app.DialogFragment
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
-import com.afollestad.materialdialogs.MaterialDialog
-import com.afollestad.materialdialogs.customview.customView
-import com.afollestad.materialdialogs.customview.getCustomView
-import com.example.aalap.news.Utils
 import com.example.aalap.news.models.weathermodels.*
 import com.example.aalap.news.presenter.WeatherPresenter
 import com.example.aalap.news.ui.adapter.WeatherDailyAdapter
-import com.example.aalap.news.ui.adapter.WeatherHourlyAdapter
+import com.example.aalap.news.ui.fragments.WeatherDialogFragment
 import com.example.aalap.news.view.MainView
 import com.google.android.gms.common.api.ResolvableApiException
 import io.reactivex.android.schedulers.AndroidSchedulers
@@ -46,15 +39,12 @@ import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.category_tabs_activity.*
 import kotlinx.android.synthetic.main.main_weather_layout.*
-import org.jetbrains.anko.image
-import org.jetbrains.anko.info
 import pl.charmas.android.reactivelocation2.ReactiveLocationProvider
-import uk.co.deanwild.materialshowcaseview.MaterialShowcaseView
-import uk.co.deanwild.materialshowcaseview.shape.Shape
 import java.lang.Exception
 import java.util.*
 
 const val LOCATION_PERMISSION = 1
+const val LOCATION_SETTINGS: Int = 5
 
 class CategoryTabActivity : BaseActivity(), MainView {
 
@@ -64,8 +54,20 @@ class CategoryTabActivity : BaseActivity(), MainView {
     private lateinit var weatherPresenter: WeatherPresenter
     private lateinit var locationProvider: ReactiveLocationProvider
     private var compositeDisposable = CompositeDisposable()
-    private var dailyScaleUp = false
-    private var hourlyDialog: MaterialDialog? = null
+    private var showDailyWeather = false
+    lateinit var hourlyDialog: DialogFragment
+
+    override fun layoutResID(): Int {
+        return R.layout.category_tabs_activity
+    }
+
+    override fun getToolbar(): Toolbar {
+        return news_toolbar
+    }
+
+    override fun getToolbarTitle(): String {
+        return "Categories"
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -84,56 +86,16 @@ class CategoryTabActivity : BaseActivity(), MainView {
 
         requestLocation()
 
-        weather_city_name.setOnClickListener { animateDailyRecycler(!dailyScaleUp) }
-        weather_current_icon.setOnClickListener { hourlyDialog?.show() }
-    }
-
-    private fun animateDailyRecycler(isScaleUp: Boolean) {
-        dailyScaleUp = isScaleUp
-
-        if (isScaleUp)
-            weather_recycler.visibility = View.VISIBLE
-        //scale animator
-        val scaleBegin = if (isScaleUp) 0f else 1f
-        val scaleEnd = if (isScaleUp) 1f else 0f
-        weather_recycler.scaleX = scaleBegin
-        weather_recycler.scaleY = scaleBegin
-        val animator = weather_recycler.animate()
-                .scaleX(scaleEnd)
-                .scaleY(scaleEnd)
-                .setDuration(1000)
-
-        animator.start()
-        animator.setListener(object : Animator.AnimatorListener {
-            override fun onAnimationRepeat(animation: Animator?) {}
-
-            override fun onAnimationEnd(animation: Animator?) {
-                if (!isScaleUp)
-                    weather_recycler.visibility = View.GONE
-            }
-
-            override fun onAnimationCancel(animation: Animator?) {}
-
-            override fun onAnimationStart(animation: Animator?) {
-
-            }
-        })
+        weather_city_name.setOnClickListener {
+            showDailyWeather = !showDailyWeather
+            weather_recycler.visibility = if(showDailyWeather) View.VISIBLE else View.GONE
+        }
+        weather_current_icon.setOnClickListener { hourlyDialog.show(supportFragmentManager, "Yoo") }
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
         menuInflater.inflate(R.menu.menu, menu)
         val searchView = menu?.findItem(R.id.menu_search)?.actionView as SearchView
-        val settings = menu.findItem(R.id.menu_settings).actionView as ImageView
-        settings.setImageResource(R.drawable.ic_baseline_settings_20px)
-        settings.setOnClickListener { startActivity(Intent(this, SettingsScreen::class.java)) }
-
-        MaterialShowcaseView.Builder(this)
-                .setTarget(settings)
-                .useFadeAnimation()
-                .setDismissText("GOT IT")
-                .setContentText("1) Go to settings to change theme to Dark Mode \n2) Change news to Compat Mode \n3) Change country to receive country specific news")
-//                .singleUse("Id") // provide a unique ID used to ensure it is only shown once
-                .show()
 
         val searchEditText = searchView.findViewById(androidx.appcompat.R.id.search_src_text) as EditText
         searchEditText.setTextColor(ContextCompat.getColor(this, android.R.color.white))
@@ -158,7 +120,9 @@ class CategoryTabActivity : BaseActivity(), MainView {
 
     override fun onOptionsItemSelected(item: MenuItem?): Boolean {
         when (item?.itemId) {
-            R.id.menu_settings -> startActivity(Intent(this, SettingsScreen::class.java))
+            R.id.menu_settings -> {
+                startActivity(Intent(this, SettingsScreen::class.java))
+            }
             R.id.menu_bookmarked -> {
                 val intent = Intent(this@CategoryTabActivity, NewsEverythingAndSaved::class.java)
                 intent.putExtra("saved", true)
@@ -168,18 +132,7 @@ class CategoryTabActivity : BaseActivity(), MainView {
         return super.onOptionsItemSelected(item)
     }
 
-    override fun layoutResID(): Int {
-        return R.layout.category_tabs_activity
-    }
-
-    override fun getToolbar(): Toolbar {
-        return news_toolbar
-    }
-
-    override fun getToolbarTitle(): String {
-        return "Categories"
-    }
-
+    //all weather utils starts --->>>
     private fun requestLocation() {
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
@@ -227,31 +180,18 @@ class CategoryTabActivity : BaseActivity(), MainView {
         weather_recycler.adapter = dailyAdapter
 
         //hourly
-        hourlyDialog = MaterialDialog(this).customView(R.layout.weather_hourly, scrollable = true)
-
-        val customView = hourlyDialog?.getCustomView()
-        customView?.setBackgroundResource(R.drawable.gradient_2)
-        val recycler: RecyclerView? = customView?.findViewById(R.id.weather_recycler_hourly)
-        recycler?.layoutManager = LinearLayoutManager(this)
-        val adapter = weather.hourly?.data?.let { WeatherHourlyAdapter(this, it) }
-        recycler?.adapter = adapter
-        recycler?.addItemDecoration(Utils().Decorator(this))
+        val list = mutableListOf<HourlyData>()
+        weather.hourly?.data?.let { list.addAll(it) }
+        hourlyDialog = WeatherDialogFragment.newInstance(list)
 
     }
 
-    private val LOCATION_SETTINGS: Int = 5
 
     @SuppressLint("MissingPermission")
     fun getLocationRX() {
 
         if (manager.isProviderEnabled(LocationManager.GPS_PROVIDER))
-            compositeDisposable.add(locationProvider.getUpdatedLocation(locationRequest)
-                    .observeOn(AndroidSchedulers.mainThread())
-                    .subscribeOn(Schedulers.io())
-                    .subscribe({ t -> weatherPresenter.getCurrentWeather(t.latitude, t.longitude) },
-                            { t -> Toast.makeText(this, t.localizedMessage, Toast.LENGTH_SHORT).show() }
-                    )
-            )
+            locationDisposable()
         else {
             if (pref.getLatitude() != 0.0 && pref.getLongitude() != 0.0)
                 weatherPresenter.getCurrentWeather(pref.getLatitude(), pref.getLongitude())

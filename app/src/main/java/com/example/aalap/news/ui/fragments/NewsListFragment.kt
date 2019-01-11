@@ -60,8 +60,6 @@ class NewsListFragment : Fragment(), NewsListView, AnkoLogger {
         context?.windowManager?.defaultDisplay?.getMetrics(displayMetrics)
         widthScreen = displayMetrics.widthPixels
 
-
-
         refresh_layout.setOnRefreshListener {
             category.let { presenter.getAllHeadlinesByCountryAndCategory(it) }
         }
@@ -69,11 +67,7 @@ class NewsListFragment : Fragment(), NewsListView, AnkoLogger {
 
     override fun onResume() {
         super.onResume()
-
-        if (!TextUtils.isEmpty(category))
-            category.let { presenter.getAllHeadlinesByCountryAndCategory(it) }
-        else
-            showError("No categories found")
+        presenter.getAllHeadlinesByCountryAndCategory(category)
     }
 
     override fun displayArticlesR(articles: List<Article>?) {

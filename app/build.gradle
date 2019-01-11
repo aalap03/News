@@ -39,16 +39,15 @@ dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
 
-    implementation 'androidx.appcompat:appcompat:1.0.1'
     testImplementation 'junit:junit:4.12'
-    androidTestImplementation 'androidx.test:runner:1.1.0'
-    androidTestImplementation 'androidx.test.espresso:espresso-core:3.1.0'
+    androidTestImplementation 'androidx.test:runner:1.1.1'
+    androidTestImplementation 'androidx.test.espresso:espresso-core:3.1.1'
 
     def androidX = '1.0.0'
 
 //    implementation 'com.android.support:appcompat-v7:28.0.0'
 
-    implementation 'androidx.appcompat:appcompat:1.0.1'
+    implementation 'androidx.appcompat:appcompat:1.0.2'
     implementation 'androidx.constraintlayout:constraintlayout:1.1.3'
     implementation "androidx.recyclerview:recyclerview:$androidX"
     implementation "com.google.android.material:material:${androidX}"
@@ -71,8 +70,6 @@ dependencies {
     //picasso
     implementation 'com.squareup.picasso:picasso:2.71828'
 
-    implementation 'co.zsmb:materialdrawer-kt:2.0.1'
-
 
     ext.anko_version = '0.10.7'
     implementation "org.jetbrains.anko:anko:$anko_version"
@@ -82,16 +79,4 @@ dependencies {
 
 
     implementation 'pl.charmas.android:android-reactive-location2:2.1@aar'
-
-    implementation 'com.afollestad.material-dialogs:core:2.0.0-beta4'
-
-
-    implementation 'com.github.deano2390:MaterialShowcaseView:1.2.0'
-
-
-
-
-
-
-
 }

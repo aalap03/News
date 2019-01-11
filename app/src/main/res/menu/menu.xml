@@ -16,6 +16,6 @@
     <item
         android:id="@+id/menu_settings"
         app:showAsAction="always"
-        app:actionViewClass="androidx.appcompat.widget.AppCompatImageView"
+        android:icon="@drawable/ic_baseline_settings_20px"
         android:title="" />
 </menu>

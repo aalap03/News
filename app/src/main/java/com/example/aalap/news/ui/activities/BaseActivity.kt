@@ -1,9 +1,11 @@
 package com.example.aalap.news.ui.activities
 
 import android.os.Bundle
+import android.transition.Fade
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import androidx.core.content.ContextCompat
+import androidx.transition.Explode
 import com.example.aalap.news.Pref
 import com.example.aalap.news.R
 import org.jetbrains.anko.AnkoLogger
@@ -26,6 +28,12 @@ abstract class BaseActivity : AppCompatActivity(), AnkoLogger {
         getToolbar().title = getToolbarTitle()
         getToolbar().setTitleTextColor(ContextCompat.getColor(this, R.color.toolbar_title_color))
         setSupportActionBar(getToolbar())
+
+
+        var enterTransition = android.transition.Explode()
+        var exitTransition = Fade(Fade.OUT)
+        window.enterTransition = enterTransition
+        window.exitTransition = exitTransition
     }
 
 }

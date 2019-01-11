@@ -4,10 +4,8 @@ import android.content.Context
 import android.content.res.Resources
 import android.graphics.Canvas
 import android.graphics.drawable.Drawable
-import android.util.TypedValue
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
-import com.afollestad.materialdialogs.MaterialDialog
 import java.text.ParseException
 import java.text.SimpleDateFormat
 import java.util.*

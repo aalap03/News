@@ -37,7 +37,7 @@ class NewsEverythingAndSaved : BaseActivity(), NewsListView {
         new_recycler.layoutManager = LinearLayoutManager(this)
 
         if (isSaved) {
-            getToolbar().title = "Saved Items"
+            getToolbar().title = "Saved News"
             displayArticlesR(Realm.getDefaultInstance().where(Article::class.java).equalTo("isSaved", true).sort("publishedAt", Sort.DESCENDING).findAll())
         } else {
             currentTitle = intent.getStringExtra("title")
