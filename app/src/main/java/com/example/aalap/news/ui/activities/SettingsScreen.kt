@@ -34,7 +34,7 @@ class SettingsScreen : BaseActivity() {
         super.onCreate(savedInstanceState)
         setTheme(pref.getTheme())
         val adapter = ArrayAdapter<String>(this,
-                android.R.layout.simple_spinner_dropdown_item, countryList)
+                R.layout.spinner_item, countryList)
         settings_country.adapter = adapter
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
