@@ -1,24 +1,22 @@
 package com.example.aalap.news.ui.activities
 
-import android.graphics.Typeface
 import android.os.Bundle
 import android.view.View
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
-import android.widget.Toast
 import androidx.appcompat.widget.Toolbar
-import androidx.core.content.ContextCompat
 import com.example.aalap.news.R
 import com.example.aalap.news.models.newsmodels.Country
 import com.example.aalap.news.models.newsmodels.NewsLayout
 import kotlinx.android.synthetic.main.settings_screen.*
 import kotlinx.android.synthetic.main.toolbar_template.*
-import org.jetbrains.anko.backgroundColor
-import org.jetbrains.anko.info
+
+var settingsChanged = false
 
 class SettingsScreen : BaseActivity() {
 
     var countryList = Country.getListOfCountries()
+
 
     override fun layoutResID(): Int {
         return R.layout.settings_screen
@@ -58,10 +56,26 @@ class SettingsScreen : BaseActivity() {
         switch_theme.setOnCheckedChangeListener { _, isChecked ->
             pref.saveTheme(if (isChecked) R.style.AppTheme_Dark else R.style.AppTheme)
             this.recreate()
+            settingsChanged = true
         }
 
         switch_articles_layout.setOnCheckedChangeListener { _, isChecked ->
             pref.saveLayout(if (isChecked) NewsLayout.LAYOUT_COMPACT else NewsLayout.LAYOUT_GRID)
+            settingsChanged = true
+        }
+
+        root_switch_mode.setOnClickListener {
+            val isChecked = switch_articles_layout.isChecked
+            switch_articles_layout.isChecked = !isChecked
+            pref.saveLayout(if(switch_articles_layout.isChecked) NewsLayout.LAYOUT_COMPACT else NewsLayout.LAYOUT_GRID)
+            settingsChanged = true
+        }
+
+        root_switch_theme.setOnClickListener {
+            val isChecked = switch_theme.isChecked
+            switch_theme.isChecked = !isChecked
+            pref.saveTheme(if (isChecked) NewsLayout.LAYOUT_COMPACT else NewsLayout.LAYOUT_GRID)
+            settingsChanged = true
         }
     }
 }

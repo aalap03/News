@@ -39,6 +39,7 @@ import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.category_tabs_activity.*
 import kotlinx.android.synthetic.main.main_weather_layout.*
+import org.jetbrains.anko.info
 import pl.charmas.android.reactivelocation2.ReactiveLocationProvider
 import java.lang.Exception
 import java.util.*
@@ -130,6 +131,16 @@ class CategoryTabActivity : BaseActivity(), MainView {
             }
         }
         return super.onOptionsItemSelected(item)
+    }
+
+    override fun onResume() {
+        super.onResume()
+
+        if(settingsChanged) {
+            info { "recreate" }
+            this.recreate()
+            settingsChanged = false
+        }
     }
 
     //all weather utils starts --->>>

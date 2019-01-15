@@ -7,30 +7,117 @@
 
     <include layout="@layout/toolbar_template" />
 
-    <androidx.appcompat.widget.SwitchCompat
-        android:id="@+id/switch_theme"
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="5dp"
-        android:text="Dark Theme"
-        android:textAppearance="?android:attr/textAppearanceMedium"
-        android:textOff="Light Theme"
-        android:textOn="Dark Theme" />
+        android:padding="5dp"
+        android:clickable="true"
+        android:focusable="true"
+        android:id="@+id/root_switch_theme"
+        android:background="?android:attr/selectableItemBackground"
+        android:weightSum="1">
 
-    <androidx.appcompat.widget.SwitchCompat
-        android:id="@+id/switch_articles_layout"
+        <RelativeLayout
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_marginStart="5dp"
+            android:layout_weight=".8">
+
+            <TextView
+                android:id="@+id/theme_primary_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Dark theme"
+                android:textAppearance="?android:attr/textAppearanceMedium" />
+
+            <TextView
+                android:id="@+id/theme_secondary_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceSmall"
+                android:layout_below="@+id/theme_primary_text"
+                android:text="Yo bro dark theme means dark" />
+        </RelativeLayout>
+
+
+        <androidx.appcompat.widget.SwitchCompat
+            android:id="@+id/switch_theme"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight=".2"
+            android:gravity="center" />
+    </LinearLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="?android:attr/colorAccent"
+        android:layout_marginStart="5dp"
+        android:layout_marginEnd="5dp"
+        />
+
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="5dp"
-        android:text="Compact Mode"
-        android:textAppearance="?android:attr/textAppearanceMedium"
-        android:textOff="Grid Mode"
-        android:textOn="Compact Mode" />
+        android:padding="5dp"
+        android:id="@+id/root_switch_mode"
+        android:background="?android:attr/selectableItemBackground"
+        android:clickable="true"
+        android:focusable="true"
+        android:weightSum="1">
+
+        <RelativeLayout
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_marginStart="5dp"
+            android:layout_weight=".8">
+
+            <TextView
+                android:id="@+id/layout_primary_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Compact Mode"
+                android:textAppearance="?android:attr/textAppearanceMedium" />
+
+            <TextView
+                android:id="@+id/layout_secondary_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceSmall"
+                android:layout_below="@+id/layout_primary_text"
+                android:text="Grid layout not grid layout yo yo" />
+        </RelativeLayout>
+
+
+        <androidx.appcompat.widget.SwitchCompat
+            android:id="@+id/switch_articles_layout"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight=".2"
+            android:gravity="center" />
+    </LinearLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="?android:attr/colorAccent"
+        android:layout_marginStart="5dp"
+        android:layout_marginEnd="5dp"
+        />
 
     <androidx.appcompat.widget.AppCompatSpinner
         android:id="@+id/settings_country"
         android:layout_width="match_parent"
-        android:layout_height="40dp"
-        android:layout_margin="5dp" />
+        android:layout_height="wrap_content"
+        android:padding="5dp"
+         />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="?android:attr/colorAccent"
+        android:layout_marginStart="5dp"
+        android:layout_marginEnd="5dp"
+        />
 
 </LinearLayout>
