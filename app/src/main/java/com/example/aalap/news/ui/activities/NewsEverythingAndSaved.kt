@@ -43,15 +43,12 @@ class NewsEverythingAndSaved : BaseActivity(), NewsListView {
             currentTitle = intent.getStringExtra("title")
             getToolbar().title = currentTitle
             presenter = NewsPresenter(this, NewsModel())
-            presenter.getEverythingArticle(currentTitle, 1, 1)
+            presenter.getEverythingNews(currentTitle)
         }
 
         if (!isSaved)
-            refresh_layout.setOnRefreshListener {
-                presenter.getEverythingArticle(currentTitle, 1, 1)
-            }
+            refresh_layout.setOnRefreshListener { presenter.getEverythingNews(currentTitle) }
     }
-
 
     override fun loading(isVisible: Boolean) {
         refresh_layout.isRefreshing = isVisible

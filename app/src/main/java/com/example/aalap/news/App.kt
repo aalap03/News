@@ -1,7 +1,6 @@
 package com.example.aalap.news
 
 import android.app.Application
-import android.content.Context
 import com.example.aalap.news.retrofitutils.NewsService
 import com.example.aalap.news.retrofitutils.WeatherService
 import io.realm.Realm

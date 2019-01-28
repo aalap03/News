@@ -25,7 +25,7 @@ import io.realm.annotations.PrimaryKey
 //}
 
 open class Source(var id: String? = null,
-                  var name: String = ""): RealmObject()
+                  var name: String = "") : RealmObject()
 
 open class Article(var source: Source? = null,
                    var author: String? = null,
@@ -35,8 +35,14 @@ open class Article(var source: Source? = null,
                    var urlToImage: String? = null,
                    var publishedAt: String = "",
                    var isSaved: Boolean = false,
-                   var category: String = ""): RealmObject()
+                   var category: String = "") : RealmObject()
 
 open class News(var status: String = "",
                 var totalResults: Int = 0,
-                var articles: RealmList<Article> = RealmList()): RealmObject()
+                var articles: RealmList<Article> = RealmList()) : RealmObject()
+
+sealed class NewsResult {
+
+    data class NewsData(var list: List<Article>) : NewsResult()
+    data class NewsError(var error: String, var dbList: List<Article>) : NewsResult()
+}

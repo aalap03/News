@@ -1,7 +1,6 @@
 package layout
 
 import android.os.Bundle
-import android.text.TextUtils
 import android.util.DisplayMetrics
 import android.view.LayoutInflater
 import android.view.View
@@ -60,14 +59,11 @@ class NewsListFragment : Fragment(), NewsListView, AnkoLogger {
         context?.windowManager?.defaultDisplay?.getMetrics(displayMetrics)
         widthScreen = displayMetrics.widthPixels
 
-        refresh_layout.setOnRefreshListener {
-            category.let { presenter.getAllHeadlinesByCountryAndCategory(it) }
-        }
-    }
+        presenter.requestHeadlinesByCountryAndCategory(category)
 
-    override fun onResume() {
-        super.onResume()
-        presenter.getAllHeadlinesByCountryAndCategory(category)
+        refresh_layout.setOnRefreshListener {
+            category.let { presenter.requestHeadlinesByCountryAndCategory(it) }
+        }
     }
 
     override fun displayArticlesR(articles: List<Article>?) {

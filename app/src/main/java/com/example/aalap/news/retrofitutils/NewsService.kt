@@ -10,25 +10,11 @@ import retrofit2.http.Query
 
 interface NewsService {
 
-    //https://newsapi.org/v2/top-headlines?country=us&apiKey=cfce766b2dea4a6f91253e26fead9721
-    @GET("top-headlines")
-    fun getTopHeadlinesByCountry(@Query("country") country: String): Single<Response<News>>
 
     @GET("top-headlines")
-    fun getTopHeadlinesByCategory(@Query("category") country: String): Single<Response<News>>
-
-    @GET("top-headlines")
-    fun getTopHeadlinesByCategoryAndCountry(@Query("country") country: String,
-                                            @Query("category") category: String): Single<Response<News>>
+    fun getTopHeadlinesByCountryAndCategory(@Query("country") country: String,
+                                            @Query("category") category: String): Observable<Response<ResponseBody>>
 
     @GET("everything")
-    fun getEverything(
-            @Query("q") query: String): Single<Response<News>>
-//    ,
-//            @Query("page") page: Long,
-//            @Query("pageSize") size: Int): Single<Response<News>>
-
-    @GET("top-headlines")
-    fun getTopHeadlines(@Query("country") country: String,
-                        @Query("category") category: String): Observable<Response<ResponseBody>>
+    fun getEverything(@Query("q") query: String): Single<Response<News>>
 }
