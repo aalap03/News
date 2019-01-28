@@ -16,7 +16,6 @@ lateinit var newsRetrofit: Retrofit
 lateinit var weatherRetrofit: Retrofit
 lateinit var newsService: NewsService
 lateinit var weatherService: WeatherService
-
 lateinit var pref: Pref
 
 class App : Application() {
