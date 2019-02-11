@@ -34,7 +34,7 @@ class NewsPresenter(var view: NewsListView, private var model: NewsModel) : Anko
     }
 
     fun requestHeadlinesByCountryAndCategory(category: String) {
-        info { "New way.!" }
+
         view.loading(true)
         model.getHeadlinesWithCountryAndCategory(category)
                 .subscribeOn(Schedulers.io())

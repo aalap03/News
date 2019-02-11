@@ -16,20 +16,18 @@ import com.example.aalap.news.Pref
 import com.example.aalap.news.R
 import com.example.aalap.news.Utils
 import com.example.aalap.news.models.newsmodels.Article
-//import com.example.aalap.news.models.newsmodels.RArticle
 import com.example.aalap.news.ui.activities.Webview
 import com.squareup.picasso.Picasso
 import org.jetbrains.anko.AnkoLogger
 import org.jetbrains.anko.info
 
-class ArticleAdapter(var context: Context, var list: List<Article>, var screenWidth: Int) : RecyclerView.Adapter<ArticleAdapter.ArticleHolder>(), AnkoLogger {
+class ArticleAdapter(var context: Context, var list: MutableList<Article>, var screenWidth: Int) : RecyclerView.Adapter<ArticleAdapter.ArticleHolder>(), AnkoLogger {
 
-    var picasso: Picasso = Picasso.get()
+    private var picasso: Picasso = Picasso.get()
     var pref = Pref(context.applicationContext)
 
     override fun onCreateViewHolder(parent: ViewGroup, p1: Int): ArticleHolder {
 
-        info { "Compact? ${pref.isLayoutCompact()}" }
         val layout = if (pref.isLayoutCompact())
             R.layout.news_item_compact
         else
@@ -51,7 +49,11 @@ class ArticleAdapter(var context: Context, var list: List<Article>, var screenWi
     }
 
     override fun onBindViewHolder(holder: ArticleHolder, position: Int) {
+
         val article = list[position]
+
+        info { "Article: $article" }
+
         holder.title.text = article.title
 
         if (pref.isLayoutCompact()) {
@@ -82,6 +84,12 @@ class ArticleAdapter(var context: Context, var list: List<Article>, var screenWi
         holder.itemView.setOnClickListener { holder.bindClicks(article) }
     }
 
+    fun setNewData(articles: MutableList<Article>) {
+        list.clear()
+        list.addAll(articles)
+        notifyDataSetChanged()
+    }
+
     inner class ArticleHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         var title: TextView = itemView.findViewById(R.id.article_title)
         var author: TextView = itemView.findViewById(R.id.article_author)
@@ -89,7 +97,6 @@ class ArticleAdapter(var context: Context, var list: List<Article>, var screenWi
         var image: ImageView = itemView.findViewById(R.id.article_image)
 
         fun bindClicks(article: Article) {
-            info { "Opening..." }
             val intent = Intent(context, Webview::class.java)
             intent.putExtra("url", article.url)
             intent.putExtra("title", article.title)

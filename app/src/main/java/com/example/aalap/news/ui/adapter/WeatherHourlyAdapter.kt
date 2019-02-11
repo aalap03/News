@@ -10,6 +10,7 @@ import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
 import com.example.aalap.news.R
 import com.example.aalap.news.models.weathermodels.HourlyData
+import es.dmoral.toasty.Toasty
 import org.jetbrains.anko.AnkoLogger
 
 class WeatherHourlyAdapter(var context: Context, var list: List<HourlyData>) :
@@ -38,7 +39,7 @@ class WeatherHourlyAdapter(var context: Context, var list: List<HourlyData>) :
         var icon: ImageView = itemView.findViewById(R.id.weather_hourly_icon)
         var summary: TextView = itemView.findViewById(R.id.weather_hourly_summary)
         fun bindClick(hourlyItem: HourlyData) {
-            Toast.makeText(context, "@ ${hourlyItem.getTimeAsHour()} Wind chill will be  ${hourlyItem.feelsLike()}", Toast.LENGTH_LONG)
+            Toasty.info(context, "@ ${hourlyItem.getTimeAsHour()} Wind chill will be  ${hourlyItem.feelsLike()}", Toast.LENGTH_LONG)
                     .show()
         }
     }

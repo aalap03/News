@@ -13,10 +13,6 @@ import java.util.*
 
 class Utils {
 
-    fun dpToPx(dp: Int): Int {
-        return (dp * Resources.getSystem().displayMetrics.density).toInt()
-    }
-
     fun getLocaleTime(defaultTime: String): String {
 
         var desiredOutput = ""
@@ -38,7 +34,7 @@ class Utils {
 
     inner class Decorator(context: Context) : RecyclerView.ItemDecoration() {
 
-        var divider: Drawable? = ContextCompat.getDrawable(context, R.drawable.line_divider)
+        private var divider: Drawable? = ContextCompat.getDrawable(context, R.drawable.line_divider)
 
         override fun onDraw(canvas: Canvas, parent: RecyclerView, state: RecyclerView.State) {
             super.onDraw(canvas, parent, state)

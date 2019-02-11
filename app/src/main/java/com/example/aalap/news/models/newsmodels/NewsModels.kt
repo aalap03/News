@@ -2,6 +2,7 @@ package com.example.aalap.news.models.newsmodels
 
 import com.google.gson.annotations.SerializedName
 import io.realm.RealmList
+import io.realm.RealmModel
 import io.realm.RealmObject
 import io.realm.annotations.PrimaryKey
 
@@ -25,7 +26,11 @@ import io.realm.annotations.PrimaryKey
 //}
 
 open class Source(var id: String? = null,
-                  var name: String = "") : RealmObject()
+                  var name: String = "") : RealmObject(){
+    override fun toString(): String {
+        return "Source(id=$id, name='$name')"
+    }
+}
 
 open class Article(var source: Source? = null,
                    var author: String? = null,
@@ -35,7 +40,11 @@ open class Article(var source: Source? = null,
                    var urlToImage: String? = null,
                    var publishedAt: String = "",
                    var isSaved: Boolean = false,
-                   var category: String = "") : RealmObject()
+                   var category: String = "") : RealmObject(){
+    override fun toString(): String {
+        return "Article(source=$source, author=$author, title='$title', description=$description, url='$url', urlToImage=$urlToImage, publishedAt='$publishedAt', isSaved=$isSaved, category='$category')"
+    }
+}
 
 open class News(var status: String = "",
                 var totalResults: Int = 0,
@@ -43,6 +52,6 @@ open class News(var status: String = "",
 
 sealed class NewsResult {
 
-    data class NewsData(var list: List<Article>) : NewsResult()
-    data class NewsError(var error: String, var dbList: List<Article>) : NewsResult()
+    data class NewsData(var list: MutableList<Article>) : NewsResult()
+    data class NewsError(var error: String, var dbList: MutableList<Article>) : NewsResult()
 }

@@ -13,7 +13,7 @@ import kotlinx.android.synthetic.main.toolbar_template.*
 
 var settingsChanged = false
 
-class SettingsScreen : BaseActivity() {
+class NewsPreference : BaseActivity() {
 
     var countryList = Country.getListOfCountries()
 
@@ -27,7 +27,7 @@ class SettingsScreen : BaseActivity() {
     }
 
     override fun getToolbarTitle(): String {
-        return "News Settings"
+        return "News Preference"
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -50,6 +50,7 @@ class SettingsScreen : BaseActivity() {
             override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
                 val country = countryList[position]
                 pref.saveCountry(country)
+                settingsChanged = true
             }
         }
 

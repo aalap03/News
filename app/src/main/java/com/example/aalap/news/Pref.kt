@@ -20,7 +20,7 @@ class Pref(appContext: Context): AnkoLogger {
         pref.edit().putInt(KEY_LAYOUT, layout).apply()
     }
 
-    fun getRecyclerLayout(): Int {
+    private fun getRecyclerLayout(): Int {
         return pref.getInt(KEY_LAYOUT, NewsLayout.LAYOUT_COMPACT)
     }
 

@@ -16,5 +16,5 @@ interface NewsService {
                                             @Query("category") category: String): Observable<Response<ResponseBody>>
 
     @GET("everything")
-    fun getEverything(@Query("q") query: String): Single<Response<News>>
+    fun getSearchedHeadlines(@Query("q") query: String): Single<Response<News>>
 }

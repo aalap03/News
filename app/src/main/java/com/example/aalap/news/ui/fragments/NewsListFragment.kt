@@ -12,10 +12,10 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.aalap.news.R
 import com.example.aalap.news.models.newsmodels.Article
 import com.example.aalap.news.models.newsmodels.NewsModel
-//import com.example.aalap.news.models.newsmodels.RArticle
 import com.example.aalap.news.presenter.NewsPresenter
 import com.example.aalap.news.ui.adapter.ArticleAdapter
 import com.example.aalap.news.view.NewsListView
+import es.dmoral.toasty.Toasty
 import kotlinx.android.synthetic.main.news_list_frag.*
 import kotlinx.android.synthetic.main.toolbar_template.*
 import org.jetbrains.anko.AnkoLogger
@@ -30,6 +30,7 @@ class NewsListFragment : Fragment(), NewsListView, AnkoLogger {
     private var adapter: ArticleAdapter? = null
     private var widthScreen: Int = 0
     var category: String = "Anything"
+    val articles = mutableListOf<Article>()
 
     companion object {
 
@@ -54,20 +55,21 @@ class NewsListFragment : Fragment(), NewsListView, AnkoLogger {
         presenter = NewsPresenter(this, NewsModel())
         new_recycler.layoutManager = LinearLayoutManager(requireContext())
 
-        info { "Fragment Category: $category" }
         val displayMetrics = DisplayMetrics()
         context?.windowManager?.defaultDisplay?.getMetrics(displayMetrics)
         widthScreen = displayMetrics.widthPixels
 
         presenter.requestHeadlinesByCountryAndCategory(category)
 
+        adapter = ArticleAdapter(requireContext(), articles, widthScreen)
+        new_recycler?.adapter = adapter
+
         refresh_layout.setOnRefreshListener {
             category.let { presenter.requestHeadlinesByCountryAndCategory(it) }
         }
     }
 
-    override fun displayArticlesR(articles: List<Article>?) {
-        info { "Article: for view Category: $category size: ${articles?.size}" }
+    override fun displayArticlesR(articles: MutableList<Article>?) {
 
         if (articles?.isEmpty() == true) {
             empty_view.visibility = View.VISIBLE
@@ -75,8 +77,7 @@ class NewsListFragment : Fragment(), NewsListView, AnkoLogger {
         } else {
             empty_view.visibility = View.GONE
             new_recycler.visibility = View.VISIBLE
-            adapter = articles?.let { ArticleAdapter(requireContext(), it, widthScreen) }!!
-            new_recycler?.adapter = adapter
+            articles?.let { adapter?.setNewData(it) }
             refresh_layout?.isRefreshing = false
         }
     }
@@ -87,8 +88,10 @@ class NewsListFragment : Fragment(), NewsListView, AnkoLogger {
 
     override fun showError(errorMsg: String?) {
         refresh_layout.isRefreshing = false
-        Toast.makeText(context, errorMsg, Toast.LENGTH_SHORT)
+        errorMsg?.let {
+            Toasty.error(requireContext(), it, Toast.LENGTH_SHORT)
                 .show()
+        }
         if (adapter == null || adapter?.itemCount == 0) {
             empty_view.visibility = View.VISIBLE
             new_recycler.visibility = View.GONE

@@ -36,7 +36,7 @@
                 android:layout_height="wrap_content"
                 android:textAppearance="?android:attr/textAppearanceSmall"
                 android:layout_below="@+id/theme_primary_text"
-                android:text="Yo bro dark theme means dark" />
+                android:text="Light text against dark background." />
         </RelativeLayout>
 
 
@@ -85,7 +85,7 @@
                 android:layout_height="wrap_content"
                 android:textAppearance="?android:attr/textAppearanceSmall"
                 android:layout_below="@+id/layout_primary_text"
-                android:text="Grid layout not grid layout yo yo" />
+                android:text="Compact news information." />
         </RelativeLayout>
 
 
@@ -104,6 +104,14 @@
         android:layout_marginStart="5dp"
         android:layout_marginEnd="5dp"
         />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:text="News for country"
+        android:padding="5dp"
+        android:layout_marginStart="5dp"
+        style="?android:attr/textAppearanceMedium"
+        android:layout_height="wrap_content" />
 
     <androidx.appcompat.widget.AppCompatSpinner
         android:id="@+id/settings_country"

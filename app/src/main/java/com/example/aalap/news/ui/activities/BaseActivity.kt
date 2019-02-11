@@ -28,12 +28,6 @@ abstract class BaseActivity : AppCompatActivity(), AnkoLogger {
         getToolbar().title = getToolbarTitle()
         getToolbar().setTitleTextColor(ContextCompat.getColor(this, R.color.toolbar_title_color))
         setSupportActionBar(getToolbar())
-
-
-        var enterTransition = android.transition.Explode()
-        var exitTransition = Fade(Fade.OUT)
-        window.enterTransition = enterTransition
-        window.exitTransition = exitTransition
     }
 
 }

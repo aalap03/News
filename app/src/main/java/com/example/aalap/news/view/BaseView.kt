@@ -8,5 +8,5 @@ interface BaseView {
 
     fun showError(errorMsg: String?)
 
-    fun displayArticlesR(articles: List<Article>?)
+    fun displayArticlesR(articles: MutableList<Article>?)
 }

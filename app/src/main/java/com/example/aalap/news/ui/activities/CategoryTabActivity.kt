@@ -3,7 +3,6 @@ package com.example.aalap.news.ui.activities
 import android.Manifest
 import android.annotation.SuppressLint
 import android.app.Activity
-import android.app.ActivityOptions
 import android.content.Context
 import android.content.Intent
 import android.content.IntentSender
@@ -34,6 +33,7 @@ import com.example.aalap.news.ui.adapter.WeatherDailyAdapter
 import com.example.aalap.news.ui.fragments.WeatherDialogFragment
 import com.example.aalap.news.view.MainView
 import com.google.android.gms.common.api.ResolvableApiException
+import es.dmoral.toasty.Toasty
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
@@ -56,7 +56,7 @@ class CategoryTabActivity : BaseActivity(), MainView {
     private lateinit var locationProvider: ReactiveLocationProvider
     private var compositeDisposable = CompositeDisposable()
     private var showDailyWeather = false
-    lateinit var hourlyDialog: DialogFragment
+    private var hourlyDialog: DialogFragment? = null
 
     override fun layoutResID(): Int {
         return R.layout.category_tabs_activity
@@ -67,7 +67,7 @@ class CategoryTabActivity : BaseActivity(), MainView {
     }
 
     override fun getToolbarTitle(): String {
-        return "Categories"
+        return "News App"
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -89,9 +89,9 @@ class CategoryTabActivity : BaseActivity(), MainView {
 
         weather_city_name.setOnClickListener {
             showDailyWeather = !showDailyWeather
-            weather_recycler.visibility = if(showDailyWeather) View.VISIBLE else View.GONE
+            weather_recycler.visibility = if (showDailyWeather) View.VISIBLE else View.GONE
         }
-        weather_current_icon.setOnClickListener { hourlyDialog.show(supportFragmentManager, "Yoo") }
+        weather_current_icon.setOnClickListener { hourlyDialog?.show(supportFragmentManager, "Yoo") }
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
@@ -122,7 +122,7 @@ class CategoryTabActivity : BaseActivity(), MainView {
     override fun onOptionsItemSelected(item: MenuItem?): Boolean {
         when (item?.itemId) {
             R.id.menu_settings -> {
-                startActivity(Intent(this, SettingsScreen::class.java))
+                startActivity(Intent(this, NewsPreference::class.java))
             }
             R.id.menu_bookmarked -> {
                 val intent = Intent(this@CategoryTabActivity, NewsEverythingAndSaved::class.java)
@@ -136,8 +136,7 @@ class CategoryTabActivity : BaseActivity(), MainView {
     override fun onResume() {
         super.onResume()
 
-        if(settingsChanged) {
-            info { "recreate" }
+        if (settingsChanged) {
             this.recreate()
             settingsChanged = false
         }
@@ -166,7 +165,7 @@ class CategoryTabActivity : BaseActivity(), MainView {
     }
 
     override fun error(errorMsg: String) {
-        Toast.makeText(this, errorMsg, Toast.LENGTH_SHORT)
+        Toasty.error(this, errorMsg)
                 .show()
     }
 
@@ -207,8 +206,13 @@ class CategoryTabActivity : BaseActivity(), MainView {
             if (pref.getLatitude() != 0.0 && pref.getLongitude() != 0.0)
                 weatherPresenter.getCurrentWeather(pref.getLatitude(), pref.getLongitude())
             else {
-                val locationSettingsRequest = LocationSettingsRequest.Builder().addLocationRequest(locationRequest).build()
-                val checkLocationSettings = LocationServices.getSettingsClient(this).checkLocationSettings(locationSettingsRequest)
+                val locationSettingsRequest = LocationSettingsRequest.Builder()
+                        .addLocationRequest(locationRequest)
+                        .build()
+                val checkLocationSettings = LocationServices
+                        .getSettingsClient(this)
+                        .checkLocationSettings(locationSettingsRequest)
+
                 checkLocationSettings
                         .addOnSuccessListener { locationDisposable() }
                         .addOnFailureListener { exception ->
@@ -246,7 +250,7 @@ class CategoryTabActivity : BaseActivity(), MainView {
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeOn(Schedulers.io())
                 .subscribe({ t -> weatherPresenter.getCurrentWeather(t.latitude, t.longitude) },
-                        { t -> Toast.makeText(this, t.localizedMessage, Toast.LENGTH_SHORT).show() }
+                        { t -> Toasty.error(this, t.localizedMessage).show() }
                 )
         )
     }

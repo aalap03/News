@@ -11,6 +11,7 @@ import com.example.aalap.news.models.newsmodels.NewsModel
 import com.example.aalap.news.presenter.NewsPresenter
 import com.example.aalap.news.ui.adapter.ArticleAdapter
 import com.example.aalap.news.view.NewsListView
+import es.dmoral.toasty.Toasty
 import io.realm.Realm
 import io.realm.Sort
 import kotlinx.android.synthetic.main.news_list_frag.*
@@ -23,6 +24,7 @@ class NewsEverythingAndSaved : BaseActivity(), NewsListView {
     var screenWidth: Int = 0
     var currentTitle = ""
     var isSaved = false
+    var articles = mutableListOf<Article>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -35,16 +37,24 @@ class NewsEverythingAndSaved : BaseActivity(), NewsListView {
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
         new_recycler.layoutManager = LinearLayoutManager(this)
+        adapter = ArticleAdapter(this, articles, screenWidth)
+        new_recycler.adapter = adapter
 
         if (isSaved) {
-            getToolbar().title = "Saved News"
-            displayArticlesR(Realm.getDefaultInstance().where(Article::class.java).equalTo("isSaved", true).sort("publishedAt", Sort.DESCENDING).findAll())
+            getToolbar().title = "Bookmarked News"
+            displayArticlesR(Realm.getDefaultInstance()
+                    .where(Article::class.java)
+                    .equalTo("isSaved", true)
+                    .sort("publishedAt", Sort.DESCENDING)
+                    .findAll())
         } else {
             currentTitle = intent.getStringExtra("title")
             getToolbar().title = currentTitle
             presenter = NewsPresenter(this, NewsModel())
             presenter.getEverythingNews(currentTitle)
         }
+
+
 
         if (!isSaved)
             refresh_layout.setOnRefreshListener { presenter.getEverythingNews(currentTitle) }
@@ -56,14 +66,16 @@ class NewsEverythingAndSaved : BaseActivity(), NewsListView {
 
     override fun showError(errorMsg: String?) {
         loading(false)
-        Toast.makeText(this, errorMsg, Toast.LENGTH_SHORT)
-                .show()
+        if (errorMsg != null) {
+            Toasty.error(this, errorMsg)
+                    .show()
+        }
     }
 
-    override fun displayArticlesR(articles: List<Article>?) {
+    override fun displayArticlesR(articles: MutableList<Article>?) {
         loading(false)
-        adapter = articles?.let { ArticleAdapter(this, it, screenWidth) }!!
-        new_recycler.adapter = adapter
+        articles?.let { adapter.setNewData(it) }
+
     }
 
     override fun layoutResID(): Int {
@@ -75,6 +87,6 @@ class NewsEverythingAndSaved : BaseActivity(), NewsListView {
     }
 
     override fun getToolbarTitle(): String {
-        return intent?.getStringExtra("title") ?: "Bro..."
+        return intent?.getStringExtra("title") ?: applicationInfo.name
     }
 }

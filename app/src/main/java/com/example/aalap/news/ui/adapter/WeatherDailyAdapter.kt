@@ -10,6 +10,7 @@ import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
 import com.example.aalap.news.R
 import com.example.aalap.news.models.weathermodels.DailyData
+import es.dmoral.toasty.Toasty
 import org.jetbrains.anko.AnkoLogger
 
 class WeatherDailyAdapter(var context: Context, var list: List<DailyData>) :
@@ -34,7 +35,7 @@ class WeatherDailyAdapter(var context: Context, var list: List<DailyData>) :
 
     inner class DailyHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         fun bindClicks(dailyItem: DailyData) {
-            Toast.makeText(context, "On ${dailyItem.getDayOfTheWeek()} it will be ${dailyItem.summary}", Toast.LENGTH_LONG)
+            Toasty.info(context, "On ${dailyItem.getDayOfTheWeek()} it will be ${dailyItem.summary}", Toast.LENGTH_LONG)
                     .show()
         }
 

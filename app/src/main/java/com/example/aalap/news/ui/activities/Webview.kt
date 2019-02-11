@@ -8,10 +8,10 @@ import android.webkit.SafeBrowsingResponse
 import android.webkit.WebResourceRequest
 import android.webkit.WebView
 import android.webkit.WebViewClient
-import android.widget.Toast
 import androidx.appcompat.widget.Toolbar
 import com.example.aalap.news.R
 import com.example.aalap.news.models.newsmodels.Article
+import es.dmoral.toasty.Toasty
 import io.realm.Realm
 import kotlinx.android.synthetic.main.activity_webview.*
 
@@ -47,13 +47,6 @@ class Webview : BaseActivity() {
                 return super.shouldOverrideUrlLoading(view, url)
             }
 
-            override fun onPageFinished(view: WebView?, url: String?) {
-                super.onPageFinished(view, url)
-
-                Toast.makeText(this@Webview, "Loading finished", Toast.LENGTH_SHORT)
-                        .show()
-            }
-
             override fun onSafeBrowsingHit(
                     view: WebView,
                     request: WebResourceRequest,
@@ -64,7 +57,7 @@ class Webview : BaseActivity() {
                 // this one to Safe Browsing.
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O_MR1) {
                     callback.backToSafety(true)
-                    Toast.makeText(view.context, "Unsafe web page blocked.", Toast.LENGTH_LONG).show()
+                    Toasty.error(view.context, "Unsafe web page blocked.").show()
                 }
 
             }
@@ -73,7 +66,7 @@ class Webview : BaseActivity() {
         webview.loadUrl(url)
     }
 
-    fun webviewSettings() {
+    private fun webviewSettings() {
         webview.settings.javaScriptEnabled = true
         webview.settings.loadWithOverviewMode = true
         webview.settings.allowContentAccess = true
