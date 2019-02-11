@@ -19,7 +19,6 @@ class NewsModel : AnkoLogger {
     fun getHeadlinesWithCountryAndCategory(category: String): Observable<NewsResult> {
 
         val country = Country.countryKeyValueMap()[pref.getCountry()]
-
         return newsService.getTopHeadlinesByCountryAndCategory(country!!, category)
                 .map<NewsResult> { NewsResult.NewsData(saveAndGetNewsByCategory(it, category)) }
                 .onErrorReturn { NewsResult.NewsError(onError(throwable = it), getSavedNewsByCategory(category)) }

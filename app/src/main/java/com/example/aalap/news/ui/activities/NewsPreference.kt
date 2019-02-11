@@ -8,6 +8,7 @@ import androidx.appcompat.widget.Toolbar
 import com.example.aalap.news.R
 import com.example.aalap.news.models.newsmodels.Country
 import com.example.aalap.news.models.newsmodels.NewsLayout
+import com.example.aalap.news.pref
 import kotlinx.android.synthetic.main.settings_screen.*
 import kotlinx.android.synthetic.main.toolbar_template.*
 
