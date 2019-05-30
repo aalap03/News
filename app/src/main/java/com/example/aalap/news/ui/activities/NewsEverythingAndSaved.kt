@@ -25,6 +25,7 @@ class NewsEverythingAndSaved : BaseActivity(), NewsListView {
     var screenWidth: Int = 0
     var currentTitle = ""
     var isSaved = false
+
     var articles = mutableListOf<Article>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
