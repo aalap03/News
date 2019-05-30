@@ -27,6 +27,7 @@ import androidx.core.content.ContextCompat
 import androidx.fragment.app.DialogFragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.aalap.news.models.weathermodels.*
+import com.example.aalap.news.pref
 import com.example.aalap.news.presenter.WeatherPresenter
 import com.example.aalap.news.ui.adapter.WeatherDailyAdapter
 import com.example.aalap.news.ui.fragments.WeatherDialogFragment

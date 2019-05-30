@@ -60,8 +60,6 @@ class NewsEverythingAndSaved : BaseActivity(), NewsListView {
             presenter.getEverythingNews(currentTitle)
         }
 
-
-
         if (!isSaved)
             refresh_layout.setOnRefreshListener { presenter.getEverythingNews(currentTitle) }
     }
@@ -93,6 +91,6 @@ class NewsEverythingAndSaved : BaseActivity(), NewsListView {
     }
 
     override fun getToolbarTitle(): String {
-        return intent?.getStringExtra("title") ?: applicationInfo.name
+        return intent?.getStringExtra("title") ?: "News App"
     }
 }
