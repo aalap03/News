@@ -30,7 +30,7 @@
         </activity>
 
         <activity
-            android:name=".ui.activities.Webview"
+            android:name=".ui.activities.NewsDetailWebView"
             android:parentActivityName=".ui.activities.CategoryTabActivity">
 
         </activity>

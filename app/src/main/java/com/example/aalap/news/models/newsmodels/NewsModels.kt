@@ -1,10 +1,7 @@
 package com.example.aalap.news.models.newsmodels
 
-import com.google.gson.annotations.SerializedName
 import io.realm.RealmList
-import io.realm.RealmModel
 import io.realm.RealmObject
-import io.realm.annotations.PrimaryKey
 
 //{
 //"status": "ok",

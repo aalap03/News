@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.util.DisplayMetrics
 import android.widget.Toast
 import androidx.appcompat.widget.Toolbar
+import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.aalap.news.R
 import com.example.aalap.news.models.newsmodels.Article
@@ -35,9 +36,14 @@ class NewsEverythingAndSaved : BaseActivity(), NewsListView {
 
         isSaved = intent.getBooleanExtra("saved", false)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
-
-        new_recycler.layoutManager = LinearLayoutManager(this)
         adapter = ArticleAdapter(this, articles, screenWidth)
+
+        var manager = if (com.example.aalap.news.pref.isLayoutCompact())
+            LinearLayoutManager(this)
+        else
+            GridLayoutManager(this, 2)
+
+        new_recycler.layoutManager = manager
         new_recycler.adapter = adapter
 
         if (isSaved) {

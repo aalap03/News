@@ -15,7 +15,7 @@ import es.dmoral.toasty.Toasty
 import io.realm.Realm
 import kotlinx.android.synthetic.main.activity_webview.*
 
-class Webview : BaseActivity() {
+class NewsDetailWebView : BaseActivity() {
     override fun layoutResID(): Int {
         return R.layout.activity_webview
     }
