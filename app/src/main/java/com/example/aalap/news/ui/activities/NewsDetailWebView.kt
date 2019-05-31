@@ -11,11 +11,16 @@ import android.webkit.WebViewClient
 import androidx.appcompat.widget.Toolbar
 import com.example.aalap.news.R
 import com.example.aalap.news.models.newsmodels.Article
+import com.example.aalap.news.ui.adapter.INTENT_KEY_ARTICLE
+import com.example.aalap.news.ui.adapter.INTENT_KEY_URL
 import es.dmoral.toasty.Toasty
 import io.realm.Realm
 import kotlinx.android.synthetic.main.activity_webview.*
 
 class NewsDetailWebView : BaseActivity() {
+
+    var realm: Realm = Realm.getDefaultInstance()
+
     override fun layoutResID(): Int {
         return R.layout.activity_webview
     }
@@ -25,7 +30,7 @@ class NewsDetailWebView : BaseActivity() {
     }
 
     override fun getToolbarTitle(): String {
-        return intent.getStringExtra("title")
+        return currentArticle?.title ?: ""
     }
 
     var url: String = ""
@@ -33,37 +38,44 @@ class NewsDetailWebView : BaseActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        url = intent.getStringExtra("url")
-        currentArticle = Realm.getDefaultInstance().where(Article::class.java).equalTo("url", url).findFirst()
+        url = intent.getStringExtra(INTENT_KEY_URL)
+        currentArticle = realm.where(Article::class.java).equalTo("url", url).findFirst()
+        if (currentArticle == null)
+            currentArticle = intent.getParcelableExtra(INTENT_KEY_ARTICLE)
+
+        currentArticle?.let {
+            url = it.url
+            webview.webViewClient = object : WebViewClient() {
+
+                override fun shouldOverrideUrlLoading(view: WebView?, url: String?): Boolean {
+                    view?.loadUrl(url)
+                    return super.shouldOverrideUrlLoading(view, url)
+                }
+
+                override fun onSafeBrowsingHit(
+                        view: WebView,
+                        request: WebResourceRequest,
+                        threatType: Int,
+                        callback: SafeBrowsingResponse
+                ) {
+                    // The "true" argument indicates that your app reports incidents like
+                    // this one to Safe Browsing.
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O_MR1) {
+                        callback.backToSafety(true)
+                        Toasty.error(view.context, "Unsafe web page blocked.").show()
+                    }
+
+                }
+            }
+            webview.loadUrl(url)
+            setToolbarTitle(it.title)
+        }
 
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         supportActionBar?.setDisplayShowHomeEnabled(true)
         webviewSettings()
 
-        webview.webViewClient = object : WebViewClient() {
 
-            override fun shouldOverrideUrlLoading(view: WebView?, url: String?): Boolean {
-                view?.loadUrl(url)
-                return super.shouldOverrideUrlLoading(view, url)
-            }
-
-            override fun onSafeBrowsingHit(
-                    view: WebView,
-                    request: WebResourceRequest,
-                    threatType: Int,
-                    callback: SafeBrowsingResponse
-            ) {
-                // The "true" argument indicates that your app reports incidents like
-                // this one to Safe Browsing.
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O_MR1) {
-                    callback.backToSafety(true)
-                    Toasty.error(view.context, "Unsafe web page blocked.").show()
-                }
-
-            }
-        }
-
-        webview.loadUrl(url)
     }
 
     private fun webviewSettings() {
@@ -84,13 +96,29 @@ class NewsDetailWebView : BaseActivity() {
     override fun onOptionsItemSelected(item: MenuItem?): Boolean {
         when (item?.itemId) {
             R.id.menu_bookmark -> {
-                Realm.getDefaultInstance().executeTransaction {
-                    currentArticle?.isSaved = !currentArticle?.isSaved!!
-                    item.setIcon(if (currentArticle?.isSaved == true) R.drawable.ic_saved else R.drawable.ic_not_saved)
+                val dbArticle = realm.where(Article::class.java).equalTo("url", url).findFirst()
+
+                if (dbArticle != null) {
+                    realm.executeTransaction {
+                        currentArticle?.isSaved = !currentArticle?.isSaved!!
+                        item.setIcon(if (currentArticle?.isSaved == true) R.drawable.ic_saved else R.drawable.ic_not_saved)
+                    }
+                } else {
+                    realm.executeTransaction { realm ->
+                        currentArticle?.isSaved = true
+                        realm.copyToRealm(currentArticle)
+                        item.setIcon(R.drawable.ic_saved)
+                    }
                 }
+
             }
         }
         return super.onOptionsItemSelected(item)
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        realm.close()
     }
 
 }

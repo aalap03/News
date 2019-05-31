@@ -21,6 +21,9 @@ import com.squareup.picasso.Picasso
 import org.jetbrains.anko.AnkoLogger
 import org.jetbrains.anko.info
 
+const val INTENT_KEY_ARTICLE = "ARTICLE"
+const val INTENT_KEY_URL = "ARTICLE_url"
+
 class ArticleAdapter(var context: Context, var list: MutableList<Article>, var screenWidth: Int) : RecyclerView.Adapter<ArticleAdapter.ArticleHolder>(), AnkoLogger {
 
     private var picasso: Picasso = Picasso.get()
@@ -92,8 +95,8 @@ class ArticleAdapter(var context: Context, var list: MutableList<Article>, var s
 
         fun bindClicks(article: Article) {
             val intent = Intent(context, NewsDetailWebView::class.java)
-            intent.putExtra("url", article.url)
-            intent.putExtra("title", article.title)
+            intent.putExtra(INTENT_KEY_ARTICLE, article)
+            intent.putExtra(INTENT_KEY_URL, article.url)
             context.startActivity(intent)
         }
     }

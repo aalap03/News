@@ -30,4 +30,8 @@ abstract class BaseActivity : AppCompatActivity(), AnkoLogger {
         setSupportActionBar(getToolbar())
     }
 
+    fun setToolbarTitle(title: String){
+        getToolbar().title = title
+    }
+
 }

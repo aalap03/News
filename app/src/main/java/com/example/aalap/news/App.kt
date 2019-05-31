@@ -37,7 +37,7 @@ class App : Application() {
                 .build()
 
         weatherRetrofit = Retrofit.Builder()
-                .baseUrl("https://api.darksky.net/forecast/" + getString(R.string.weather_api_key) + "/")
+                .baseUrl("https://api.darksky.net/forecast/" + BuildConfig.WEATHER_API_KEY + "/")
                 .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
                 .addConverterFactory(GsonConverterFactory.create())
                 .build()
@@ -59,7 +59,7 @@ class App : Application() {
 
             val request = chain.request()
             val newBuilder = request.newBuilder()
-            newBuilder.header("Authorization", "Bearer ${getString(R.string.news_api_key)}")
+            newBuilder.header("Authorization", "Bearer ${BuildConfig.NEWS_API_KEY}")
 
             chain.proceed(newBuilder.build())
         }
