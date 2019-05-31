@@ -9,3 +9,5 @@ User can also favourite news, and view it later, plus search news by any keyword
 User can also view weather of current city, with of daily of 8 days and 48 hours.
 
 Future improvement, replace RxJava, Realm and MVP architecture to Architecture components features like livedata, view-model and MVVM architecture, powered by kotlin coroutines.
+
+There is news_demo.gif describing current flow.
