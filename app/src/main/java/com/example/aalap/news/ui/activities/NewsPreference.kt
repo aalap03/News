@@ -7,8 +7,7 @@ import android.widget.ArrayAdapter
 import androidx.appcompat.widget.Toolbar
 import com.example.aalap.news.R
 import com.example.aalap.news.models.newsmodels.Country
-import com.example.aalap.news.models.newsmodels.NewsLayout
-import com.example.aalap.news.pref
+import com.example.aalap.news.models.newsmodels.Layout
 import kotlinx.android.synthetic.main.settings_screen.*
 import kotlinx.android.synthetic.main.toolbar_template.*
 
@@ -62,21 +61,21 @@ class NewsPreference : BaseActivity() {
         }
 
         switch_articles_layout.setOnCheckedChangeListener { _, isChecked ->
-            pref.saveLayout(if (isChecked) NewsLayout.LAYOUT_COMPACT else NewsLayout.LAYOUT_GRID)
+            pref.saveLayout(if (isChecked) Layout.COMPACT.ordinal else Layout.GRID.ordinal)
             settingsChanged = true
         }
 
         root_switch_mode.setOnClickListener {
             val isChecked = switch_articles_layout.isChecked
             switch_articles_layout.isChecked = !isChecked
-            pref.saveLayout(if(switch_articles_layout.isChecked) NewsLayout.LAYOUT_COMPACT else NewsLayout.LAYOUT_GRID)
+            pref.saveLayout(if(switch_articles_layout.isChecked) Layout.COMPACT.ordinal else Layout.GRID.ordinal)
             settingsChanged = true
         }
 
         root_switch_theme.setOnClickListener {
             val isChecked = switch_theme.isChecked
             switch_theme.isChecked = !isChecked
-            pref.saveTheme(if (isChecked) NewsLayout.LAYOUT_COMPACT else NewsLayout.LAYOUT_GRID)
+            pref.saveTheme(if (isChecked) Layout.COMPACT.ordinal else Layout.GRID.ordinal)
             settingsChanged = true
         }
     }

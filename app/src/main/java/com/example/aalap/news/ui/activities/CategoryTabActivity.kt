@@ -23,7 +23,6 @@ import com.google.android.gms.location.*
 import kotlinx.android.synthetic.main.toolbar_template.*
 import android.widget.EditText
 import android.widget.TextView
-import android.widget.Toast
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.DialogFragment
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -40,7 +39,6 @@ import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.category_tabs_activity.*
 import kotlinx.android.synthetic.main.main_weather_layout.*
-import org.jetbrains.anko.info
 import pl.charmas.android.reactivelocation2.ReactiveLocationProvider
 import java.lang.Exception
 import java.util.*
@@ -93,6 +91,7 @@ class CategoryTabActivity : BaseActivity(), MainView {
             weather_recycler.visibility = if (showDailyWeather) View.VISIBLE else View.GONE
         }
         weather_current_icon.setOnClickListener { hourlyDialog?.show(supportFragmentManager, "Yoo") }
+
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
@@ -153,7 +152,7 @@ class CategoryTabActivity : BaseActivity(), MainView {
                         arrayOf(Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION),
                         LOCATION_PERMISSION)
             else
-                getLocationRX()
+                getLocationAfterPermissionAccess()
         }
     }
 
@@ -162,7 +161,7 @@ class CategoryTabActivity : BaseActivity(), MainView {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
         if (requestCode == LOCATION_PERMISSION && grantResults.isNotEmpty())
             if (grantResults[0] == PackageManager.PERMISSION_GRANTED)
-                getLocationRX()
+                getLocationAfterPermissionAccess()
     }
 
     override fun error(errorMsg: String) {
@@ -199,7 +198,7 @@ class CategoryTabActivity : BaseActivity(), MainView {
 
 
     @SuppressLint("MissingPermission")
-    fun getLocationRX() {
+    fun getLocationAfterPermissionAccess() {
 
         if (manager.isProviderEnabled(LocationManager.GPS_PROVIDER))
             locationDisposable()

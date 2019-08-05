@@ -7,11 +7,13 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.Fragment
+import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 
 import com.example.aalap.news.R
 import com.example.aalap.news.models.newsmodels.Article
 import com.example.aalap.news.models.newsmodels.NewsModel
+import com.example.aalap.news.pref
 import com.example.aalap.news.presenter.NewsPresenter
 import com.example.aalap.news.ui.adapter.ArticleAdapter
 import com.example.aalap.news.view.NewsListView
@@ -53,7 +55,12 @@ class NewsListFragment : Fragment(), NewsListView, AnkoLogger {
         news_toolbar.visibility = View.GONE
         category = arguments?.getString(CATEGORY) ?: "Anything"
         presenter = NewsPresenter(this, NewsModel())
-        new_recycler.layoutManager = LinearLayoutManager(requireContext())
+        var manager = if (pref.isLayoutCompact())
+            LinearLayoutManager(requireContext())
+        else
+            GridLayoutManager(requireContext(), 2)
+
+        new_recycler.layoutManager = manager
 
         val displayMetrics = DisplayMetrics()
         context?.windowManager?.defaultDisplay?.getMetrics(displayMetrics)
@@ -90,7 +97,7 @@ class NewsListFragment : Fragment(), NewsListView, AnkoLogger {
         refresh_layout.isRefreshing = false
         errorMsg?.let {
             Toasty.error(requireContext(), it, Toast.LENGTH_SHORT)
-                .show()
+                    .show()
         }
         if (adapter == null || adapter?.itemCount == 0) {
             empty_view.visibility = View.VISIBLE

@@ -2,7 +2,7 @@ package com.example.aalap.news
 
 import android.content.Context
 import android.content.SharedPreferences
-import com.example.aalap.news.models.newsmodels.NewsLayout
+import com.example.aalap.news.models.newsmodels.Layout
 import org.jetbrains.anko.AnkoLogger
 import org.jetbrains.anko.info
 
@@ -21,7 +21,7 @@ class Pref(appContext: Context): AnkoLogger {
     }
 
     private fun getRecyclerLayout(): Int {
-        return pref.getInt(KEY_LAYOUT, NewsLayout.LAYOUT_COMPACT)
+        return pref.getInt(KEY_LAYOUT, Layout.COMPACT.ordinal)
     }
 
     fun saveTheme(themeRes: Int) {
@@ -37,7 +37,7 @@ class Pref(appContext: Context): AnkoLogger {
     }
 
     fun isLayoutCompact(): Boolean {
-        return (getRecyclerLayout() == NewsLayout.LAYOUT_COMPACT)
+        return (getRecyclerLayout() == Layout.COMPACT.ordinal)
     }
 
     fun saveLastCoOrdinates(latitude: String, longitude: String) {

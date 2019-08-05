@@ -8,10 +8,10 @@ import layout.NewsListFragment
 
 class CategoryPagerAdapter(fragmentManager: FragmentManager): FragmentPagerAdapter(fragmentManager) {
 
-    var categories = Category.getCategories()
+    private var categories = Category.values()
 
     override fun getItem(position: Int): Fragment {
-        return NewsListFragment.newInstance(categories[position])
+        return NewsListFragment.newInstance(categories[position].name)
     }
 
     override fun getCount(): Int {
@@ -19,6 +19,6 @@ class CategoryPagerAdapter(fragmentManager: FragmentManager): FragmentPagerAdapt
     }
 
     override fun getPageTitle(position: Int): CharSequence? {
-        return categories[position].toUpperCase()
+        return categories[position].name.toUpperCase()
     }
 }

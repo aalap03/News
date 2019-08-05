@@ -1,10 +1,10 @@
 package com.example.aalap.news.models.newsmodels
 
-import com.google.gson.annotations.SerializedName
+import android.os.Parcelable
 import io.realm.RealmList
-import io.realm.RealmModel
 import io.realm.RealmObject
 import io.realm.annotations.PrimaryKey
+import kotlinx.android.parcel.Parcelize
 
 //{
 //"status": "ok",
@@ -25,22 +25,26 @@ import io.realm.annotations.PrimaryKey
 //}]
 //}
 
+@Parcelize
 open class Source(var id: String? = null,
-                  var name: String = "") : RealmObject(){
+                  var name: String = "") : RealmObject(), Parcelable {
     override fun toString(): String {
         return "Source(id=$id, name='$name')"
     }
 }
 
-open class Article(var source: Source? = null,
-                   var author: String? = null,
-                   var title: String = "",
-                   var description: String? = null,
-                   var url: String = "",
-                   var urlToImage: String? = null,
-                   var publishedAt: String = "",
-                   var isSaved: Boolean = false,
-                   var category: String = "") : RealmObject(){
+@Parcelize
+open class Article(
+        var url: String = "",
+        var source: Source? = null,
+        var author: String? = null,
+        var title: String = "",
+        var description: String? = null,
+
+        var urlToImage: String? = null,
+        var publishedAt: String = "",
+        var isSaved: Boolean = false,
+        var category: String = "") : RealmObject(), Parcelable {
     override fun toString(): String {
         return "Article(source=$source, author=$author, title='$title', description=$description, url='$url', urlToImage=$urlToImage, publishedAt='$publishedAt', isSaved=$isSaved, category='$category')"
     }

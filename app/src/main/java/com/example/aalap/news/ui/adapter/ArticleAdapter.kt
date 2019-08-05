@@ -16,10 +16,13 @@ import com.example.aalap.news.Pref
 import com.example.aalap.news.R
 import com.example.aalap.news.Utils
 import com.example.aalap.news.models.newsmodels.Article
-import com.example.aalap.news.ui.activities.Webview
+import com.example.aalap.news.ui.activities.NewsDetailWebView
 import com.squareup.picasso.Picasso
 import org.jetbrains.anko.AnkoLogger
 import org.jetbrains.anko.info
+
+const val INTENT_KEY_ARTICLE = "ARTICLE"
+const val INTENT_KEY_URL = "ARTICLE_url"
 
 class ArticleAdapter(var context: Context, var list: MutableList<Article>, var screenWidth: Int) : RecyclerView.Adapter<ArticleAdapter.ArticleHolder>(), AnkoLogger {
 
@@ -63,13 +66,7 @@ class ArticleAdapter(var context: Context, var list: MutableList<Article>, var s
             holder.image.layoutParams.height = screenWidth / 2
         }
 
-        if (!TextUtils.isEmpty(article.author)) {
-            holder.author.visibility = View.VISIBLE
-            holder.author.text = article.author
-        } else {
-            holder.author.visibility = View.GONE
-        }
-
+        holder.author.text = article.author
         holder.date.text = Utils().getLocaleTime(article.publishedAt)
 
         if (TextUtils.isEmpty(article.urlToImage))
@@ -97,9 +94,9 @@ class ArticleAdapter(var context: Context, var list: MutableList<Article>, var s
         var image: ImageView = itemView.findViewById(R.id.article_image)
 
         fun bindClicks(article: Article) {
-            val intent = Intent(context, Webview::class.java)
-            intent.putExtra("url", article.url)
-            intent.putExtra("title", article.title)
+            val intent = Intent(context, NewsDetailWebView::class.java)
+            intent.putExtra(INTENT_KEY_ARTICLE, article)
+            intent.putExtra(INTENT_KEY_URL, article.url)
             context.startActivity(intent)
         }
     }

@@ -1,5 +1,5 @@
 <resources>
     <string name="app_name">News</string>
-    <string name="news_api_key">cfce766b2dea4a6f91253e26fead9721</string>
-    <string name="weather_api_key">c8d13033595ad94a21a2465f54552730</string>
+    <!--<string name="news_api_key">cfce766b2dea4a6f91253e26fead9721</string>-->
+    <!--<string name="weather_api_key">c8d13033595ad94a21a2465f54552730</string>-->
 </resources>
