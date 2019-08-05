@@ -88,8 +88,8 @@ dependencies {
     implementation "androidx.gridlayout:gridlayout:$androidX"
 
     //rx
-    implementation 'io.reactivex.rxjava2:rxandroid:2.1.0'
-    implementation 'io.reactivex.rxjava2:rxjava:2.2.3'
+    implementation 'io.reactivex.rxjava2:rxandroid:2.1.1'
+    implementation 'io.reactivex.rxjava2:rxjava:2.2.6'
 
     //newsRetrofit
     implementation 'com.squareup.retrofit2:retrofit:2.5.0'
@@ -101,7 +101,7 @@ dependencies {
 
     ext.anko_version = '0.10.7'
     implementation "org.jetbrains.anko:anko:$anko_version"
-    implementation 'com.google.android.gms:play-services-location:16.0.0'
+    implementation 'com.google.android.gms:play-services-location:17.0.0'
     implementation 'pl.charmas.android:android-reactive-location2:2.1@aar'
     implementation 'com.github.GrenderG:Toasty:1.4.0'
 
