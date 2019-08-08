@@ -43,6 +43,7 @@ class NewsModel : AnkoLogger {
             it.executeTransaction { realm ->
                 val res = response.body()?.string()
 
+                info { "result: category server: $res" }
                 realm.where(News::class.java).findFirst()?.deleteFromRealm()
                 realm.where(Article::class.java)
                         .equalTo("category", category)

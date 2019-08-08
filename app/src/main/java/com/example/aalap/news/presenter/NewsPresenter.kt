@@ -35,12 +35,14 @@ class NewsPresenter(var view: NewsListView, private var model: NewsModel) : Anko
 
     fun requestHeadlinesByCountryAndCategory(category: String) {
 
+        info { "getting result: $category" }
         view.loading(true)
         model.getHeadlinesWithCountryAndCategory(category)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(
                         { newsResult ->
+                            info { "result: $newsResult" }
                             when (newsResult) {
                                 is NewsResult.NewsData -> view.displayArticlesR(newsResult.list)
                                 is NewsResult.NewsError -> {
@@ -50,6 +52,7 @@ class NewsPresenter(var view: NewsListView, private var model: NewsModel) : Anko
                             }
                         },
                         { t ->
+                            t.printStackTrace()
                             view.showError(t.localizedMessage)
                             view.displayArticlesR(model.getSavedNewsByCategory(category))
                         })
