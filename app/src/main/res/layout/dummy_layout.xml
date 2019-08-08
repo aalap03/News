@@ -20,6 +20,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:hint="username"
+        android:id="@+id/username"
         android:textColor="@color/colorPrimary"
         android:textColorHint="#50000000" />
 
@@ -27,6 +28,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:hint="Password"
+        android:id="@+id/password"
         android:imeOptions="actionDone"
         android:inputType="textPassword|textNoSuggestions"
         android:textColor="@color/colorPrimary"

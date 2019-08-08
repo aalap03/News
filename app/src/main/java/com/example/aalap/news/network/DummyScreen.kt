@@ -27,6 +27,14 @@ class DummyScreen : BaseActivity(), LoginView {
             }
             false
         }
+
+        password.setOnEditorActionListener { v, actionId, event ->
+            if (actionId == EditorInfo.IME_ACTION_DONE) {
+                presenter.authenticateAndGetToken(username.text.toString(), password.text.toString())
+            }
+            false
+        }
+
     }
 
     override fun domainSuccess() {
@@ -48,6 +56,11 @@ class DummyScreen : BaseActivity(), LoginView {
 
     override fun getToolbarTitle(): String {
         return "Dummy Screen"
+    }
+
+    override fun onStop() {
+        super.onStop()
+        presenter.clean()
     }
 
 }

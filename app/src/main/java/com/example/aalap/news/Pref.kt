@@ -64,4 +64,13 @@ class Pref(appContext: Context): AnkoLogger {
     }
 
 
+    //login test
+
+    fun saveToken(token: String){
+        pref.edit().putString("token", token).apply()
+    }
+
+    fun getToken() = pref.getString("token", "")
+
+
 }

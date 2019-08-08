@@ -1,14 +1,19 @@
 package com.example.aalap.news.network
 
+import com.example.aalap.news.network.datamodel.AuthRes
+import com.example.aalap.news.network.datamodel.DomainRes
+import com.example.aalap.news.network.serviceImpl.LoginLogoutServicesImpl
 import io.reactivex.Observable
+import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
+import io.reactivex.schedulers.Schedulers
 import org.jetbrains.anko.AnkoLogger
 import org.jetbrains.anko.info
 import retrofit2.Response
 
-class LoginModel: AnkoLogger {
+class LoginModel : AnkoLogger {
 
-    var retrofit = DomainAndAuthServiceImpl()
+    var retrofit = LoginLogoutServicesImpl()
     var compositeDisposable = CompositeDisposable()
 
     fun requestRegion(domain: String): Observable<DomainRes> {
@@ -25,6 +30,13 @@ class LoginModel: AnkoLogger {
             DomainRes(body?.region)
         else
             DomainRes(null, responseNotSuccessful(res))
+    }
+
+    fun requestLogin(username: String, password: String): Observable<AuthRes?>? {
+        return retrofit.authenticateAndGetToken(username, password)
+                ?.subscribeOn(Schedulers.io())
+                ?.observeOn(AndroidSchedulers.mainThread())
+
     }
 
     private fun <T> responseNotSuccessful(result: Response<T>): String {
